@@ -28,7 +28,18 @@ export interface SignInParams {
   password: string;
 }
 
+export interface ResetPasswordParams {
+  email: string;
+}
+
 class AuthClient {
+  async signUp(_: SignUpParams): Promise<{ error?: string }> {
+    const token = generateToken();
+    localStorage.setItem("auth-token", token);
+
+    return {};
+  }
+
   async signIn(params: SignInParams): Promise<{ error?: string }> {
     const { email, password } = params;
     if (email !== "user@company.com" || password !== "password") {
@@ -39,6 +50,10 @@ class AuthClient {
     localStorage.setItem("auth-token", token);
 
     return {};
+  }
+
+  async resetPassword(_: ResetPasswordParams): Promise<{ error?: string }> {
+    return { error: "Password reset not implemented" };
   }
 
   async getUser(): Promise<{ data?: User | null; error?: string }> {
