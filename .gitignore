@@ -1,7 +1,19 @@
-bin/
-obj/
 .vscode/
-.DS_Store
 **/*.user
 **/*.suo
 *.log
+# Ignore node_modules folder (for a Node.js project)
+node_modules/
+
+# Ignore environment files
+.env
+
+# Ignore all log files
+*.log
+
+# Ignore Mac OS system files
+.DS_Store
+
+# Ignore folders like bin, obj (for .NET Core projects)
+bin/
+obj/
