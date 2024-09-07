@@ -1,17 +1,14 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
+import React from "react";
+import type { Metadata, Viewport } from "next";
+import "@/styles/global.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { UserProvider } from "@/contexts/user-context";
+import { ThemeProvider } from "@/components/core/theme-provider/theme-provider";
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+} satisfies Viewport;
 
 export const metadata: Metadata = {
   title: "Inventory Management",
@@ -25,10 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body>
+        <UserProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </UserProvider>
       </body>
     </html>
   );
