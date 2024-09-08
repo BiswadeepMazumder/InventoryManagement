@@ -10,3 +10,22 @@ for order creation, modification, and product management.
 Reeact.js + .net core entity framework + azure sql server. 
 This will be hosted on azure.
 
+## Entity Mapping Visual Representation
+
+
+Here’s the visual representation of the entity and table mapping for the project:
+
+```plaintext
+┌──────────────┐        ┌───────────────┐        ┌───────────────┐        ┌─────────────┐
+│  Category    │        │   Supplier    │        │    Users      │        │   Orders    │
+└─────┬────────┘        └─────┬─────────┘        └─────┬─────────┘        └─────┬───────┘
+      │                       │                        │                        │
+      ▼                       ▼                        │                        │
+┌─────────────┐        ┌──────────────┐                │                        ▼
+│   Items     │        │SupplierToCat │                └────────────┐    ┌────────────┐
+└─────┬───────┘        └─────┬────────┘                             │    │ OrderItems │
+      │                      │                                      ▼    └────────────┘
+      │                      ▼                                ┌────────────┐
+      └──────────────────────────────────────────────────────►│   Orders   │
+                                                              └────────────┘
+
