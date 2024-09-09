@@ -1,16 +1,3 @@
-## Project Overview
-
-This inventory management software is designed to help small to mid-sized businesses streamline the process of managing orders and product inventory. 
-The system allows the Business Owner, Manager, or Worker to efficiently handle essential inventory tasks while providing clear, intuitive interfaces 
-for order creation, modification, and product management.
-
-
-## Project Architechture
-
-Reeact.js + .net core entity framework + azure sql server. 
-This will be hosted on azure.
-
-
 # Database Schema and Entity Relationship Explanation
 
 This document explains how the various tables in the database are connected, detailing the relationships, primary keys, foreign keys, and the flow of data between them.
@@ -88,11 +75,11 @@ This document explains how the various tables in the database are connected, det
 
 ```plaintext
 ┌──────────────┐        ┌───────────────┐        ┌───────────────┐        ┌─────────────┐
-│  Category    │        │   Supplier    │        │    Users      │        │   Orders    │
+│  Category    │        │   Supplier    │        │    Users      │        │   Orders     │
 └─────┬────────┘        └─────┬─────────┘        └─────┬─────────┘        └─────┬───────┘
-      │                       │                        │                        │
-      ▼                       ▼                        │                        │
-┌─────────────┐        ┌──────────────┐                │                        ▼
+      │                       │                        │                       │
+      ▼                       ▼                        │                       │
+┌─────────────┐        ┌──────────────┐                │                       ▼
 │   Items     │        │SupplierToCat │                └────────────┐    ┌────────────┐
 └─────┬───────┘        └─────┬────────┘                             │    │ OrderItems │
       │                      │                                      ▼    └────────────┘

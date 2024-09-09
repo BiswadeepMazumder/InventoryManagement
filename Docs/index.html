@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Architecture Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        pre {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-left: 4px solid #333;
+            overflow-x: auto;
+        }
+        code {
+            background-color: #e8e8e8;
+            padding: 2px 4px;
+            font-size: 1.1em;
+        }
+        blockquote {
+            margin: 10px 0;
+            padding-left: 15px;
+            border-left: 4px solid #333;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Step-by-Step Guide: Understanding the System Architecture</h1>
+
+    <p>This document provides a detailed breakdown of how your system architecture works and how each component interacts. We’ll go through the entire process from the <strong>frontend (React app)</strong> to the <strong>backend (.NET Core API)</strong>, the <strong>Azure SQL Database</strong>, and how the system is deployed using <strong>Azure DevOps</strong>.</p>
+
+    <h2>1. Overview of the System Architecture</h2>
+
+    <h3>System Components:</h3>
+
+    <ul>
+        <li><strong>Frontend (React App)</strong>: This is the user-facing interface. The React app will use <strong>Axios</strong> to make API requests to the backend and receive data. Hosted on a cloud server, such as <strong>Azure App Service</strong> or <strong>Azure Static Web Apps</strong>.</li>
+        <li><strong>Backend (.NET Core API)</strong>: A <strong>Controller-based</strong> API, following the <strong>MVC (Model-View-Controller)</strong> architecture. It processes requests, applies business logic, communicates with the database, and returns responses to the frontend. Uses <strong>OAuth</strong> for secure authentication. Also hosted on a cloud server.</li>
+        <li><strong>Database (Azure SQL Database)</strong>: Stores all data, including users, orders, products, categories, etc. The backend interacts with the database using <strong>Entity Framework Core</strong> (EF Core), an Object-Relational Mapping (ORM) tool.</li>
+        <li><strong>CI/CD Pipeline (Azure DevOps)</strong>: Azure DevOps automates the process of building, testing, and deploying both the frontend and backend. You have <strong>four branches</strong> in your GitHub repository:
+            <ul>
+                <li><strong>main</strong>: Final branch for production-ready code.</li>
+                <li><strong>staging</strong>: For merging and testing frontend and backend code.</li>
+                <li><strong>frontend</strong>: Holds the React app code.</li>
+                <li><strong>backend</strong>: Holds the .NET Core API code.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>2. How the Components Work Together</h2>
+
+    <h3>User Action in Frontend (React App)</h3>
+    <p><strong>Axios Makes an API Request</strong>: When the user performs an action, Axios sends an HTTP request to the backend API.</p>
+
+    <pre><code>const token = localStorage.getItem('accessToken');  // OAuth token
+axios.get('https://api.yourdomain.com/api/orders', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+}).then(response => {
+    console.log(response.data);  // Logs the fetched orders
+});
+</code></pre>
+
+    <h3>Backend API Receives the Request</h3>
+
+    <p>The request hits the API endpoint and is routed to the appropriate <strong>Controller</strong>. For example, if the request is for <code>GET /api/orders</code>, it goes to the <code>OrdersController</code>.</p>
+
+    <pre><code>[Authorize]  // Ensures OAuth authentication
+[Route("api/[controller]")]
+[ApiController]
+public class OrdersController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrdersController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    [HttpGet]
+    public async Task&lt;ActionResult&lt;IEnumerable&lt;OrderDTO&gt;&gt;&gt; GetOrders()
+    {
+        var orders = await _orderService.GetAllOrdersAsync();
+        return Ok(orders);
+    }
+}
+</code></pre>
+
+    <h3>Service Layer Handles Business Logic</h3>
+
+    <p>The <strong>Service Layer</strong> contains the business logic, such as validating data, calculating totals, checking inventory levels, etc. It calls the <strong>Repository Layer</strong> to handle data access.</p>
+
+    <pre><code>public class OrderService : IOrderService
+{
+    private readonly IOrderRepository _orderRepository;
+
+    public OrderService(IOrderRepository orderRepository)
+    {
+        _orderRepository = orderRepository;
+    }
+
+    public async Task&lt;IEnumerable&lt;OrderDTO&gt;&gt; GetAllOrdersAsync()
+    {
+        var orders = await _orderRepository.GetAllOrdersAsync();
+        return orders.Select(o =&gt; new OrderDTO { ... }).ToList();
+    }
+}
+</code></pre>
+
+    <h3>Repository Layer Communicates with the Database</h3>
+
+    <p>The <strong>Repository Layer</strong> is responsible for interacting with the <strong>Azure SQL Database</strong>. It uses <strong>Entity Framework Core (EF Core)</strong> to map database tables to C# models and perform CRUD operations.</p>
+
+    <pre><code>public class OrderRepository : IOrderRepository
+{
+    private readonly InventoryDbContext _context;
+
+    public OrderRepository(InventoryDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task&lt;IEnumerable&lt;Order&gt;&gt; GetAllOrdersAsync()
+    {
+        return await _context.Orders
+            .Include(o =&gt; o.OrderItems)
+            .ToListAsync();
+    }
+}
+</code></pre>
+
+    <h3>Data Returned to the Frontend</h3>
+    <p>The data is sent back to the frontend as a JSON response. Axios processes the response, and the React app displays the list of orders.</p>
+
+    <h2>3. Detailed Interaction Flow</h2>
+
+    <h3>Step-by-Step Interaction Example: Fetching Orders from the Database</h3>
+
+    <ul>
+        <li><strong>User Action on Frontend</strong>: A user clicks on the "View Orders" button in the React app.</li>
+        <li><strong>Axios Makes a GET Request</strong>: Axios sends a <code>GET</code> request to <code>https://api.yourdomain.com/api/orders</code>, including the OAuth token.</li>
+        <li><strong>Backend Receives Request</strong>: The request is received by the <code>OrdersController</code>, and the OAuth token is validated.</li>
+        <li><strong>Service Layer Calls Repository</strong>: The <code>OrderService</code> calls the <code>OrderRepository</code> to retrieve the orders from the database.</li>
+        <li><strong>Database Interaction</strong>: The <code>OrderRepository</code> fetches the data from the Azure SQL Database.</li>
+        <li><strong>Data Returned to Frontend</strong>: The backend sends the data back as a JSON response, and Axios processes the response in the frontend.</li>
+    </ul>
+
+    <h2>4. Cohesive Integration on Azure</h2>
+
+    <h3>Azure Hosting Setup</h3>
+
+    <ul>
+        <li><strong>Frontend Hosting</strong>: Host the React app on <strong>Azure Static Web Apps</strong> or <strong>Azure App Service</strong>.</li>
+        <li><strong>Backend Hosting</strong>: Host the .NET Core API on <strong>Azure App Service</strong>.</li>
+        <li><strong>Azure SQL Database</strong>: The backend API uses a secure connection string to interact with the database.</li>
+    </ul>
+
+    <h3>CI/CD with Azure DevOps</h3>
+
+    <ul>
+        <li><strong>Continuous Integration</strong>: Azure DevOps builds the project and runs automated tests when code is pushed to the frontend or backend branches.</li>
+        <li><strong>Continuous Deployment</strong>: When code is merged into the staging or main branch, Azure DevOps automatically deploys the frontend and backend.</li>
+    </ul>
+
+    <h2>5. Unit Testing and Best Practices</h2>
+
+    <h3>Unit Testing Methodology</h3>
+
+    <p>Use <strong>xUnit</strong> or <strong>NUnit</strong> for testing in .NET Core. Mock dependencies like repositories using <strong>Moq</strong> to isolate business logic during tests. Follow the <strong>Arrange-Act-Assert</strong> pattern in each test.</p>
+
+    <pre><code>public class OrderServiceTests
+{
+    private readonly Mock&lt;IOrderRepository&gt; _mockRepo;
+    private readonly OrderService _orderService;
+
+    public OrderServiceTests()
+    {
+        _mockRepo = new Mock&lt;IOrderRepository&gt;();
+        _orderService = new OrderService(_mockRepo.Object);
+    }
+
+    [Fact]
+    public async Task GetAllOrders_ReturnsListOfOrders()
+    {
+        // Arrange
+        var orders = new List&lt;Order&gt; { new Order { OrderID = 1, OrderCode = "ORD001" } };
+        _mockRepo.Setup(repo =&gt; repo.GetAllOrdersAsync()).ReturnsAsync(orders);
+
+        // Act
+        var result = await _orderService.GetAllOrdersAsync();
+
+        // Assert
+        Assert.Equal(1, result.Count());
+    }
+}
+</code></pre>
+
+    <h3>Testing API Endpoints</h3>
+
+    <p>You can use tools like <strong>Postman</strong> to manually test API endpoints. Swagger can also be used to provide a UI to test the API.</p>
+
+    <ul>
+        <li><strong>Postman</strong>: Send GET, POST, PUT, DELETE requests to your API endpoints. Include the OAuth token in the headers to test secured endpoints.</li>
+        <li><strong>Swagger UI</strong>: Swagger automatically generates interactive API documentation, allowing you to test endpoints directly from the browser.</li>
+    </ul>
+
+    <h2>Summary</h2>
+
+    <p>This step-by-step guide walks through the entire architecture of your Inventory Management System, from the <strong>React frontend</strong> to the <strong>.NET Core API backend</strong>, to the <strong>Azure SQL Database</strong>, and finally, how everything is integrated and deployed on <strong>Azure</strong> using Azure DevOps CI/CD pipelines. Each part of the system works together to provide a cohesive, scalable, and secure solution.</p>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+1. Order Management
+POST /api/orders: Create a new upcoming order.
+PUT /api/orders/{id}: Modify an existing order (by order ID).
+DELETE /api/orders/{id}: Remove a order from the inventory (by order ID).
+
+2. Order Details Viewing
+GET /api/orders: Get a list of all orders (both upcoming and previous).
+GET /api/orders/upcoming: Get a list of upcoming orders.
+GET /api/orders/{id}: Get details of a specific order (by order ID).
+GET /api/orders/previous: Get a list of previous orders.
+
+3. Product List Management
+POST /api/products: Add a new product to the inventory.
+DELETE /api/products/{id}: Remove a product from the inventory (by product ID).
+GET /api/products: Get a list of all products in the inventory.
+PUT /api/products/{id}: Update product information (price, stock, etc.).
+
+4. Dashboard and Home Screen
+GET /api/dashboard/orders: Get an overview of previous and upcoming orders for the dashboard.
+GET /api/dashboard/top-products: Get data for the top-selling products for the chart.
+GET /api/dashboard/low-products: Get data for the lowest-selling products for the chart.
+
+Total Estimated Endpoints:
+Order Management: 2 endpoints
+Order Details Viewing: 4 endpoints
+Product List Management: 4 endpoints
+Dashboard and Home Screen: 3 endpoints
+Total: 13 API Endpoints
