@@ -9,19 +9,19 @@ import { ArrowDown as ArrowDownIcon } from "@phosphor-icons/react/dist/ssr/Arrow
 import { ArrowUp as ArrowUpIcon } from "@phosphor-icons/react/dist/ssr/ArrowUp";
 import { Users as UsersIcon } from "@phosphor-icons/react/dist/ssr/Users";
 
-export interface TotalCustomersProps {
+export interface CurrentOrderProps {
   diff?: number;
   trend: "up" | "down";
   sx?: SxProps;
   value: string;
 }
 
-export function TotalCustomers({
+export function CurrentOrder({
   diff,
   trend,
   sx,
   value,
-}: TotalCustomersProps): React.JSX.Element {
+}: CurrentOrderProps): React.JSX.Element {
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
   const trendColor =
     trend === "up"
@@ -39,7 +39,7 @@ export function TotalCustomers({
           >
             <Stack spacing={1}>
               <Typography color="text.secondary" variant="overline">
-                Total Customers
+                Current Order
               </Typography>
               <Typography variant="h4">{value}</Typography>
             </Stack>

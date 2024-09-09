@@ -4,10 +4,10 @@ import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 
 import { config } from "@/config";
-import { Budget } from "@/components/dashboard/overview/budget";
-import { TasksProgress } from "@/components/dashboard/overview/tasks-progress";
-import { TotalCustomers } from "@/components/dashboard/overview/total-customers";
-import { TotalProfit } from "@/components/dashboard/overview/total-profit";
+import { PastOrder } from "@/components/dashboard/overview/past-order";
+import { LowStock } from "@/components/dashboard/overview/low-stock";
+import { CurrentOrder } from "@/components/dashboard/overview/current-order";
+import { UpcomingOrder } from "@/components/dashboard/overview/upcoming-order";
 
 export const metadata = {
   title: `Overview | Dashboard | ${config.site.name}`,
@@ -17,22 +17,31 @@ export default function Page(): React.JSX.Element {
   return (
     <Grid container spacing={3}>
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <Budget diff={12} trend="up" sx={{ height: "100%" }} value="$24k" />
-      </Grid>
-      <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <TotalCustomers
+        <CurrentOrder
           diff={16}
-          trend="down"
+          trend="up"
           sx={{ height: "100%" }}
-          value="1.6k"
+          value="7,278"
         />
       </Grid>
+
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <TasksProgress sx={{ height: "100%" }} value={75.5} />
+        <UpcomingOrder
+          diff={29}
+          trend="down"
+          sx={{ height: "100%" }}
+          value="4,502"
+        />
       </Grid>
+
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <TotalProfit sx={{ height: "100%" }} value="$15k" />
+        <PastOrder diff={12} trend="up" sx={{ height: "100%" }} value="6,452" />
       </Grid>
+
+      <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
+        <LowStock sx={{ height: "100%" }} name={"Ravioli"} value={22} />
+      </Grid>
+
       <Grid size={{ lg: 8, xs: 12 }}></Grid>
       <Grid size={{ lg: 4, md: 6, xs: 12 }}></Grid>
       <Grid size={{ lg: 4, md: 6, xs: 12 }}></Grid>

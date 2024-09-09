@@ -10,10 +10,12 @@ import { ListBullets as ListBulletsIcon } from "@phosphor-icons/react/dist/ssr/L
 
 export interface TasksProgressProps {
   sx?: SxProps;
+  name: string;
   value: number;
 }
 
-export function TasksProgress({
+export function LowStock({
+  name,
   value,
   sx,
 }: TasksProgressProps): React.JSX.Element {
@@ -32,9 +34,11 @@ export function TasksProgress({
                 gutterBottom
                 variant="overline"
               >
-                Task Progress
+                Low Stock
               </Typography>
-              <Typography variant="h4">{value}%</Typography>
+              <Typography variant="h4">
+                {name}: {value}
+              </Typography>
             </Stack>
             <Avatar
               sx={{
