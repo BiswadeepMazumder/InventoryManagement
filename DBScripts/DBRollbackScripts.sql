@@ -1,4 +1,4 @@
--- Dropping the tables in reverse order of their dependencies to avoid errors
+-- Dropping the tables in reverse order of their dependencies to avoid errors. This will avoid any errors while deleting the table.
 
 -- Rollback: Drop the ORDERITEMS table
 DROP TABLE IF EXISTS OrderItems;
