@@ -38,7 +38,7 @@ This section describes the architecture and component mappings for the Inventory
 
 ---
 
-## Diagram Description
+## System Description
 
 ### 1. **React Frontend**:
 - User interacts with the UI, and Axios makes HTTP requests to the backend.
