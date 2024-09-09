@@ -4,12 +4,157 @@ This inventory management software is designed to help small to mid-sized busine
 The system allows the Business Owner, Manager, or Worker to efficiently handle essential inventory tasks while providing clear, intuitive interfaces 
 for order creation, modification, and product management.
 
+---
 
-# Project Architechture
+# Project Architecture
 
-Reeact.js + .net core entity framework + azure sql server. 
-This will be hosted on azure.
+The project is built using:
+- **Frontend**: React.js
+- **Backend**: .NET Core with Entity Framework
+- **Database**: Azure SQL Database
 
+This will be hosted on Azure, and managed through Azure DevOps CI/CD pipelines.
+
+---
+
+# System Architecture and Component Mapping
+
+This section describes the architecture and component mappings for the Inventory Management System, which includes the Frontend (React app), Backend (.NET Core API), Azure SQL Database, and Azure DevOps CI/CD pipeline.
+
+## Components Mapping Visualization
+
+### 1. **Frontend (React) → Backend (API)**
+- The React app uses **Axios** to send HTTP requests to the backend API.
+- Each request is accompanied by an **OAuth** token for secure authentication.
+- Example request: `GET /api/orders`
+
+### 2. **Backend (.NET Core API) → Azure SQL Database**
+- The .NET Core API handles business logic, processes the request, and communicates with the **Azure SQL Database** using **Entity Framework Core**.
+- Example: The `OrderController` fetches all orders from the `Orders` table in the Azure SQL Database.
+
+### 3. **CI/CD Pipeline (Azure DevOps)**
+- **Azure DevOps** builds and deploys the React app and .NET Core API to their respective Azure App Services (Frontend and Backend).
+- The pipeline integrates testing steps, such as unit testing and integration testing, before final deployment.
+
+---
+
+## Diagram Description
+
+### 1. **React Frontend**:
+- User interacts with the UI, and Axios makes HTTP requests to the backend.
+- This communication uses **OAuth** for authentication and authorization.
+
+### 2. **API Layer**:
+- The API is hosted on an Azure cloud server.
+- Requests from the frontend are routed through **controllers** that process the request and delegate business logic to the service layer.
+
+### 3. **Service Layer**:
+- Applies business rules and logic.
+- Calls the repository layer to fetch or update data from the database.
+
+### 4. **Repository and Entity Framework**:
+- The repository interacts with the database using **Entity Framework** to perform CRUD operations.
+
+### 5. **Azure SQL Database**:
+- All the data is stored here, including orders, users, products, and categories.
+
+### 6. **CI/CD Integration with Azure DevOps**:
+- **Azure DevOps pipelines** handle the automation of builds, testing, and deployments. When code is pushed to staging or main branches, Azure DevOps triggers the pipeline to deploy updates.
+
+---
+
+## Visual Representation of System Architecture
+```plaintext
+┌──────────────┐    HTTP Requests    ┌──────────────┐    Business Logic     ┌──────────────┐    CRUD Operations    ┌────────────────────┐
+│ React App    │  ────────────────►  │  API Layer   │  ────────────────►    │  Service     │  ────────────────►     │ Azure SQL Database │
+│ (Frontend)   │    (Axios + OAuth)  │ (.NET Core)  │   Controllers &       │  Layer       │   Entity Framework    │ Orders, Users, etc.│
+└──────────────┘                     └──────────────┘   Repositories        └──────────────┘                       └────────────────────┘
+
+                     ▲
+                     │
+    CI/CD Integration with Azure DevOps
+                     │
+       ┌────────────────────────────────┐
+       │ Automated Build and Deployment │
+       │ Frontend & Backend App Services│
+       └────────────────────────────────┘
+
+```
+
+# API Endpoints Overview
+
+This document outlines the available API endpoints for managing orders, viewing order details, handling the product inventory, and providing data for the dashboard in the Inventory Management System.
+
+---
+
+## 1. Order Management
+
+- **POST /api/orders**:  
+  Creates a new upcoming order.
+
+- **PUT /api/orders/{id}**:  
+  Modifies an existing order by `Order ID`.
+
+- **DELETE /api/orders/{id}**:  
+  Removes an order from the inventory by `Order ID`.
+
+---
+
+## 2. Order Details Viewing
+
+- **GET /api/orders**:  
+  Retrieves a list of all orders, both upcoming and previous.
+
+- **GET /api/orders/upcoming**:  
+  Retrieves a list of upcoming orders.
+
+- **GET /api/orders/{id}**:  
+  Retrieves details of a specific order by `Order ID`.
+
+- **GET /api/orders/previous**:  
+  Retrieves a list of previous orders.
+
+---
+
+## 3. Product List Management
+
+- **POST /api/products**:  
+  Adds a new product to the inventory.
+
+- **DELETE /api/products/{id}**:  
+  Removes a product from the inventory by `Product ID`.
+
+- **GET /api/products**:  
+  Retrieves a list of all products in the inventory.
+
+- **PUT /api/products/{id}**:  
+  Updates product information such as price, stock, etc., by `Product ID`.
+
+---
+
+## 4. Dashboard and Home Screen
+
+- **GET /api/dashboard/orders**:  
+  Retrieves an overview of previous and upcoming orders for the dashboard.
+
+- **GET /api/dashboard/top-products**:  
+  Retrieves data for the top-selling products for the chart.
+
+- **GET /api/dashboard/low-products**:  
+  Retrieves data for the lowest-selling products for the chart.
+
+---
+
+## Total API Endpoints Breakdown
+
+- **Order Management**: 3 endpoints
+- **Order Details Viewing**: 4 endpoints
+- **Product List Management**: 4 endpoints
+- **Dashboard and Home Screen**: 3 endpoints
+
+---
+
+## Total: 14 API Endpoints
 
 
 # Database Schema and Entity Relationship Explanation
@@ -89,14 +234,16 @@ This document explains how the various tables in the database are connected, det
 
 ```plaintext
 ┌──────────────┐        ┌───────────────┐        ┌───────────────┐        ┌─────────────┐
-│  Category    │        │   Supplier    │        │    Users      │        │   Orders    │
+│  Category    │        │   Supplier    │        │    Users      │        │   Orders     │
 └─────┬────────┘        └─────┬─────────┘        └─────┬─────────┘        └─────┬───────┘
-      │                       │                        │                        │
-      ▼                       ▼                        │                        │
-┌─────────────┐        ┌──────────────┐                │                        ▼
+      │                       │                        │                       │
+      ▼                       ▼                        │                       │
+┌─────────────┐        ┌──────────────┐                │                       ▼
 │   Items     │        │SupplierToCat │                └────────────┐    ┌────────────┐
 └─────┬───────┘        └─────┬────────┘                             │    │ OrderItems │
-      │                      |                                      ▼    └────────────┘
+      │                      │                                      ▼    └────────────┘
       │                      ▼                                ┌────────────┐
       └──────────────────────────────────────────────────────►│   Orders   │
                                                               └────────────┘
+
+```
