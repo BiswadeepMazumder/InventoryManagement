@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class Item
 {
+    [Key] 
     public string ItemId { get; set; } = null!;     // primary key
 
     public string? ItemName { get; set; }

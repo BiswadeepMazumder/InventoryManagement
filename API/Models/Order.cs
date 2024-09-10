@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class Order
 {
+    [Key] 
     public string OrderId { get; set; } = null!;
 
     public DateTime? OrderDate { get; set; }

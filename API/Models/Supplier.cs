@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class Supplier
 {
+    [Key] 
     public string SupplierId { get; set; } = null!;
 
     public string? SupplierName { get; set; }

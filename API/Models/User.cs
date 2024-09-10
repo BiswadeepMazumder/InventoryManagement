@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class User
-{
+{   
+    [Key] 
     public string UserId { get; set; } = null!;
 
     public string? UserName { get; set; }

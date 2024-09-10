@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class OrderItem
 {
+    [Key] 
     public string OrderId { get; set; } = null!;
 
     public string ItemId { get; set; } = null!;
