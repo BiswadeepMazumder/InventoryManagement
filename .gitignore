@@ -17,3 +17,4 @@ node_modules/
 # Ignore folders like bin, obj (for .NET Core projects)
 bin/
 obj/
+Azure.txt

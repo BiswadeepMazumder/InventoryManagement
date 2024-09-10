@@ -75,11 +75,11 @@ This document explains how the various tables in the database are connected, det
 
 ```plaintext
 ┌──────────────┐        ┌───────────────┐        ┌───────────────┐        ┌─────────────┐
-│  Category    │        │   Supplier    │        │    Users      │        │   Orders     │
+│  Category    │        │   Supplier    │        │    Users      │        │   Orders    │
 └─────┬────────┘        └─────┬─────────┘        └─────┬─────────┘        └─────┬───────┘
-      │                       │                        │                       │
-      ▼                       ▼                        │                       │
-┌─────────────┐        ┌──────────────┐                │                       ▼
+      │                       │                        │                        │
+      ▼                       ▼                        │                        │
+┌─────────────┐        ┌──────────────┐                │                        ▼
 │   Items     │        │SupplierToCat │                └────────────┐    ┌────────────┐
 └─────┬───────┘        └─────┬────────┘                             │    │ OrderItems │
       │                      │                                      ▼    └────────────┘

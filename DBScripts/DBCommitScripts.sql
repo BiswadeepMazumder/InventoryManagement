@@ -33,8 +33,8 @@ CREATE TABLE Users (
 CREATE TABLE Items (
     ItemID VARCHAR(7) PRIMARY KEY,  -- Primary key for Items
     ItemName VARCHAR(20), 
-    ItemUnitPrice DECIMAL(3,2), 
-    CurrentStock INT CHECK (CurrentStock <= 200),  -- Maximum stock count to order at a time is 200
+    ItemUnitPrice DECIMAL(13,2), 
+    CurrentStock INT ,
     Status INT CHECK (Status IN (0, 1, 2, 3, 4, 5)),  
     CategoryCode VARCHAR(2),  -- Foreign key referencing Category table
     FOREIGN KEY (CategoryCode) REFERENCES Category(CategoryCode)  -- CategoryCode in Items references CategoryCode in Category
@@ -49,7 +49,7 @@ CREATE TABLE Orders (
     OrderAmount DECIMAL(10,2), 
     OrderStatus INT CHECK (OrderStatus IN (0, 1, 2, 3, 4, 5)), 
     CancelComment VARCHAR(550),  
-    FOREIGN KEY (UserID) REFERENCES [User](UserID)  -- UserID in Orders references UserID in User
+    FOREIGN KEY (UserID) REFERENCES [Users](UserID)  -- UserID in Orders references UserID in User
 );
 
 /*
@@ -111,6 +111,19 @@ INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('SUPPLIER', 'S
 INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('Water', 'WT', 1);
 INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('Orders', 'OD', 1);
 INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('Users', 'US', 1);
+
+
+-- Inserting data into SupplierToCategory table
+
+INSERT INTO Supplier (SupplierID, SupplierName, SupplierAddress, SupplierCity, SupplierZipCode, SupplierPhoneNumber, SupplierLastOrderDate, Status)
+VALUES
+('SUP9010', 'Sherwood Distributor', 'HURON STREET', 'CLEVELAND', 44990, 6473829150, NULL, 1),
+('SUP9030', 'Cleveland Pepsico', 'CLEVELAND', 'CLEVELAND', 49898, 7483926150, NULL, 1),
+('SUP9050', 'Sysco Corporation', 'TOLEDO', 'TOLEDO', 43629, 5647382910, NULL, 1),
+('SUP9060', 'Seaways Wholesale', 'WARRENSVILLE', 'CUYAHOGA', 41232, 8374651920, NULL, 1),
+('SUP9070', 'Value Wholesale', 'OHIO CITY', 'CLEVELAND', 40978, 2938475610, NULL, 1),
+('SUP9080', 'Fritolays', 'CEDAR', 'AKRON', 44112, 6473829150, NULL, 1);
+
 
 -- Inserting all values into Items table
 
@@ -270,34 +283,37 @@ INSERT INTO SupplierToCategory (CategoryCode, SupplierID, Status) VALUES ('WT', 
 -- Inserting data into OrderItems table
 
 INSERT INTO OrderItems (OrderID, ItemID, OrderDate, ItemCount, ItemName, TotalPrice, OrderStatus) VALUES
-('OD240910', 'BR002007', '2024-08-01', 324, 'Kiwi Beer', 7240, 4),
-('OD240910', 'FZ006130', '2024-08-01', 456, 'Gyros', 9915, 4),
-('OD240910', 'PP4580', '2024-08-01', 50, 'Dr Pepper', 336, 4),
-('OD240910', 'CH81210', '2024-08-01', 234, 'Ruffles Classic', 4941, 4),
-('OD240910', 'FZ006080', '2024-08-01', 786, 'Meat balls', 17598, 4),
-('OD240910', 'CH80510', '2024-08-01', 678, 'Lays Honey', 15021, 4),
-('OD240910', 'TO1013', '2024-08-01', 876, 'Hand Sanitizers', 19365, 4),
-('OD240910', 'PP4577', '2024-08-01', 50, 'Brisk Ice Tea', 639, 4),
-('OD240910', 'PP4576', '2024-08-01', 50, 'Minutemaid Lemonade', 1125, 4),
-('OD240910', 'FZ006090', '2024-08-01', 345, 'Shepard pie', 7762.5, 4),
-('OD240910', 'CH80710', '2024-08-01', 789, 'Cheetos Puff', 17752.5, 4),
-('OD240910', 'CH80210', '2024-08-01', 324, 'Lays Classic', 363, 4),
-('OD240910', 'CD0030', '2024-08-01', 87, 'Reese Nutrageous', 126, 4),
-('OD240910', 'WT0003', '2024-08-01', 234, 'Aquafina', 273, 4),
-('OD240910', 'CO9802', '2024-08-01', 345, 'Grandma Choco Cookie', 7762.5, 4),
-('OD240910', 'CH81010', '2024-08-01', 486, 'Cheetos Hot Fries', 10935, 4);
+('OD240910', 'CD0050', '2024-08-01', 324, 'Reese Pieces', 7240, 4),
+('OD240910', 'CD0380', '2024-08-01', 456, 'Life Savers', 9915, 4),
+('OD240910', 'CD0440', '2024-08-01', 50, 'Haribo', 336, 4),
+('OD240910', 'PS1203', '2024-08-01', 234, 'Dog Food Can', 4941, 4),
+('OD240910', 'CF9922', '2024-08-01', 786, 'Condensed Milk', 17598, 4),
+('OD240910', 'TO1015', '2024-08-01', 678, 'Table Napkins', 15021, 4),
+('OD240910', 'PP4561', '2024-08-01', 876, 'SPRITE LIME', 19365, 4),
+('OD240910', 'PP4575', '2024-08-01', 50, 'Canada Dry Ginger Ale', 639, 4),
+('OD240910', 'WT0003', '2024-08-01', 50, 'Aquafina', 1125, 4),
+('OD240910', 'AB2011', '2024-08-01', 345, 'Raspberry Beer', 7762.5, 4),
+('OD240910', 'CD0140', '2024-08-01', 789, 'Snicker Almont', 17752.5, 4),
+('OD240910', 'CD0170', '2024-08-01', 324, 'Milkyway', 363, 4),
+('OD240910', 'CD0210', '2024-08-01', 87, 'Crunch', 126, 4),
+('OD240910', 'CF9928', '2024-08-01', 234, 'Tomato Puree', 273, 4),
+('OD240910', 'PS1205', '2024-08-01', 345, 'Cat Litter', 7762.5, 4),
+('OD240910', 'AB2013', '2024-08-01', 486, 'Pineapple Beer', 10935, 4);
+
 
 
 
 -- Inserting data into Orders table
 
-INSERT INTO Orders (OrderID, OrderDate, OrderName, UserID, OrderAmount, OrderStatus, CancelComment) VALUES
-('OD240910', '2024-08-01', 'AUG_01', 2, 234234, 4, NULL),
-('OD240911', '2024-08-10', 'AUG_02', 1, 67567, 3, NULL),
-('OD240912', '2024-08-20', 'AUG_03', 1, 87676, 2, NULL),
-('OD240913', '2024-08-25', 'AUG_04', 2, 870879, 1, NULL),
-('OD240914', '2024-09-01', 'SEPT_01', 1, 523452, 0, 'CANCEL COMMENTS'),
-('OD240915', '2024-09-02', 'SEPT_02', 1, 453455, 1, NULL);
+INSERT INTO Orders (OrderID, OrderDate, OrderName, UserID, OrderAmount, OrderStatus, CancelComment)
+VALUES
+('OD240910', '2024-08-01', 'AUG_01', 'US01', 234234, 4, NULL),
+('OD240911', '2024-08-10', 'AUG_02', 'US01', 67567, 3, NULL),
+('OD240912', '2024-08-20', 'AUG_03', 'US01', 87676, 2, NULL),
+('OD240913', '2024-08-25', 'AUG_04', 'US01', 870879, 1, NULL),
+('OD240914', '2024-09-01', 'SEPT_01', 'US02', 523452, 0, 'CANCEL COMMENTS'),
+('OD240915', '2024-09-02', 'SEPT_02', 'US03', 453455, 1, NULL);
+
 
 -- Inserting data into Users table
 
