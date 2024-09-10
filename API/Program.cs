@@ -1,16 +1,27 @@
-using API.Data;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<InventoryDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Get the connection string from environment variable or from appsetting.json
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+                     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string not found.");
+}
+
+// Register the DbContext with the connection string from the environment variable
+builder.Services.AddDbContext<InventoryDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
