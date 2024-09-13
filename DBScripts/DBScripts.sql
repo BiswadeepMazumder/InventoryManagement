@@ -4,7 +4,7 @@
 -- Creating the CATEGORY table
 CREATE TABLE Category (
     CategoryName VARCHAR(20),  -- Category name
-    CategoryCode VARCHAR(2) PRIMARY KEY,  -- Primary key for Category
+    CategoryCode VARCHAR(2) PRIMARY KEY,  -- primary key for category
     Status INT CHECK (Status IN (0, 1)) 
 );
 
