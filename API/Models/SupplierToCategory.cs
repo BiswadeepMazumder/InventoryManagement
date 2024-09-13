@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class SupplierToCategory
-{   
-    [Key] 
+{
     public string CategoryCode { get; set; } = null!;
 
     public string SupplierId { get; set; } = null!;

@@ -7,11 +7,11 @@ namespace API.Services
 {
     public class ItemDTO
     {
-        public required string ItemId { get; set; }
+        public string ItemId { get; set; } = null!;
         public string? ItemName { get; set; }
         public decimal? ItemUnitPrice { get; set; }
         public int? CurrentStock { get; set; }
         public int? Status { get; set; }
-        public string? CategoryCode { get; set; } 
+        public string? CategoryCode { get; set; }
     }
 }

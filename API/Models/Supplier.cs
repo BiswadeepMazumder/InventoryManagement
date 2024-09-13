@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
 public partial class Supplier
 {
-    [Key] 
     public string SupplierId { get; set; } = null!;
 
     public string? SupplierName { get; set; }
@@ -23,5 +21,5 @@ public partial class Supplier
 
     public int? Status { get; set; }
 
-    public virtual ICollection<SupplierToCategory> SupplierToCategories { get; set; } = new List<SupplierToCategory>();
+    public virtual ICollection<SupplierToCategory> SupplierToCategory { get; set; } = new List<SupplierToCategory>();
 }

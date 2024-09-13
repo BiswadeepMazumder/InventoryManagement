@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Data;
 using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Components;
@@ -13,125 +14,114 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 
 namespace API.Controllers
-{   
-        [Route("api/[controller]")]
-        [ApiController]
-        public class ItemController : ControllerBase
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ItemController : ControllerBase
+    {
+        private readonly InventoryDbContext _context;
+
+        public ItemController(InventoryDbContext context)
         {
-            private readonly InventoryDbContext _context;
+            _context = context;
+        }
 
-            public ItemController(InventoryDbContext context)
-            {
-                _context = context;
-            }
-
-        // Get all items
+        // GET: api/Item
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemDTO>>> GetItems()
         {
-            return await _context.Items
-                .Select(i => new ItemDTO
-                {
-                    ItemId = i.ItemId,
-                    ItemName = i.ItemName,
-                    ItemUnitPrice = i.ItemUnitPrice,
-                    CurrentStock = i.CurrentStock,
-                    Status = i.Status,
-                    CategoryCode = i.CategoryCode
-                })
-                .ToListAsync();
+            var items = await _context.Items.Select(item => new ItemDTO
+            {
+                ItemId = item.ItemId,
+                ItemName = item.ItemName,
+                ItemUnitPrice = item.ItemUnitPrice,
+                CurrentStock = item.CurrentStock,
+                Status = item.Status,
+                CategoryCode = item.CategoryCode
+            }).ToListAsync();
+
+            return Ok(items);
         }
 
-
-         // GET: api/items{id}
+        // GET: api/Item/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ItemDTO>> GetItem(string id)
         {
-            var item = await _context.Items
-                .Where(i => i.ItemId == id)
-                .Select(i => new ItemDTO
-                {
-                    ItemId = i.ItemId,
-                    ItemName = i.ItemName,
-                    ItemUnitPrice = i.ItemUnitPrice,
-                    CurrentStock = i.CurrentStock,
-                    Status = i.Status,
-                    CategoryCode = i.CategoryCode
-                })
-                .FirstOrDefaultAsync();
+            var item = await _context.Items.FindAsync(id);
 
             if (item == null)
             {
                 return NotFound();
             }
 
-            return Ok(item);
-        }
-
-         // POST: api/items  (create item)
-        [HttpPost]
-        public async Task<ActionResult<Item>> PostItem(ItemDTO itemDto)
-        {
-            // Create an instance of Item from ItemDTO
-            var item = new Item
+            var itemDTO = new ItemDTO
             {
-                ItemId = itemDto.ItemId,
-                ItemName = itemDto.ItemName,
-                ItemUnitPrice = itemDto.ItemUnitPrice,
-                CurrentStock = itemDto.CurrentStock,
-                Status = itemDto.Status,
-                CategoryCode = itemDto.CategoryCode
+                ItemId = item.ItemId,
+                ItemName = item.ItemName,
+                ItemUnitPrice = item.ItemUnitPrice,
+                CurrentStock = item.CurrentStock,
+                Status = item.Status,
+                CategoryCode = item.CategoryCode
             };
 
-                // Add the new item to the Items DbSet
-                _context.Items.Add(item);
-                
-                // Save changes to the database
-                await _context.SaveChangesAsync();
-
-                // Return the created item and the location where it can be retrieved
-                return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, item);
-
+            return Ok(itemDTO);
         }
 
+        // POST: api/Item
+       [HttpPost]
+public async Task<ActionResult<ItemDTO>> PostItem([FromBody] ItemDTO itemDTO)
+{
+    if (!ModelState.IsValid)
+    {
+        return BadRequest(ModelState);
+    }
 
+    var item = new Items
+    {
+        ItemId = itemDTO.ItemId,
+        ItemName = itemDTO.ItemName,
+        ItemUnitPrice = itemDTO.ItemUnitPrice,
+        CurrentStock = itemDTO.CurrentStock,
+        Status = itemDTO.Status,
+        CategoryCode = itemDTO.CategoryCode
+    };
 
+    _context.Items.Add(item);
+    await _context.SaveChangesAsync();
 
-         // PUT: api/items/{id}         (update item)
+    return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, itemDTO);
+}
+
+        // PUT: api/Item/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(string id, ItemDTO itemDto)
+        public async Task<IActionResult> PutItem(string id, ItemDTO itemDTO)
         {
-            // Check if the provided id matches the ItemDTO's ItemId
-            if (id != itemDto.ItemId)
+            if (id != itemDTO.ItemId)
             {
-                return BadRequest("Item ID mismatch");
+                return BadRequest();
             }
 
-            // Fetch the existing item from the database
             var item = await _context.Items.FindAsync(id);
+
             if (item == null)
             {
-                return NotFound("Item not found");
+                return NotFound();
             }
 
-            // Map the updated values from the ItemDTO to the existing item
-            item.ItemName = itemDto.ItemName;
-            item.ItemUnitPrice = itemDto.ItemUnitPrice;
-            item.CurrentStock = itemDto.CurrentStock;
-            item.Status = itemDto.Status;
-            item.CategoryCode = itemDto.CategoryCode;
+            item.ItemName = itemDTO.ItemName;
+            item.ItemUnitPrice = itemDTO.ItemUnitPrice;
+            item.CurrentStock = itemDTO.CurrentStock;
+            item.Status = itemDTO.Status;
+            item.CategoryCode = itemDTO.CategoryCode;
 
-            // Mark the item as modified in the context
             _context.Entry(item).State = EntityState.Modified;
 
             try
             {
-                // Save changes to the database
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                // Check if the item still exists, otherwise return NotFound
                 if (!ItemExists(id))
                 {
                     return NotFound();
@@ -142,17 +132,15 @@ namespace API.Controllers
                 }
             }
 
-            // Return NoContent (204) if the update was successful
             return NoContent();
         }
 
-
-
-         // DELETE: api/items/{id}
+        // DELETE: api/Item/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(string id)
         {
-            var item = await _context.Items.FindAsync(id);
+           var item = await _context.Items.FindAsync(id);
+
             if (item == null)
             {
                 return NotFound();
@@ -168,6 +156,5 @@ namespace API.Controllers
         {
             return _context.Items.Any(e => e.ItemId == id);
         }
-
     }
 }

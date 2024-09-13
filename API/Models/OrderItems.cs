@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
-public partial class OrderItem
+public partial class OrderItems
 {
-    [Key] 
     public string OrderId { get; set; } = null!;
 
     public string ItemId { get; set; } = null!;
@@ -19,9 +17,9 @@ public partial class OrderItem
 
     public decimal? TotalPrice { get; set; }
 
-    public string? OrderStatus { get; set; }
+    public int? OrderStatus { get; set; }
 
-    public virtual Item Item { get; set; } = null!;
+    public virtual Items Item { get; set; } = null!;
 
-    public virtual Order Order { get; set; } = null!;
+    public virtual Orders Order { get; set; } = null!;
 }

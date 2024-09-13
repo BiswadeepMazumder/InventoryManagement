@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace API.Models;
 
-public partial class Order
+public partial class Orders
 {
-    [Key] 
     public string OrderId { get; set; } = null!;
 
     public DateTime? OrderDate { get; set; }
@@ -21,7 +19,7 @@ public partial class Order
 
     public string? CancelComment { get; set; }
 
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public virtual ICollection<OrderItems> OrderItems { get; set; } = new List<OrderItems>();
 
     public virtual User? User { get; set; }
 }

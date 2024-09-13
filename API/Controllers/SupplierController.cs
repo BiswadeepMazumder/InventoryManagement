@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using API.Data;
 using System.Threading.Tasks;
 using API.Models;
 using API.Services;
@@ -29,7 +30,7 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<SupplierDTO>>> GetSuppliers()
         {
             // Fetch suppliers and map them to DTO
-            var suppliers = await _context.Suppliers.Select(s => new SupplierDTO
+            var suppliers = await _context.Supplier.Select(s => new SupplierDTO
             {
                 SupplierName = s.SupplierName,
                 SupplierPhoneNumber = s.SupplierPhoneNumber,
