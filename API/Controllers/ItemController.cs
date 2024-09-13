@@ -1,46 +1,71 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 
 namespace API.Controllers
 {   
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ItemController:ControllerBase
-    {
-        private readonly InventoryDbContext _context;
-        public ItemController(InventoryDbContext context)
+        [Route("api/[controller]")]
+        [ApiController]
+        public class ItemController : ControllerBase
         {
-            _context = context;
-        }
+            private readonly InventoryDbContext _context;
 
+            public ItemController(InventoryDbContext context)
+            {
+                _context = context;
+            }
 
-         // GET: api/items
+        // Get all items
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public async Task<ActionResult<IEnumerable<ItemDTO>>> GetItems()
         {
-            return await _context.Items.ToListAsync();
+            return await _context.Items
+                .Select(i => new ItemDTO
+                {
+                    ItemId = i.ItemId,
+                    ItemName = i.ItemName,
+                    ItemUnitPrice = i.ItemUnitPrice,
+                    CurrentStock = i.CurrentStock,
+                    Status = i.Status,
+                    CategoryCode = i.CategoryCode
+                })
+                .ToListAsync();
         }
 
-         // GET: api/items/{id}
+
+         // GET: api/items{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(string id)
+        public async Task<ActionResult<ItemDTO>> GetItem(string id)
         {
-            var item = await _context.Items.FindAsync(id);
+            var item = await _context.Items
+                .Where(i => i.ItemId == id)
+                .Select(i => new ItemDTO
+                {
+                    ItemId = i.ItemId,
+                    ItemName = i.ItemName,
+                    ItemUnitPrice = i.ItemUnitPrice,
+                    CurrentStock = i.CurrentStock,
+                    Status = i.Status,
+                    CategoryCode = i.CategoryCode
+                })
+                .FirstOrDefaultAsync();
 
             if (item == null)
             {
                 return NotFound();
             }
 
-            return item;
+            return Ok(item);
         }
 
          // POST: api/items

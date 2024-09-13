@@ -11,9 +11,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Get the connection string from environment variable or from appsetting.json
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
-                     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// Check if the environment variable exists and override the connection string if present
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") 
+                       ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
+Console.WriteLine(connectionString);
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -22,7 +24,7 @@ if (string.IsNullOrEmpty(connectionString))
 
 // Register the DbContext with the connection string from the environment variable
 builder.Services.AddDbContext<InventoryDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString).EnableSensitiveDataLogging().LogTo(Console.WriteLine));
 
 var app = builder.Build();
 
@@ -34,26 +36,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
 
 
 app.MapControllers();

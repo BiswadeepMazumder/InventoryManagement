@@ -45,7 +45,11 @@ public partial class InventoryDbContext : DbContext
                 throw new InvalidOperationException("Connection string not found in environment variables.");
             }
 
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(connectionString,options => 
+                                            options.EnableRetryOnFailure(   maxRetryCount: 5, // Number of retries
+                                                                            maxRetryDelay: TimeSpan.FromSeconds(30), // Delay between retries
+                                                                            errorNumbersToAdd: null
+                                                                         ));
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
