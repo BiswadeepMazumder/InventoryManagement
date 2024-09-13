@@ -4,7 +4,7 @@
 -- Creating the CATEGORY table
 CREATE TABLE Category (
     CategoryName VARCHAR(20),  -- Category name
-    CategoryCode VARCHAR(2) PRIMARY KEY,  -- primary key for category
+    CategoryCode VARCHAR(2) PRIMARY KEY,  -- Primary key for Category
     Status INT CHECK (Status IN (0, 1)) 
 );
 
@@ -16,7 +16,7 @@ CREATE TABLE Supplier (
     SupplierCity VARCHAR(20),  
     SupplierZipCode NUMERIC(5), 
     SupplierPhoneNumber NUMERIC(10),  
-    SupplierLastOrderDate DATETIME,  -- Last order received date from the supplier
+    SupplierLastOrderDate DATETIME,  -- Last order received date from the Supplier
     Status INT CHECK (Status IN (0, 1))  
 );
 
