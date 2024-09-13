@@ -7,7 +7,7 @@ namespace API.Services
 {
     public class ItemDTO
     {
-        public string ItemId { get; set; }
+        public required string ItemId { get; set; }
         public string? ItemName { get; set; }
         public decimal? ItemUnitPrice { get; set; }
         public int? CurrentStock { get; set; }
