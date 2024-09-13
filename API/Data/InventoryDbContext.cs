@@ -35,7 +35,6 @@ public partial class InventoryDbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             // Fetch connection string from the environment variable
-
             // setting connection string in enviroment
             // export CONNECTION_STRING="your conn str"
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
@@ -46,7 +45,8 @@ public partial class InventoryDbContext : DbContext
             }
 
             optionsBuilder.UseSqlServer(connectionString,options => 
-                                            options.EnableRetryOnFailure(   maxRetryCount: 5, // Number of retries
+                                            options.EnableRetryOnFailure(  
+                                                                            maxRetryCount: 5, // Number of retries
                                                                             maxRetryDelay: TimeSpan.FromSeconds(30), // Delay between retries
                                                                             errorNumbersToAdd: null
                                                                          ));

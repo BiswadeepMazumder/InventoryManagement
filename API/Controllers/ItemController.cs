@@ -68,33 +68,70 @@ namespace API.Controllers
             return Ok(item);
         }
 
-         // POST: api/items
+         // POST: api/items  (create item)
         [HttpPost]
-        public async Task<ActionResult<Item>> PostItem(Item item)
+        public async Task<ActionResult<Item>> PostItem(ItemDTO itemDto)
         {
-            _context.Items.Add(item);
-            await _context.SaveChangesAsync();
+            // Create an instance of Item from ItemDTO
+            var item = new Item
+            {
+                ItemId = itemDto.ItemId,
+                ItemName = itemDto.ItemName,
+                ItemUnitPrice = itemDto.ItemUnitPrice,
+                CurrentStock = itemDto.CurrentStock,
+                Status = itemDto.Status,
+                CategoryCode = itemDto.CategoryCode
+            };
 
-            return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, item);
+                // Add the new item to the Items DbSet
+                _context.Items.Add(item);
+                
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                // Return the created item and the location where it can be retrieved
+                return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, item);
+
         }
 
-         // PUT: api/items/{id}
+
+
+
+         // PUT: api/items/{id}         (update item)
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(string id, Item item)
+        public async Task<IActionResult> PutItem(string id, ItemDTO itemDto)
         {
-            if (id != item.ItemId)
+            // Check if the provided id matches the ItemDTO's ItemId
+            if (id != itemDto.ItemId)
             {
-                return BadRequest();
+                return BadRequest("Item ID mismatch");
             }
 
+            // Fetch the existing item from the database
+            var item = await _context.Items.FindAsync(id);
+            if (item == null)
+            {
+                return NotFound("Item not found");
+            }
+
+            // Map the updated values from the ItemDTO to the existing item
+            item.ItemName = itemDto.ItemName;
+            item.ItemUnitPrice = itemDto.ItemUnitPrice;
+            item.CurrentStock = itemDto.CurrentStock;
+            item.Status = itemDto.Status;
+            item.CategoryCode = itemDto.CategoryCode;
+
+            // Mark the item as modified in the context
             _context.Entry(item).State = EntityState.Modified;
 
             try
             {
+                // Save changes to the database
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
+                // Check if the item still exists, otherwise return NotFound
                 if (!ItemExists(id))
                 {
                     return NotFound();
@@ -105,8 +142,12 @@ namespace API.Controllers
                 }
             }
 
+            // Return NoContent (204) if the update was successful
             return NoContent();
         }
+
+
+
          // DELETE: api/items/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(string id)
