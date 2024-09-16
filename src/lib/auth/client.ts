@@ -6,8 +6,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-const auth = getAuth();
-
 import type { User } from "@/types/user";
 
 function generateToken(): string {
@@ -45,6 +43,7 @@ class AuthClient {
     const { firstName, lastName, email, password } = params;
 
     try {
+      const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -73,6 +72,7 @@ class AuthClient {
     }
 
     try {
+      const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
