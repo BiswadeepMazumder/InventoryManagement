@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+
+const auth = getAuth();
+
 import type { User } from "@/types/user";
 
 function generateToken(): string {
@@ -33,11 +41,29 @@ export interface ResetPasswordParams {
 }
 
 class AuthClient {
-  async signUp(_: SignUpParams): Promise<{ error?: string }> {
-    const token = generateToken();
-    localStorage.setItem("auth-token", token);
+  async signUp(params: SignUpParams): Promise<{ error?: string }> {
+    const { firstName, lastName, email, password } = params;
 
-    return {};
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      console.log("[DEBUG] User created:", user);
+
+      const token = generateToken();
+      localStorage.setItem("auth-token", token);
+
+      return {};
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("[DEBUG] Error:", errorCode, errorMessage);
+
+      return { error: errorMessage };
+    }
   }
 
   async signIn(params: SignInParams): Promise<{ error?: string }> {
@@ -46,10 +72,26 @@ class AuthClient {
       return { error: "Invalid credentials" };
     }
 
-    const token = generateToken();
-    localStorage.setItem("auth-token", token);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      console.log("[DEBUG] User signed in:", user);
 
-    return {};
+      const token = generateToken();
+      localStorage.setItem("auth-token", token);
+
+      return {};
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("[DEBUG] Error:", errorCode, errorMessage);
+
+      return { error: errorMessage };
+    }
   }
 
   async resetPassword(_: ResetPasswordParams): Promise<{ error?: string }> {
