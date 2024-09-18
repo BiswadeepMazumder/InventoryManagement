@@ -67,9 +67,6 @@ class AuthClient {
 
   async signIn(params: SignInParams): Promise<{ error?: string }> {
     const { email, password } = params;
-    if (email !== "user@company.com" || password !== "password") {
-      return { error: "Invalid credentials" };
-    }
 
     try {
       const userCredential = await signInWithEmailAndPassword(

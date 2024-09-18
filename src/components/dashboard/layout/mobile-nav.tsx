@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import RouterLink from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -16,6 +16,9 @@ import type { NavItemConfig } from "@/types/nav";
 import { paths } from "@/paths";
 import { isNavItemActive } from "@/lib/is-nav-item-active";
 import { Logo } from "@/components/core/logo";
+
+import { logger } from "@/lib/default-logger";
+import { useUser } from "@/hooks/use-user";
 
 import { navItems } from "./config";
 import { navIcons } from "./nav-icons";
@@ -32,10 +35,28 @@ export function MobileNav({
   onClose,
 }: MobileNavProps): React.JSX.Element {
   const pathname = usePathname();
+  const router = useRouter();
+  const { checkSession } = useUser();
 
-  const handleSignOut = async () => {
-    await authClient.signOut();
-  };
+  const handleSignOut = React.useCallback(async (): Promise<void> => {
+    try {
+      const { error } = await authClient.signOut();
+
+      if (error) {
+        logger.error("Sign out error", error);
+        return;
+      }
+
+      // Refresh the auth state
+      await checkSession?.();
+
+      // UserProvider, for this case, will not refresh the router and we need to do it manually
+      router.refresh();
+      // After refresh, AuthGuard will handle the redirect
+    } catch (err) {
+      logger.error("Sign out error", err);
+    }
+  }, [checkSession, router]);
 
   return (
     <Drawer
