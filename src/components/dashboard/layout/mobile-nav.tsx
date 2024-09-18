@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import RouterLink from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -17,8 +17,12 @@ import { paths } from "@/paths";
 import { isNavItemActive } from "@/lib/is-nav-item-active";
 import { Logo } from "@/components/core/logo";
 
+import { logger } from "@/lib/default-logger";
+import { useUser } from "@/hooks/use-user";
+
 import { navItems } from "./config";
 import { navIcons } from "./nav-icons";
+import { authClient } from "@/lib/auth/client";
 
 export interface MobileNavProps {
   onClose?: () => void;
@@ -31,6 +35,28 @@ export function MobileNav({
   onClose,
 }: MobileNavProps): React.JSX.Element {
   const pathname = usePathname();
+  const router = useRouter();
+  const { checkSession } = useUser();
+
+  const handleSignOut = React.useCallback(async (): Promise<void> => {
+    try {
+      const { error } = await authClient.signOut();
+
+      if (error) {
+        logger.error("Sign out error", error);
+        return;
+      }
+
+      // Refresh the auth state
+      await checkSession?.();
+
+      // UserProvider, for this case, will not refresh the router and we need to do it manually
+      router.refresh();
+      // After refresh, AuthGuard will handle the redirect
+    } catch (err) {
+      logger.error("Sign out error", err);
+    }
+  }, [checkSession, router]);
 
   return (
     <Drawer
@@ -97,37 +123,16 @@ export function MobileNav({
       </Box>
       <Divider sx={{ borderColor: "var(--mui-palette-neutral-700)" }} />
       <Stack spacing={2} sx={{ p: "12px" }}>
-        <div>
-          <Typography
-            color="var(--mui-palette-neutral-100)"
-            variant="subtitle2"
-          >
-            Need more features?
-          </Typography>
-          <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-            Check out our Pro solution template.
-          </Typography>
-        </div>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Box
-            component="img"
-            alt="Pro version"
-            src="/assets/devias-kit-pro.png"
-            sx={{ height: "auto", width: "160px" }}
-          />
-        </Box>
         <Button
-          component="a"
+          variant="contained"
+          sx={{ mt: 2 }}
+          onClick={handleSignOut}
           endIcon={
             <ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />
           }
           fullWidth
-          href="https://material-kit-pro-react.devias.io/"
-          sx={{ mt: 2 }}
-          target="_blank"
-          variant="contained"
         >
-          Pro version
+          Sign out
         </Button>
       </Stack>
     </Drawer>

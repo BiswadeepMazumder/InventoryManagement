@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+
+import { auth } from "@/firebase";
+
 import type { User } from "@/types/user";
 
 function generateToken(): string {
@@ -33,23 +40,54 @@ export interface ResetPasswordParams {
 }
 
 class AuthClient {
-  async signUp(_: SignUpParams): Promise<{ error?: string }> {
-    const token = generateToken();
-    localStorage.setItem("auth-token", token);
+  async signUp(params: SignUpParams): Promise<{ error?: string }> {
+    const { firstName, lastName, email, password } = params;
 
-    return {};
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      console.log("[DEBUG] User created:", user);
+
+      const token = generateToken();
+      localStorage.setItem("auth-token", token);
+
+      return {};
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("[DEBUG] Error:", errorCode, errorMessage);
+
+      return { error: errorMessage };
+    }
   }
 
   async signIn(params: SignInParams): Promise<{ error?: string }> {
     const { email, password } = params;
-    if (email !== "user@company.com" || password !== "password") {
-      return { error: "Invalid credentials" };
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      console.log("[DEBUG] User signed in:", user);
+
+      const token = generateToken();
+      localStorage.setItem("auth-token", token);
+
+      return {};
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("[DEBUG] Error:", errorCode, errorMessage);
+
+      return { error: errorMessage };
     }
-
-    const token = generateToken();
-    localStorage.setItem("auth-token", token);
-
-    return {};
   }
 
   async resetPassword(_: ResetPasswordParams): Promise<{ error?: string }> {
