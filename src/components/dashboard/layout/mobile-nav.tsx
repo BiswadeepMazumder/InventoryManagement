@@ -19,6 +19,7 @@ import { Logo } from "@/components/core/logo";
 
 import { navItems } from "./config";
 import { navIcons } from "./nav-icons";
+import { authClient } from "@/lib/auth/client";
 
 export interface MobileNavProps {
   onClose?: () => void;
@@ -31,6 +32,10 @@ export function MobileNav({
   onClose,
 }: MobileNavProps): React.JSX.Element {
   const pathname = usePathname();
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+  };
 
   return (
     <Drawer
@@ -97,37 +102,16 @@ export function MobileNav({
       </Box>
       <Divider sx={{ borderColor: "var(--mui-palette-neutral-700)" }} />
       <Stack spacing={2} sx={{ p: "12px" }}>
-        <div>
-          <Typography
-            color="var(--mui-palette-neutral-100)"
-            variant="subtitle2"
-          >
-            Need more features?
-          </Typography>
-          <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-            Check out our Pro solution template.
-          </Typography>
-        </div>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Box
-            component="img"
-            alt="Pro version"
-            src="/assets/devias-kit-pro.png"
-            sx={{ height: "auto", width: "160px" }}
-          />
-        </Box>
         <Button
-          component="a"
+          variant="contained"
+          sx={{ mt: 2 }}
+          onClick={handleSignOut}
           endIcon={
             <ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />
           }
           fullWidth
-          href="https://material-kit-pro-react.devias.io/"
-          sx={{ mt: 2 }}
-          target="_blank"
-          variant="contained"
         >
-          Pro version
+          Sign out
         </Button>
       </Stack>
     </Drawer>
