@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.Models;
 using API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -28,6 +29,7 @@ namespace API.Controllers
 
         // GET: api/Item
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ItemDTO>>> GetItems()
         {
             var items = await _context.Items.Select(item => new ItemDTO
@@ -45,6 +47,7 @@ namespace API.Controllers
 
         // GET: api/Item/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ItemDTO>> GetItem(string id)
         {
             var item = await _context.Items.FindAsync(id);

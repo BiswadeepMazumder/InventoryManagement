@@ -11,11 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class SupplierController : ControllerBase
     {
         private readonly InventoryDbContext _context;
@@ -26,7 +28,8 @@ namespace API.Controllers
         }
 
         // GET: api/suppliers
-        [HttpGet]
+        [HttpGet("suppliers")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SupplierDTO>>> GetSuppliers()
         {
             // Fetch suppliers and map them to DTO

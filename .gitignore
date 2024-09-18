@@ -19,3 +19,5 @@ bin/
 obj/
 Azure.txt
 appsettings.Development.json
+Release/
+.fake

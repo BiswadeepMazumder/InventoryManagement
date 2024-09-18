@@ -11,12 +11,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Enable CORS to allow cross-origin requests from the frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
+
 // Get the connection string from environment variable or from appsetting.json
 // Check if the environment variable exists and override the connection string if present
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") 
                        ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-Console.WriteLine(connectionString);
+//Console.WriteLine(connectionString);
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -30,13 +42,20 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
+    app.UseSwagger();
+    // to use swagger ui in production
+    app.UseSwaggerUI();
+
+
+app.UseRouting();
+app.UseHsts();
 app.UseHttpsRedirection();
+// Use CORS policy that allows all origins, methods, and headers
+app.UseCors("AllowAll");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapControllers();
