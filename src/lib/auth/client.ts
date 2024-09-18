@@ -1,10 +1,11 @@
 "use client";
 
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+
+import { auth } from "../../firebase";
 
 import type { User } from "@/types/user";
 
@@ -43,7 +44,6 @@ class AuthClient {
     const { firstName, lastName, email, password } = params;
 
     try {
-      const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -72,7 +72,6 @@ class AuthClient {
     }
 
     try {
-      const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
