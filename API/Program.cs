@@ -41,14 +41,30 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
 
 var app = builder.Build();
 
+ //try
+    //{
+       // if (app.Environment.IsDevelopment())
+app.UseSwagger();
+                 // to use swagger ui in production
+app.UseSwaggerUI();
+             //}
+    //}
+ 
+ 
+       // Console.WriteLine(ex.Message);
+       // return StatusCode(500, "An error occurred while processing your request.");
+   
 // Configure the HTTP request pipeline.
-
-    app.UseSwagger();
-    // to use swagger ui in production
-    app.UseSwaggerUI();
+// if (app.Environment.IsDevelopment())
+//    { app.UseSwagger();
+//     // to use swagger ui in production
+//     app.UseSwaggerUI();
+//    }
+   
 
 
 app.UseRouting();
+app.UseExceptionHandler("/error");
 app.UseHsts();
 app.UseHttpsRedirection();
 // Use CORS policy that allows all origins, methods, and headers

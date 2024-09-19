@@ -1,0 +1,22 @@
+1. Dashboard:
+
+    a. ViewPastOrder();  -- done 
+    b. ViewUpcomingOrder(); -- done
+    c. CriticalLowItem();  -- done
+    d. ViewAllSuppliers(); -- done
+    e. ViewAllOrders();  -- done
+    f. ViewCountofAllCategories();
+
+2. Mange Orders:
+
+    a. ViewAllOrders(); -- done 
+    b. MakeNewOrder(); -- done
+    c. DeleteOrder();  -- done
+
+3. Manage Items:
+
+    a. AddNewItem(); -- done
+    b. UpdateItem(); -- done
+    c. DeleteItem(); -- done
+    d. ViewAllItems(); -- done
+

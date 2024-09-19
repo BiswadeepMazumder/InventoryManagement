@@ -45,6 +45,32 @@ namespace API.Controllers
             return Ok(items);
         }
 
+
+
+        // GET: api/LowStock Items
+        [HttpGet("lowstock")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ItemDTO>>> GetLowStockItems()
+        {
+            var lowStockItems = await _context.Items
+               .Where(item => item.CurrentStock < 500)  // Filter items with current stock < 200
+               .OrderBy(item => item.CurrentStock)      // Optionally, you can order by stock
+               .Take(5)                                 // Take the top 5 items
+               .Select(item => new ItemDTO
+               {
+                     ItemId = item.ItemId,
+                     ItemName = item.ItemName,
+                     ItemUnitPrice = item.ItemUnitPrice,
+                     CurrentStock = item.CurrentStock,
+                     Status = item.Status,
+                     CategoryCode = item.CategoryCode
+               })
+             .ToListAsync();
+                 return Ok(lowStockItems);
+        }
+
+
+
         // GET: api/Item/5
         [HttpGet("{id}")]
         [AllowAnonymous]
@@ -71,29 +97,29 @@ namespace API.Controllers
         }
 
         // POST: api/Item
-       [HttpPost]
-public async Task<ActionResult<ItemDTO>> PostItem([FromBody] ItemDTO itemDTO)
-{
-    if (!ModelState.IsValid)
-    {
-        return BadRequest(ModelState);
-    }
+        [HttpPost]
+        public async Task<ActionResult<ItemDTO>> PostItem([FromBody] ItemDTO itemDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-    var item = new Items
-    {
-        ItemId = itemDTO.ItemId,
-        ItemName = itemDTO.ItemName,
-        ItemUnitPrice = itemDTO.ItemUnitPrice,
-        CurrentStock = itemDTO.CurrentStock,
-        Status = itemDTO.Status,
-        CategoryCode = itemDTO.CategoryCode
-    };
+            var item = new Items
+            {
+                ItemId = itemDTO.ItemId,
+                ItemName = itemDTO.ItemName,
+                ItemUnitPrice = itemDTO.ItemUnitPrice,
+                CurrentStock = itemDTO.CurrentStock,
+                Status = itemDTO.Status,
+                CategoryCode = itemDTO.CategoryCode
+            };
 
-    _context.Items.Add(item);
-    await _context.SaveChangesAsync();
+            _context.Items.Add(item);
+            await _context.SaveChangesAsync();
 
-    return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, itemDTO);
-}
+            return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, itemDTO);
+        }
 
         // PUT: api/Item/5
         [HttpPut("{id}")]
@@ -142,7 +168,7 @@ public async Task<ActionResult<ItemDTO>> PostItem([FromBody] ItemDTO itemDTO)
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(string id)
         {
-           var item = await _context.Items.FindAsync(id);
+            var item = await _context.Items.FindAsync(id);
 
             if (item == null)
             {
