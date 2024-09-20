@@ -46,7 +46,7 @@ export default function Page(): React.JSX.Element {
         <LowStock sx={{ height: "100%" }} name={"Ravioli"} value={22} />
       </Grid>
 
-      <Grid size={{ lg: 8, md: 4, xs: 12 }}>
+      <Grid size={{ lg: 8, md: 8, xs: 12 }}>
         <Statistics
           chartSeries={[
             {
@@ -147,7 +147,7 @@ export default function Page(): React.JSX.Element {
           sx={{ height: "100%" }}
         />
       </Grid>
-      <Grid size={{ lg: 4, md: 3, xs: 3 }}>
+      <Grid size={{ lg: 4, md: 4, xs: 12 }}>
         <ItemStock
           chartSeries={[63, 15, 22]}
           labels={["Category 1", "Category 2", "Category 3"]}
