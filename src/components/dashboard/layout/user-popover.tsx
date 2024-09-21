@@ -61,9 +61,9 @@ export function UserPopover({
       slotProps={{ paper: { sx: { width: "240px" } } }}
     >
       <Box sx={{ p: "16px 20px " }}>
-        <Typography variant="subtitle1">Sofia Rivers</Typography>
+        <Typography variant="subtitle1">Name</Typography>
         <Typography color="text.secondary" variant="body2">
-          sofia.rivers@devias.io
+          Email
         </Typography>
       </Box>
       <Divider />
