@@ -14,12 +14,12 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
 import { useSelection } from "@/hooks/use-selection";
-import { Item } from "@/types/item";
+import { Supplier } from "@/types/supplier";
 
-interface ItemsTableProps {
+interface SuppliersTableProps {
   count?: number;
   page?: number;
-  rows?: Item[];
+  rows?: Supplier[];
   rowsPerPage?: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -28,16 +28,16 @@ interface ItemsTableProps {
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function ItemsTable({
+export function SuppliersTable({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-}: ItemsTableProps): React.JSX.Element {
+}: SuppliersTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
-    return rows.map((item) => item.itemId);
+    return rows.map((item) => item.supplierId);
   }, [rows]);
 
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -66,27 +66,27 @@ export function ItemsTable({
                   }}
                 />
               </TableCell>
-              <TableCell>Item Name</TableCell>
-              <TableCell>Item Unit Price</TableCell>
-              <TableCell>Current Stock</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Category Code</TableCell>
+              <TableCell>Supplier Name</TableCell>
+              <TableCell>Supplier Address</TableCell>
+              <TableCell>Supplier City</TableCell>
+              <TableCell>Supplier Zip Code</TableCell>
+              <TableCell>Supplier Phone Number</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.itemId);
+              const isSelected = selected?.has(row.supplierId);
 
               return (
-                <TableRow hover key={row.itemId} selected={isSelected}>
+                <TableRow hover key={row.supplierId} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
                         if (event.target.checked) {
-                          selectOne(row.itemId);
+                          selectOne(row.supplierId);
                         } else {
-                          deselectOne(row.itemId);
+                          deselectOne(row.supplierId);
                         }
                       }}
                     />
@@ -99,14 +99,14 @@ export function ItemsTable({
                     >
                       {/*<Avatar src={row.avatar} />*/}
                       <Typography variant="subtitle2">
-                        {row.itemName}
+                        {row.supplierName}
                       </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.itemUnitPrice}</TableCell>
-                  <TableCell>{row.currentStock}</TableCell>
-                  <TableCell>{row.status}</TableCell>
-                  <TableCell>{row.categoryCode}</TableCell>
+                  <TableCell>{row.supplierAddress}</TableCell>
+                  <TableCell>{row.supplierCity}</TableCell>
+                  <TableCell>{row.supplierZipCode}</TableCell>
+                  <TableCell>{row.supplierPhoneNumber}</TableCell>
                 </TableRow>
               );
             })}
