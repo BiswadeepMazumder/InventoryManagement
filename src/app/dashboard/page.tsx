@@ -4,7 +4,6 @@ import * as React from "react";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 
-import useFetchItems from "@/hooks/useFetchItems";
 import useFetchLowStockItem from "@/hooks/useFetchLowStockItem";
 
 import { PastOrder } from "@/components/dashboard/overview/PastOrder";
@@ -17,9 +16,6 @@ import { ItemStock } from "@/components/dashboard/overview/ItemStock";
 import { Suppliers } from "@/components/dashboard/overview/Suppliers";
 
 export default function Page(): React.JSX.Element {
-  const { items, loading } = useFetchItems("user-id");
-  console.log("[DEBUG] Items: ", items, loading);
-
   const { items: lowStockItems, loading: lowStockLoading } =
     useFetchLowStockItem("user-id");
   console.log("[DEBUG] lowStockItems: ", lowStockItems, lowStockLoading);

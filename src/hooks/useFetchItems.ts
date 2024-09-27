@@ -2,15 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchItems } from "@/services/item.services";
-
-export type Item = {
-  itemId: string;
-  itemName: string;
-  itemUnitPrice: number;
-  currentStock: number;
-  status: number;
-  categoryCode: string;
-};
+import { Item } from "@/types/item";
 
 type UseFetchItems = {
   items: Item[];
@@ -19,11 +11,12 @@ type UseFetchItems = {
 
 export const useFetchItems = (userId: string): UseFetchItems => {
   const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetch = async () => {
       try {
+        setLoading(true);
         const data = await fetchItems(userId);
         setItems(data);
       } catch (error) {

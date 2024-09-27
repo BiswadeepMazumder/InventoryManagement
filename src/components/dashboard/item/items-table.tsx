@@ -14,39 +14,32 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-import dayjs from "dayjs";
 
 import { useSelection } from "@/hooks/use-selection";
+import { Item } from "@/types/item";
 
-function noop(): void {
-  // do nothing
-}
-
-export interface Customer {
-  id: string;
-  avatar: string;
-  name: string;
-  email: string;
-  address: { city: string; state: string; country: string; street: string };
-  phone: string;
-  createdAt: Date;
-}
-
-interface CustomersTableProps {
+interface ItemsTableProps {
   count?: number;
   page?: number;
-  rows?: Customer[];
+  rows?: Item[];
   rowsPerPage?: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function CustomersTable({
+export function ItemsTable({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
-}: CustomersTableProps): React.JSX.Element {
+  onPageChange,
+  onRowsPerPageChange,
+}: ItemsTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
-    return rows.map((customer) => customer.id);
+    return rows.map((item) => item.itemId);
   }, [rows]);
 
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -75,27 +68,27 @@ export function CustomersTable({
                   }}
                 />
               </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Signed Up</TableCell>
+              <TableCell>Item Name</TableCell>
+              <TableCell>Item Unit Price</TableCell>
+              <TableCell>Current Stock</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Category Code</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.id);
+              const isSelected = selected?.has(row.itemId);
 
               return (
-                <TableRow hover key={row.id} selected={isSelected}>
+                <TableRow hover key={row.itemId} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
                         if (event.target.checked) {
-                          selectOne(row.id);
+                          selectOne(row.itemId);
                         } else {
-                          deselectOne(row.id);
+                          deselectOne(row.itemId);
                         }
                       }}
                     />
@@ -106,19 +99,16 @@ export function CustomersTable({
                       direction="row"
                       spacing={2}
                     >
-                      <Avatar src={row.avatar} />
-                      <Typography variant="subtitle2">{row.name}</Typography>
+                      {/*<Avatar src={row.avatar} />*/}
+                      <Typography variant="subtitle2">
+                        {row.itemName}
+                      </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    {row.address.city}, {row.address.state},{" "}
-                    {row.address.country}
-                  </TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>
-                    {dayjs(row.createdAt).format("MMM D, YYYY")}
-                  </TableCell>
+                  <TableCell>{row.itemUnitPrice}</TableCell>
+                  <TableCell>{row.currentStock}</TableCell>
+                  <TableCell>{row.status}</TableCell>
+                  <TableCell>{row.categoryCode}</TableCell>
                 </TableRow>
               );
             })}
@@ -129,8 +119,8 @@ export function CustomersTable({
       <TablePagination
         component="div"
         count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}

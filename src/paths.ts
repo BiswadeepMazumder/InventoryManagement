@@ -7,9 +7,10 @@ export const paths = {
   },
   dashboard: {
     overview: "/dashboard",
+    items: "/dashboard/items",
+    orders: "/dashboard/orders",
+    suppliers: "/dashboard/suppliers",
     account: "/dashboard/account",
-    customers: "/dashboard/customers",
-    integrations: "/dashboard/integrations",
     settings: "/dashboard/settings",
   },
   errors: { notFound: "/errors/not-found" },
