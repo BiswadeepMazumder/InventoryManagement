@@ -1,9 +1,12 @@
+"use client";
+
 import * as React from "react";
-import type { Metadata } from "next";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 
-import { config } from "@/config";
+import useFetchItems from "@/hooks/useFetchItems";
+import useFetchLowStockItem from "@/hooks/useFetchLowStockItem";
+
 import { PastOrder } from "@/components/dashboard/overview/PastOrder";
 import { LowStock } from "@/components/dashboard/overview/LowStock";
 import { CurrentOrder } from "@/components/dashboard/overview/CurrentOrder";
@@ -13,11 +16,16 @@ import { Statistics } from "@/components/dashboard/overview/Statistics";
 import { ItemStock } from "@/components/dashboard/overview/ItemStock";
 import { Suppliers } from "@/components/dashboard/overview/Suppliers";
 
-export const metadata = {
-  title: `Overview | Dashboard | ${config.site.name}`,
-} satisfies Metadata;
-
 export default function Page(): React.JSX.Element {
+  const { items, loading } = useFetchItems("user-id");
+  console.log("[DEBUG] Items: ", items, loading);
+
+  const { items: lowStockItems, loading: lowStockLoading } =
+    useFetchLowStockItem("user-id");
+  console.log("[DEBUG] lowStockItems: ", lowStockItems, lowStockLoading);
+
+  const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
+
   return (
     <Grid container spacing={3}>
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
@@ -43,7 +51,11 @@ export default function Page(): React.JSX.Element {
       </Grid>
 
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <LowStock sx={{ height: "100%" }} name={"Ravioli"} value={22} />
+        <LowStock
+          sx={{ height: "100%" }}
+          name={lowStockItem?.itemName ?? "-"}
+          value={lowStockItem?.currentStock ?? 0}
+        />
       </Grid>
 
       <Grid size={{ lg: 8, md: 8, xs: 12 }}>
