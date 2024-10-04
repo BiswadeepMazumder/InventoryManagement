@@ -60,7 +60,7 @@ export function SideNav(): React.JSX.Element {
         "--NavItem-icon-active-color":
           "var(--mui-palette-primary-contrastText)",
         "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
-        bgcolor: "var(--SideNav-background)",
+        backgroundColor: "var(--SideNav-background)",
         color: "var(--SideNav-color)",
         display: { xs: "none", lg: "flex" },
         flexDirection: "column",
@@ -177,12 +177,12 @@ function NavItem({
           textDecoration: "none",
           whiteSpace: "nowrap",
           ...(disabled && {
-            bgcolor: "var(--NavItem-disabled-background)",
+            backgroundColor: "var(--NavItem-disabled-background)",
             color: "var(--NavItem-disabled-color)",
             cursor: "not-allowed",
           }),
           ...(active && {
-            bgcolor: "var(--NavItem-active-background)",
+            backgroundColor: "var(--NavItem-active-background)",
             color: "var(--NavItem-active-color)",
           }),
         }}

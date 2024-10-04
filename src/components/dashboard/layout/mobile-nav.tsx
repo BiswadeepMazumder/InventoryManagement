@@ -73,7 +73,7 @@ export function MobileNav({
           "--NavItem-icon-active-color":
             "var(--mui-palette-primary-contrastText)",
           "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
-          bgcolor: "var(--MobileNav-background)",
+          backgroundColor: "var(--MobileNav-background)",
           color: "var(--MobileNav-color)",
           display: "flex",
           flexDirection: "column",
@@ -189,12 +189,12 @@ function NavItem({
           textDecoration: "none",
           whiteSpace: "nowrap",
           ...(disabled && {
-            bgcolor: "var(--NavItem-disabled-background)",
+            backgroundColor: "var(--NavItem-disabled-background)",
             color: "var(--NavItem-disabled-color)",
             cursor: "not-allowed",
           }),
           ...(active && {
-            bgcolor: "var(--NavItem-active-background)",
+            backgroundColor: "var(--NavItem-active-background)",
             color: "var(--NavItem-active-color)",
           }),
         }}
