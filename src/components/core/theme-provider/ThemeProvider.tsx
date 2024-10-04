@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@/styles/theme/create-theme";
 
-import EmotionCache from "./emotion-cache";
+import EmotionCache from "./EmotionCache";
 
 export interface ThemeProviderProps {
   children: React.ReactNode;

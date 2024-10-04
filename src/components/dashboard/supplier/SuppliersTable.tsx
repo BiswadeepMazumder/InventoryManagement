@@ -13,7 +13,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
-import { useSelection } from "@/hooks/use-selection";
+import { useSelection } from "@/hooks/useSelection";
 import { Supplier } from "@/types/supplier";
 
 interface SuppliersTableProps {

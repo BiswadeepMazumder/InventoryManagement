@@ -2,9 +2,9 @@ import * as React from "react";
 import type { Metadata } from "next";
 
 import { config } from "@/config";
-import { GuestGuard } from "@/components/auth/guest-guard";
+import { GuestGuard } from "@/components/auth/GuestGuard";
 import { Layout } from "@/components/auth/layout";
-import { ResetPasswordForm } from "@/components/auth/reset-password-form";
+import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 
 export const metadata = {
   title: `Reset password | Auth | ${config.site.name}`,

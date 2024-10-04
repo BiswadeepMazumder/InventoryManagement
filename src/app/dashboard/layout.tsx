@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import GlobalStyles from "@mui/material/GlobalStyles";
 
-import { AuthGuard } from "@/components/auth/auth-guard";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 import { MainNav } from "@/components/dashboard/layout/MainNav";
 import { SideNav } from "@/components/dashboard/layout/SideNav";
 import { config } from "@/config";
