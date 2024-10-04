@@ -112,7 +112,7 @@ INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('Water', 'WT',
 INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('Orders', 'OD', 1);
 INSERT INTO Category (CategoryName, CategoryCode, Status) VALUES ('Users', 'US', 1);
 
--- Inserting all values into Item table
+
 
 INSERT INTO Items (ItemID, ItemName, ItemUnitPrice, CurrentStock, Status, CategoryCode) VALUES
 ('CD0010', 'Reese Peanut Butter Cups', 2, 345, 1, 'CD'),
