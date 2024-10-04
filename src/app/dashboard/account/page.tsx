@@ -5,8 +5,8 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 
 import { config } from "@/config";
-import { AccountDetailsForm } from "@/components/dashboard/account/account-details-form";
-import { AccountInfo } from "@/components/dashboard/account/account-info";
+import { AccountDetailsForm } from "@/components/dashboard/account/AccountDetailsForm";
+import { AccountInfo } from "@/components/dashboard/account/AccountInfo";
 
 export const metadata = {
   title: `Account | Dashboard | ${config.site.name}`,

@@ -10,8 +10,8 @@ import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Downloa
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 import { Upload as UploadIcon } from "@phosphor-icons/react/dist/ssr/Upload";
 
-import { OrdersFilters } from "@/components/dashboard/order/orders-filters";
-import { OrdersTable } from "@/components/dashboard/order/orders-table";
+import { OrdersFilters } from "@/components/dashboard/order/OrdersFilters";
+import { OrdersTable } from "@/components/dashboard/order/OrdersTable";
 
 import { Order } from "@/types/order";
 import useFetchOrders from "@/hooks/useFetchOrders";

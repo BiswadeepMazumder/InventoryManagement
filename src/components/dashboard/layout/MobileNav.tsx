@@ -6,22 +6,34 @@ import { usePathname, useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowSquareUpRight";
+import { CaretUpDown as CaretUpDownIcon } from "@phosphor-icons/react/dist/ssr/CaretUpDown";
 
 import type { NavItemConfig } from "@/types/nav";
 import { paths } from "@/paths";
 import { isNavItemActive } from "@/lib/is-nav-item-active";
 import { Logo } from "@/components/core/logo";
 
-import { navItems } from "./config";
-import { navIcons } from "./nav-icons";
-import { authClient } from "@/lib/auth/client";
-import { useUser } from "@/hooks/use-user";
 import { logger } from "@/lib/default-logger";
+import { useUser } from "@/hooks/use-user";
 
-export function SideNav(): React.JSX.Element {
+import { navItems } from "./config";
+import { navIcons } from "./NavIcons";
+import { authClient } from "@/lib/auth/client";
+
+export interface MobileNavProps {
+  onClose?: () => void;
+  open?: boolean;
+  items?: NavItemConfig[];
+}
+
+export function MobileNav({
+  open,
+  onClose,
+}: MobileNavProps): React.JSX.Element {
   const pathname = usePathname();
   const router = useRouter();
   const { checkSession } = useUser();
@@ -47,33 +59,33 @@ export function SideNav(): React.JSX.Element {
   }, [checkSession, router]);
 
   return (
-    <Box
-      sx={{
-        "--SideNav-background": "var(--mui-palette-neutral-950)",
-        "--SideNav-color": "var(--mui-palette-common-white)",
-        "--NavItem-color": "var(--mui-palette-neutral-300)",
-        "--NavItem-hover-background": "rgba(255, 255, 255, 0.04)",
-        "--NavItem-active-background": "var(--mui-palette-primary-main)",
-        "--NavItem-active-color": "var(--mui-palette-primary-contrastText)",
-        "--NavItem-disabled-color": "var(--mui-palette-neutral-500)",
-        "--NavItem-icon-color": "var(--mui-palette-neutral-400)",
-        "--NavItem-icon-active-color":
-          "var(--mui-palette-primary-contrastText)",
-        "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
-        backgroundColor: "var(--SideNav-background)",
-        color: "var(--SideNav-color)",
-        display: { xs: "none", lg: "flex" },
-        flexDirection: "column",
-        height: "100%",
-        left: 0,
-        maxWidth: "100%",
-        position: "fixed",
-        scrollbarWidth: "none",
-        top: 0,
-        width: "var(--SideNav-width)",
-        zIndex: "var(--SideNav-zIndex)",
-        "&::-webkit-scrollbar": { display: "none" },
+    <Drawer
+      PaperProps={{
+        sx: {
+          "--MobileNav-background": "var(--mui-palette-neutral-950)",
+          "--MobileNav-color": "var(--mui-palette-common-white)",
+          "--NavItem-color": "var(--mui-palette-neutral-300)",
+          "--NavItem-hover-background": "rgba(255, 255, 255, 0.04)",
+          "--NavItem-active-background": "var(--mui-palette-primary-main)",
+          "--NavItem-active-color": "var(--mui-palette-primary-contrastText)",
+          "--NavItem-disabled-color": "var(--mui-palette-neutral-500)",
+          "--NavItem-icon-color": "var(--mui-palette-neutral-400)",
+          "--NavItem-icon-active-color":
+            "var(--mui-palette-primary-contrastText)",
+          "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
+          backgroundColor: "var(--MobileNav-background)",
+          color: "var(--MobileNav-color)",
+          display: "flex",
+          flexDirection: "column",
+          maxWidth: "100%",
+          scrollbarWidth: "none",
+          width: "var(--MobileNav-width)",
+          zIndex: "var(--MobileNav-zIndex)",
+          "&::-webkit-scrollbar": { display: "none" },
+        },
       }}
+      onClose={onClose}
+      open={open}
     >
       <Stack spacing={2} sx={{ p: 3 }}>
         <Box
@@ -102,7 +114,7 @@ export function SideNav(): React.JSX.Element {
           Sign out
         </Button>
       </Stack>
-    </Box>
+    </Drawer>
   );
 }
 

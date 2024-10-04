@@ -9,8 +9,8 @@ import { List as ListIcon } from "@phosphor-icons/react/dist/ssr/List";
 
 import { usePopover } from "@/hooks/use-popover";
 
-import { MobileNav } from "./mobile-nav";
-import { UserPopover } from "./user-popover";
+import { MobileNav } from "./MobileNav";
+import { UserPopover } from "./UserPopover";
 
 export function MainNav(): React.JSX.Element {
   const [openNav, setOpenNav] = React.useState<boolean>(false);
