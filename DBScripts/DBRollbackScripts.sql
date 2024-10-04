@@ -85,7 +85,7 @@ DELETE FROM SupplierToCategory WHERE CategoryCode = 'TO' AND SupplierID = 'SUP90
 DELETE FROM SupplierToCategory WHERE CategoryCode = 'WT' AND SupplierID = 'SUP9030';
 
 
--- Rollback script to delete the inserted rows from OrderItems table
+
 
 DELETE FROM OrderItems WHERE OrderID = 'OD240910' AND ItemID = 'BR002007';
 DELETE FROM OrderItems WHERE OrderID = 'OD240910' AND ItemID = 'FZ006130';
