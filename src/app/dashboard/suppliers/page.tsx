@@ -12,12 +12,15 @@ import { Upload as UploadIcon } from "@phosphor-icons/react/dist/ssr/Upload";
 import { SuppliersTable } from "@/components/dashboard/supplier/suppliers-table";
 import { SuppliersFilters } from "@/components/dashboard/supplier/suppliers-filters";
 import { Supplier } from "@/types/supplier";
+import useFetchSuppliers from "@/hooks/useFetchSuppliers";
 
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const paginatedSuppliers = applyPagination([], page, rowsPerPage);
+  const { suppliers, loading } = useFetchSuppliers("user-id");
+
+  const paginatedSuppliers = applyPagination(suppliers, page, rowsPerPage);
 
   const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -33,9 +36,9 @@ export default function Page(): React.JSX.Element {
     setPage(0);
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Stack spacing={2}>

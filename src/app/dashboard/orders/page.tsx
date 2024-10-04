@@ -14,12 +14,15 @@ import { OrdersFilters } from "@/components/dashboard/order/orders-filters";
 import { OrdersTable } from "@/components/dashboard/order/orders-table";
 
 import { Order } from "@/types/order";
+import useFetchOrders from "@/hooks/useFetchOrders";
 
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const paginatedOrders = applyPagination([], page, rowsPerPage);
+  const { orders, loading } = useFetchOrders("user-id");
+
+  const paginatedOrders = applyPagination(orders, page, rowsPerPage);
 
   const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -35,9 +38,9 @@ export default function Page(): React.JSX.Element {
     setPage(0);
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Stack spacing={2}>
