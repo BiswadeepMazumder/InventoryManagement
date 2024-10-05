@@ -15,10 +15,12 @@ import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
 
 import { Item } from "@/types/item";
 import useFetchItems from "@/hooks/useFetchItems";
+import CreateItemModal from "@/components/dashboard/item/CreateItemModal";
 
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
 
   const { items, loading } = useFetchItems("user-id");
 
@@ -36,6 +38,18 @@ export default function Page(): React.JSX.Element {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleOpenCreateModal = () => {
+    setOpenCreateModal(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setOpenCreateModal(false);
+  };
+
+  const handleSubmitCreateItem = () => {
+    console.log("Create item");
   };
 
   if (loading) {
@@ -66,6 +80,7 @@ export default function Page(): React.JSX.Element {
           <Button
             startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
             variant="contained"
+            onClick={handleOpenCreateModal}
           >
             Add
           </Button>
@@ -79,6 +94,11 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+      />
+      <CreateItemModal
+        open={openCreateModal}
+        onClose={handleCloseCreateModal}
+        onSubmit={handleSubmitCreateItem}
       />
     </Stack>
   );
