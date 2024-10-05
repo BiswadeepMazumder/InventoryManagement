@@ -15,13 +15,13 @@ import { CaretUpDown as CaretUpDownIcon } from "@phosphor-icons/react/dist/ssr/C
 import type { NavItemConfig } from "@/types/nav";
 import { paths } from "@/paths";
 import { isNavItemActive } from "@/lib/is-nav-item-active";
-import { Logo } from "@/components/core/logo";
+import { Logo } from "@/components/core/Logo";
 
 import { logger } from "@/lib/default-logger";
-import { useUser } from "@/hooks/use-user";
+import { useUser } from "@/hooks/useUser";
 
 import { navItems } from "./config";
-import { navIcons } from "./nav-icons";
+import { navIcons } from "./NavIcons";
 import { authClient } from "@/lib/auth/client";
 
 export interface MobileNavProps {
@@ -73,7 +73,7 @@ export function MobileNav({
           "--NavItem-icon-active-color":
             "var(--mui-palette-primary-contrastText)",
           "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
-          bgcolor: "var(--MobileNav-background)",
+          backgroundColor: "var(--MobileNav-background)",
           color: "var(--MobileNav-color)",
           display: "flex",
           flexDirection: "column",
@@ -189,12 +189,12 @@ function NavItem({
           textDecoration: "none",
           whiteSpace: "nowrap",
           ...(disabled && {
-            bgcolor: "var(--NavItem-disabled-background)",
+            backgroundColor: "var(--NavItem-disabled-background)",
             color: "var(--NavItem-disabled-color)",
             cursor: "not-allowed",
           }),
           ...(active && {
-            bgcolor: "var(--NavItem-active-background)",
+            backgroundColor: "var(--NavItem-active-background)",
             color: "var(--NavItem-active-color)",
           }),
         }}

@@ -9,8 +9,8 @@ import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Downloa
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 import { Upload as UploadIcon } from "@phosphor-icons/react/dist/ssr/Upload";
 
-import { SuppliersTable } from "@/components/dashboard/supplier/suppliers-table";
-import { SuppliersFilters } from "@/components/dashboard/supplier/suppliers-filters";
+import { SuppliersTable } from "@/components/dashboard/supplier/SuppliersTable";
+import { SuppliersFilters } from "@/components/dashboard/supplier/SuppliersFilters";
 import { Supplier } from "@/types/supplier";
 import useFetchSuppliers from "@/hooks/useFetchSuppliers";
 

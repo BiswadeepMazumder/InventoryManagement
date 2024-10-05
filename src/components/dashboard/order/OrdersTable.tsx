@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,13 +13,13 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
-import { useSelection } from "@/hooks/use-selection";
-import { Item } from "@/types/item";
+import { useSelection } from "@/hooks/useSelection";
+import { Order } from "@/types/order";
 
 interface ItemsTableProps {
   count?: number;
   page?: number;
-  rows?: Item[];
+  rows?: Order[];
   rowsPerPage?: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -28,7 +28,7 @@ interface ItemsTableProps {
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function ItemsTable({
+export function OrdersTable({
   count = 0,
   rows = [],
   page = 0,
@@ -37,7 +37,7 @@ export function ItemsTable({
   onRowsPerPageChange,
 }: ItemsTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
-    return rows.map((item) => item.itemId);
+    return rows.map((item) => item.orderId);
   }, [rows]);
 
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -66,47 +66,46 @@ export function ItemsTable({
                   }}
                 />
               </TableCell>
-              <TableCell>Item Name</TableCell>
-              <TableCell>Item Unit Price</TableCell>
-              <TableCell>Current Stock</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Category Code</TableCell>
+              <TableCell>Order Id</TableCell>
+              <TableCell>Order Date</TableCell>
+              <TableCell>Order Name</TableCell>
+              <TableCell>Order Amount</TableCell>
+              <TableCell>Order Status</TableCell>
+              <TableCell>Cancel Comment</TableCell>
+              <TableCell>User Id</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.itemId);
+              const isSelected = selected?.has(row.orderId);
 
               return (
-                <TableRow hover key={row.itemId} selected={isSelected}>
+                <TableRow hover key={row.orderId} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
                         if (event.target.checked) {
-                          selectOne(row.itemId);
+                          selectOne(row.orderId);
                         } else {
-                          deselectOne(row.itemId);
+                          deselectOne(row.orderId);
                         }
                       }}
                     />
                   </TableCell>
                   <TableCell>
-                    <Stack
-                      sx={{ alignItems: "center" }}
-                      direction="row"
-                      spacing={2}
-                    >
-                      {/*<Avatar src={row.avatar} />*/}
-                      <Typography variant="subtitle2">
-                        {row.itemName}
-                      </Typography>
-                    </Stack>
+                    <Typography variant="subtitle2">{row.orderId}</Typography>
                   </TableCell>
-                  <TableCell>{row.itemUnitPrice}</TableCell>
-                  <TableCell>{row.currentStock}</TableCell>
-                  <TableCell>{row.status}</TableCell>
-                  <TableCell>{row.categoryCode}</TableCell>
+                  <TableCell>
+                    <Typography variant="subtitle2">{row.orderDate}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="subtitle2">{row.orderName}</Typography>
+                  </TableCell>
+                  <TableCell>{row.orderAmount}</TableCell>
+                  <TableCell>{row.orderStatus}</TableCell>
+                  <TableCell>{row.cancelComment}</TableCell>
+                  <TableCell>{row.userId}</TableCell>
                 </TableRow>
               );
             })}

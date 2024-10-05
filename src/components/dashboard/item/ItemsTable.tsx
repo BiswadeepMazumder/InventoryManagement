@@ -13,13 +13,13 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
-import { useSelection } from "@/hooks/use-selection";
-import { Supplier } from "@/types/supplier";
+import { useSelection } from "@/hooks/useSelection";
+import { Item } from "@/types/item";
 
-interface SuppliersTableProps {
+interface ItemsTableProps {
   count?: number;
   page?: number;
-  rows?: Supplier[];
+  rows?: Item[];
   rowsPerPage?: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -28,16 +28,16 @@ interface SuppliersTableProps {
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function SuppliersTable({
+export function ItemsTable({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-}: SuppliersTableProps): React.JSX.Element {
+}: ItemsTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
-    return rows.map((item) => item.supplierId);
+    return rows.map((item) => item.itemId);
   }, [rows]);
 
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -66,27 +66,27 @@ export function SuppliersTable({
                   }}
                 />
               </TableCell>
-              <TableCell>Supplier Name</TableCell>
-              <TableCell>Supplier Address</TableCell>
-              <TableCell>Supplier City</TableCell>
-              <TableCell>Supplier Zip Code</TableCell>
-              <TableCell>Supplier Phone Number</TableCell>
+              <TableCell>Item Name</TableCell>
+              <TableCell>Item Unit Price</TableCell>
+              <TableCell>Current Stock</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Category Code</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.supplierId);
+              const isSelected = selected?.has(row.itemId);
 
               return (
-                <TableRow hover key={row.supplierId} selected={isSelected}>
+                <TableRow hover key={row.itemId} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
                         if (event.target.checked) {
-                          selectOne(row.supplierId);
+                          selectOne(row.itemId);
                         } else {
-                          deselectOne(row.supplierId);
+                          deselectOne(row.itemId);
                         }
                       }}
                     />
@@ -99,14 +99,14 @@ export function SuppliersTable({
                     >
                       {/*<Avatar src={row.avatar} />*/}
                       <Typography variant="subtitle2">
-                        {row.supplierName}
+                        {row.itemName}
                       </Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.supplierAddress}</TableCell>
-                  <TableCell>{row.supplierCity}</TableCell>
-                  <TableCell>{row.supplierZipCode}</TableCell>
-                  <TableCell>{row.supplierPhoneNumber}</TableCell>
+                  <TableCell>{row.itemUnitPrice}</TableCell>
+                  <TableCell>{row.currentStock}</TableCell>
+                  <TableCell>{row.status}</TableCell>
+                  <TableCell>{row.categoryCode}</TableCell>
                 </TableRow>
               );
             })}

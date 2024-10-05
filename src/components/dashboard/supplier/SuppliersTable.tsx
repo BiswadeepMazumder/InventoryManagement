@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-
+import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,13 +13,13 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 
-import { useSelection } from "@/hooks/use-selection";
-import { Order } from "@/types/order";
+import { useSelection } from "@/hooks/useSelection";
+import { Supplier } from "@/types/supplier";
 
-interface ItemsTableProps {
+interface SuppliersTableProps {
   count?: number;
   page?: number;
-  rows?: Order[];
+  rows?: Supplier[];
   rowsPerPage?: number;
   onPageChange: (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -28,16 +28,16 @@ interface ItemsTableProps {
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function OrdersTable({
+export function SuppliersTable({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-}: ItemsTableProps): React.JSX.Element {
+}: SuppliersTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
-    return rows.map((item) => item.orderId);
+    return rows.map((item) => item.supplierId);
   }, [rows]);
 
   const { selectAll, deselectAll, selectOne, deselectOne, selected } =
@@ -66,46 +66,47 @@ export function OrdersTable({
                   }}
                 />
               </TableCell>
-              <TableCell>Order Id</TableCell>
-              <TableCell>Order Date</TableCell>
-              <TableCell>Order Name</TableCell>
-              <TableCell>Order Amount</TableCell>
-              <TableCell>Order Status</TableCell>
-              <TableCell>Cancel Comment</TableCell>
-              <TableCell>User Id</TableCell>
+              <TableCell>Supplier Name</TableCell>
+              <TableCell>Supplier Address</TableCell>
+              <TableCell>Supplier City</TableCell>
+              <TableCell>Supplier Zip Code</TableCell>
+              <TableCell>Supplier Phone Number</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.orderId);
+              const isSelected = selected?.has(row.supplierId);
 
               return (
-                <TableRow hover key={row.orderId} selected={isSelected}>
+                <TableRow hover key={row.supplierId} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
                         if (event.target.checked) {
-                          selectOne(row.orderId);
+                          selectOne(row.supplierId);
                         } else {
-                          deselectOne(row.orderId);
+                          deselectOne(row.supplierId);
                         }
                       }}
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2">{row.orderId}</Typography>
+                    <Stack
+                      sx={{ alignItems: "center" }}
+                      direction="row"
+                      spacing={2}
+                    >
+                      {/*<Avatar src={row.avatar} />*/}
+                      <Typography variant="subtitle2">
+                        {row.supplierName}
+                      </Typography>
+                    </Stack>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">{row.orderDate}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">{row.orderName}</Typography>
-                  </TableCell>
-                  <TableCell>{row.orderAmount}</TableCell>
-                  <TableCell>{row.orderStatus}</TableCell>
-                  <TableCell>{row.cancelComment}</TableCell>
-                  <TableCell>{row.userId}</TableCell>
+                  <TableCell>{row.supplierAddress}</TableCell>
+                  <TableCell>{row.supplierCity}</TableCell>
+                  <TableCell>{row.supplierZipCode}</TableCell>
+                  <TableCell>{row.supplierPhoneNumber}</TableCell>
                 </TableRow>
               );
             })}

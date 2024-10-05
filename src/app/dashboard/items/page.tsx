@@ -10,8 +10,8 @@ import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Downloa
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 import { Upload as UploadIcon } from "@phosphor-icons/react/dist/ssr/Upload";
 
-import { ItemsFilters } from "@/components/dashboard/item/items-filters";
-import { ItemsTable } from "@/components/dashboard/item/items-table";
+import { ItemsFilters } from "@/components/dashboard/item/ItemsFilters";
+import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
 
 import { Item } from "@/types/item";
 import useFetchItems from "@/hooks/useFetchItems";

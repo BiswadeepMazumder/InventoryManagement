@@ -6,7 +6,7 @@ import Alert from "@mui/material/Alert";
 
 import { paths } from "@/paths";
 import { logger } from "@/lib/default-logger";
-import { useUser } from "@/hooks/use-user";
+import { useUser } from "@/hooks/useUser";
 
 export interface GuestGuardProps {
   children: React.ReactNode;

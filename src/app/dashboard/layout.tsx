@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import GlobalStyles from "@mui/material/GlobalStyles";
 
-import { AuthGuard } from "@/components/auth/auth-guard";
-import { MainNav } from "@/components/dashboard/layout/main-nav";
-import { SideNav } from "@/components/dashboard/layout/side-nav";
+import { AuthGuard } from "@/components/auth/AuthGuard";
+import { MainNav } from "@/components/dashboard/layout/MainNav";
+import { SideNav } from "@/components/dashboard/layout/SideNav";
 import { config } from "@/config";
 
 export const metadata = {
@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
       />
       <Box
         sx={{
-          bgcolor: "var(--mui-palette-background-default)",
+          backgroundColor: "var(--mui-palette-background-default)",
           display: "flex",
           flexDirection: "column",
           position: "relative",

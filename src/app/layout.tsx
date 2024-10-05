@@ -2,8 +2,8 @@ import React from "react";
 import type { Metadata, Viewport } from "next";
 import "@/styles/global.css";
 
-import { UserProvider } from "@/contexts/user-context";
-import { ThemeProvider } from "@/components/core/theme-provider/theme-provider";
+import { UserProvider } from "@/contexts/UserContext";
+import { ThemeProvider } from "@/components/core/theme-provider/ThemeProvider";
 
 export const viewport = {
   width: "device-width",
