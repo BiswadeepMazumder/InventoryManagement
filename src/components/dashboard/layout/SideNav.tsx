@@ -17,7 +17,7 @@ import { Logo } from "@/components/logo/Logo";
 
 import { navItems } from "./config";
 import { navIcons } from "./NavIcons";
-import { authClient } from "@/utils/auth/client";
+import { authClient } from "@/utils/client";
 import { useUser } from "@/hooks/useUser";
 import { logger } from "@/utils/default-logger";
 

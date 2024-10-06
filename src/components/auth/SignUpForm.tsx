@@ -19,7 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z as zod } from "zod";
 
 import { paths } from "@/paths";
-import { authClient } from "@/utils/auth/client";
+import { authClient } from "@/utils/client";
 import { useUser } from "@/hooks/useUser";
 
 const schema = zod.object({

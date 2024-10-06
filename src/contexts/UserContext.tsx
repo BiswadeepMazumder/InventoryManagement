@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import type { User } from "@/types/user";
-import { authClient } from "@/utils/auth/client";
+import { authClient } from "@/utils/client";
 import { logger } from "@/utils/default-logger";
 
 export interface UserContextValue {

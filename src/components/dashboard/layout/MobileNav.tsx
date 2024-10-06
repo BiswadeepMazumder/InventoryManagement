@@ -22,7 +22,7 @@ import { useUser } from "@/hooks/useUser";
 
 import { navItems } from "./config";
 import { navIcons } from "./NavIcons";
-import { authClient } from "@/utils/auth/client";
+import { authClient } from "@/utils/client";
 
 export interface MobileNavProps {
   onClose?: () => void;

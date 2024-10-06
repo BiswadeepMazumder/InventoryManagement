@@ -13,7 +13,7 @@ import { SignOut as SignOutIcon } from "@phosphor-icons/react/dist/ssr/SignOut";
 import { User as UserIcon } from "@phosphor-icons/react/dist/ssr/User";
 
 import { paths } from "@/paths";
-import { authClient } from "@/utils/auth/client";
+import { authClient } from "@/utils/client";
 import { logger } from "@/utils/default-logger";
 import { useUser } from "@/hooks/useUser";
 
