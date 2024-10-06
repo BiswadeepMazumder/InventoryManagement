@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -33,13 +33,28 @@ export default function Page(): React.JSX.Element {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [searched, setSearched] = useState<string>("");
 
   const [selectedUpdateItem, setSelectedUpdateItem] = useState<Item>();
   const [selectedDeleteItem, setSelectedDeleteItem] = useState<Item[]>([]);
+  const [searchItems, setSearchItems] = useState<Item[]>([]);
 
   const { items, loading } = useFetchItems("user-id");
 
-  const paginatedItems = applyPagination(items, page, rowsPerPage);
+  const itemsToDisplay = searched ? searchItems : items;
+  const paginatedItems = applyPagination(itemsToDisplay, page, rowsPerPage);
+
+  useEffect(() => {
+    const filteredRows = items.filter((row) => {
+      return row.itemName.toLowerCase().includes(searched.toLowerCase());
+    });
+    console.log("Filtered Rows", filteredRows);
+    setSearchItems(filteredRows);
+  }, [searched]);
+
+  const cancelSearch = () => {
+    setSearched("");
+  };
 
   const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -156,9 +171,13 @@ export default function Page(): React.JSX.Element {
           </Button>
         </div>
       </Stack>
-      <ItemsFilters />
+      <ItemsFilters
+        value={searched}
+        onChange={(searchVal) => setSearched(searchVal)}
+        onCancelSearch={() => cancelSearch()}
+      />
       <ItemsTable
-        count={items.length}
+        count={itemsToDisplay.length}
         page={page}
         rows={paginatedItems}
         rowsPerPage={rowsPerPage}
