@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Item } from "@/types/item";
 
 const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
@@ -18,7 +19,7 @@ export const fetchItems = async (userId: string): Promise<any> => {
   return response.data;
 };
 
-export const createItem = async (userId: string, data: any): Promise<any> => {
+export const createItem = async (userId: string, item: Item): Promise<any> => {
   const options = {
     url: "",
     method: "POST",
@@ -27,8 +28,12 @@ export const createItem = async (userId: string, data: any): Promise<any> => {
       "Content-Type": "application/json;charset=UTF-8",
     },
     data: {
-      userId,
-      data,
+      itemId: item.itemId,
+      itemName: item.itemName,
+      itemUnitPrice: item.itemUnitPrice,
+      currentStock: item.currentStock,
+      status: item.status,
+      categoryCode: item.categoryCode,
     },
   };
   const response = await axios(options);
@@ -74,7 +79,7 @@ export const fetchItemById = async (
 export const updateItemById = async (
   userId: string,
   itemId: string,
-  data: any,
+  item: Item,
 ): Promise<any> => {
   const options = {
     url: "",
@@ -84,9 +89,12 @@ export const updateItemById = async (
       "Content-Type": "application/json;charset=UTF-8",
     },
     data: {
-      userId,
-      itemId,
-      data,
+      itemId: itemId,
+      itemName: item.itemName,
+      itemUnitPrice: item.itemUnitPrice,
+      currentStock: item.currentStock,
+      status: item.status,
+      categoryCode: item.categoryCode,
     },
   };
   const response = await axios(options);

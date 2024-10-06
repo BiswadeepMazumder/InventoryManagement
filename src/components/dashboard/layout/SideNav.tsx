@@ -12,14 +12,14 @@ import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from "@phosphor-icons/re
 
 import type { NavItemConfig } from "@/types/nav";
 import { paths } from "@/paths";
-import { isNavItemActive } from "@/lib/is-nav-item-active";
-import { Logo } from "@/components/core/Logo";
+import { isNavItemActive } from "@/utils/is-nav-item-active";
+import { Logo } from "@/components/logo/Logo";
 
 import { navItems } from "./config";
 import { navIcons } from "./NavIcons";
-import { authClient } from "@/lib/auth/client";
+import { authClient } from "@/utils/client";
 import { useUser } from "@/hooks/useUser";
-import { logger } from "@/lib/default-logger";
+import { logger } from "@/utils/default-logger";
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
