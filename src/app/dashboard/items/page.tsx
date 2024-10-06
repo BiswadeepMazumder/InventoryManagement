@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
-import { Upload as UploadIcon } from "@phosphor-icons/react/dist/ssr/Upload";
 
 import { ItemsFilters } from "@/components/dashboard/item/ItemsFilters";
 import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
@@ -26,6 +25,17 @@ import {
 } from "@/services/item.services";
 import UpdateItemModal from "@/components/dashboard/item/UpdateItemModal";
 import DeleteItemModal from "@/components/dashboard/item/DeleteItemModal";
+import ExportSheet from "@/utils/export-sheet";
+import ExportPopover from "@/components/table/ExportPopover";
+import { usePopover } from "@/hooks/usePopover";
+
+const applyPagination = (
+  rows: Item[],
+  page: number,
+  rowsPerPage: number,
+): Item[] => {
+  return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+};
 
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
@@ -39,6 +49,7 @@ export default function Page(): React.JSX.Element {
   const [selectedDeleteItem, setSelectedDeleteItem] = useState<Item[]>([]);
   const [searchItems, setSearchItems] = useState<Item[]>([]);
 
+  const exportPopover = usePopover<HTMLDivElement>();
   const { items, loading } = useFetchItems("user-id");
 
   const itemsToDisplay = searched ? searchItems : items;
@@ -139,6 +150,13 @@ export default function Page(): React.JSX.Element {
     handleCloseDeleteModal();
   };
 
+  const handleExport = (type: string) => {
+    console.log("Exporting items", type);
+    if (type) {
+      ExportSheet({ data: items, fileType: type as "csv" | "xlsx" });
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -153,6 +171,8 @@ export default function Page(): React.JSX.Element {
           <Button
             color="inherit"
             startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
+            onClick={exportPopover.handleOpen}
+            ref={exportPopover.anchorRef}
           >
             Export
           </Button>
@@ -165,11 +185,13 @@ export default function Page(): React.JSX.Element {
           </Button>
         </div>
       </Stack>
+
       <ItemsFilters
         value={searched}
         onChange={(searchVal) => setSearched(searchVal)}
         onCancelSearch={() => cancelSearch()}
       />
+
       <ItemsTable
         count={itemsToDisplay.length}
         page={page}
@@ -202,15 +224,14 @@ export default function Page(): React.JSX.Element {
         onSubmit={handleDeleteItem}
       />
 
+      <ExportPopover
+        anchorEl={exportPopover.anchorRef.current}
+        onClose={exportPopover.handleClose}
+        open={exportPopover.open}
+        onClick={handleExport}
+      />
+
       <ToastContainer />
     </Stack>
   );
-}
-
-function applyPagination(
-  rows: Item[],
-  page: number,
-  rowsPerPage: number,
-): Item[] {
-  return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 }
