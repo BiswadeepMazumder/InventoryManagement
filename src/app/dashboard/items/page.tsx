@@ -6,6 +6,9 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 import { Upload as UploadIcon } from "@phosphor-icons/react/dist/ssr/Upload";
@@ -16,6 +19,7 @@ import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
 import { Item } from "@/types/item";
 import useFetchItems from "@/hooks/useFetchItems";
 import CreateItemModal from "@/components/dashboard/item/CreateItemModal";
+import { createItem } from "@/services/item.services";
 
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
@@ -48,15 +52,21 @@ export default function Page(): React.JSX.Element {
     setOpenCreateModal(false);
   };
 
-  const handleSubmitCreateItem = () => {
-    console.log("Create item");
+  const handleSubmitCreateItem = async (values: Item) => {
+    console.log("Create item", values);
+    try {
+      const response = await createItem("user-id", values);
+      console.log("Item created", response);
+      toast(response.toString());
+    } catch (error) {
+      console.error("Error creating item", error);
+      if (error) toast(error.toString());
+    }
   };
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log("[DEBUG] items", items);
 
   return (
     <Stack spacing={2}>
@@ -100,6 +110,7 @@ export default function Page(): React.JSX.Element {
         onClose={handleCloseCreateModal}
         onSubmit={handleSubmitCreateItem}
       />
+      <ToastContainer />
     </Stack>
   );
 }
