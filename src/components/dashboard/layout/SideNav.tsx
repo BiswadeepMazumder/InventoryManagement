@@ -13,7 +13,7 @@ import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from "@phosphor-icons/re
 import type { NavItemConfig } from "@/types/nav";
 import { paths } from "@/paths";
 import { isNavItemActive } from "@/lib/is-nav-item-active";
-import { Logo } from "@/components/core/Logo";
+import { Logo } from "@/components/logo/Logo";
 
 import { navItems } from "./config";
 import { navIcons } from "./NavIcons";

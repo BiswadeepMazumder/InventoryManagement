@@ -13,7 +13,7 @@ import { ArrowClockwise as ArrowClockwiseIcon } from "@phosphor-icons/react/dist
 import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
 import type { ApexOptions } from "apexcharts";
 
-import { Chart } from "@/components/core/Chart";
+import { Chart } from "@/components/chart/Chart";
 
 export interface StatisticsProps {
   chartSeries: { name: string; data: number[] }[];
