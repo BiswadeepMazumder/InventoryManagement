@@ -19,12 +19,23 @@ import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
 import { Item } from "@/types/item";
 import useFetchItems from "@/hooks/useFetchItems";
 import CreateItemModal from "@/components/dashboard/item/CreateItemModal";
-import { createItem } from "@/services/item.services";
+import {
+  createItem,
+  deleteItemById,
+  updateItemById,
+} from "@/services/item.services";
+import UpdateItemModal from "@/components/dashboard/item/UpdateItemModal";
+import DeleteItemModal from "@/components/dashboard/item/DeleteItemModal";
 
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const [selectedUpdateItem, setSelectedUpdateItem] = useState<Item>();
+  const [selectedDeleteItem, setSelectedDeleteItem] = useState<Item[]>([]);
 
   const { items, loading } = useFetchItems("user-id");
 
@@ -52,16 +63,65 @@ export default function Page(): React.JSX.Element {
     setOpenCreateModal(false);
   };
 
-  const handleSubmitCreateItem = async (values: Item) => {
-    console.log("Create item", values);
+  const handleCreateItem = async (item: Item) => {
+    console.log("Create item", item);
     try {
-      const response = await createItem("user-id", values);
+      const response = await createItem("user-id", item);
       console.log("Item created", response);
       toast(response.toString());
     } catch (error) {
       console.error("Error creating item", error);
       if (error) toast(error.toString());
     }
+  };
+
+  const handleOpenUpdateModal = (values: Item) => {
+    setOpenUpdateModal(true);
+    setSelectedUpdateItem(values);
+  };
+
+  const handleCloseUpdateModal = () => {
+    setOpenUpdateModal(false);
+  };
+
+  const handleUpdateItem = async (item: Item) => {
+    console.log("Update item", item);
+    try {
+      const response = await updateItemById("user-id", item.itemId, item);
+      console.log("Item Updated", response);
+      toast(response.toString());
+    } catch (error) {
+      console.error("Error updating item", error);
+      if (error) toast(error.toString());
+    }
+  };
+
+  const handleOpenDeleteModal = (items: Item[]) => {
+    setOpenDeleteModal(true);
+    setSelectedDeleteItem(items);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  const handleDeleteItem = async () => {
+    console.log("Delete item", selectedDeleteItem);
+
+    // loop through the items and delete them one by one
+    for (const item of selectedDeleteItem) {
+      try {
+        const response = await deleteItemById("user-id", item.itemId);
+        console.log("Item Deleted", response);
+        toast(response.toString());
+      } catch (error) {
+        console.error("Error deleting item", error);
+        if (error) toast(error.toString());
+      }
+    }
+
+    // close the modal
+    handleCloseDeleteModal();
   };
 
   if (loading) {
@@ -104,12 +164,31 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        onUpdateItem={handleOpenUpdateModal}
+        onDeleteItem={handleOpenDeleteModal}
       />
+
       <CreateItemModal
         open={openCreateModal}
         onClose={handleCloseCreateModal}
-        onSubmit={handleSubmitCreateItem}
+        onSubmit={handleCreateItem}
       />
+
+      {selectedUpdateItem && (
+        <UpdateItemModal
+          item={selectedUpdateItem}
+          open={openUpdateModal}
+          onClose={handleCloseUpdateModal}
+          onSubmit={handleUpdateItem}
+        />
+      )}
+
+      <DeleteItemModal
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        onSubmit={handleDeleteItem}
+      />
+
       <ToastContainer />
     </Stack>
   );

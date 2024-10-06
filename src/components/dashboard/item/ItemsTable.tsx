@@ -15,6 +15,10 @@ import Typography from "@mui/material/Typography";
 
 import { useSelection } from "@/hooks/useSelection";
 import { Item } from "@/types/item";
+import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
+import IconButton from "@mui/material/IconButton";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import { Tooltip } from "@mui/material";
 
 interface ItemsTableProps {
   count?: number;
@@ -26,6 +30,8 @@ interface ItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onUpdateItem: (item: Item) => void;
+  onDeleteItem: (items: Item[]) => void;
 }
 
 export function ItemsTable({
@@ -35,6 +41,8 @@ export function ItemsTable({
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
+  onUpdateItem,
+  onDeleteItem,
 }: ItemsTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
     return rows.map((item) => item.itemId);
@@ -47,9 +55,23 @@ export function ItemsTable({
     (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
   const selectedAll = rows.length > 0 && selected?.size === rows.length;
 
+  const handleDeleteItem = () => {
+    onDeleteItem(
+      Array.from(selected).map(
+        (id) => rows.find((row) => row.itemId === id) as Item,
+      ),
+    );
+    deselectAll();
+  };
+
   return (
     <Card>
       <Box sx={{ overflowX: "auto" }}>
+        <EnhancedTableToolbar
+          title="All Items"
+          numSelected={selected.size}
+          onDeleteItem={handleDeleteItem}
+        />
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>
             <TableRow>
@@ -71,6 +93,7 @@ export function ItemsTable({
               <TableCell>Current Stock</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Category Code</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -97,7 +120,6 @@ export function ItemsTable({
                       direction="row"
                       spacing={2}
                     >
-                      {/*<Avatar src={row.avatar} />*/}
                       <Typography variant="subtitle2">
                         {row.itemName}
                       </Typography>
@@ -107,6 +129,13 @@ export function ItemsTable({
                   <TableCell>{row.currentStock}</TableCell>
                   <TableCell>{row.status}</TableCell>
                   <TableCell>{row.categoryCode}</TableCell>
+                  <TableCell padding="none">
+                    <Tooltip title="Edit item">
+                      <IconButton onClick={() => onUpdateItem(row)}>
+                        <EditNoteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
               );
             })}

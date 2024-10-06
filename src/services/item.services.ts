@@ -79,7 +79,7 @@ export const fetchItemById = async (
 export const updateItemById = async (
   userId: string,
   itemId: string,
-  data: any,
+  item: Item,
 ): Promise<any> => {
   const options = {
     url: "",
@@ -89,9 +89,12 @@ export const updateItemById = async (
       "Content-Type": "application/json;charset=UTF-8",
     },
     data: {
-      userId,
-      itemId,
-      data,
+      itemId: itemId,
+      itemName: item.itemName,
+      itemUnitPrice: item.itemUnitPrice,
+      currentStock: item.currentStock,
+      status: item.status,
+      categoryCode: item.categoryCode,
     },
   };
   const response = await axios(options);

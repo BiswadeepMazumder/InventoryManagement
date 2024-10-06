@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect } from "react";
 import { nanoid } from "nanoid";
 import { z as zod } from "zod";
 import { Controller, useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
+import { Item } from "@/types/item";
 
 const schema = zod.object({
   itemId: zod.string(),
@@ -40,12 +41,14 @@ const defaultValues = {
 } satisfies Values;
 
 type CreateItemModalProps = {
+  item: Item;
   open: boolean;
   onClose: () => void;
   onSubmit: (values: Values) => void;
 };
 
-export default function CreateItemModal({
+export default function UpdateItemModal({
+  item,
   open,
   onClose,
   onSubmit,
@@ -54,11 +57,20 @@ export default function CreateItemModal({
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const handleCreateItem = (values: Values) => {
-    console.log("Create item", values);
+  useEffect(() => {
+    setValue("itemName", item.itemName);
+    setValue("itemUnitPrice", item.itemUnitPrice);
+    setValue("currentStock", item.currentStock);
+    setValue("status", item.status);
+    setValue("categoryCode", item.categoryCode);
+  }, [item]);
+
+  const handleUpdateItem = (values: Values) => {
+    console.log("Update item", values);
     onSubmit(values);
     onClose();
   };
@@ -72,8 +84,8 @@ export default function CreateItemModal({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>Create a new item</DialogTitle>
-      <form onSubmit={handleSubmit(handleCreateItem)}>
+      <DialogTitle>Update item</DialogTitle>
+      <form onSubmit={handleSubmit(handleUpdateItem)}>
         <DialogContent>
           <Stack spacing={2}>
             <Controller
@@ -164,7 +176,7 @@ export default function CreateItemModal({
         <DialogActions>
           <Button onClick={onClose}>Close</Button>
           <Button type="submit" autoFocus>
-            Create item
+            Update item
           </Button>
         </DialogActions>
       </form>
