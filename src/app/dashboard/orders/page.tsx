@@ -49,12 +49,12 @@ export default function Page(): React.JSX.Element {
           <Typography variant="h4">Orders</Typography>
         </Stack>
         <div>
-          <Button
-            color="inherit"
-            startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}
-          >
-            Import
-          </Button>
+          {/*<Button*/}
+          {/*  color="inherit"*/}
+          {/*  startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}*/}
+          {/*>*/}
+          {/*  Import*/}
+          {/*</Button>*/}
           <Button
             color="inherit"
             startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
