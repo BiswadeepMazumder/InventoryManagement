@@ -61,6 +61,7 @@ export function ItemsTable({
         (id) => rows.find((row) => row.itemId === id) as Item,
       ),
     );
+
     deselectAll();
   };
 
@@ -70,7 +71,7 @@ export function ItemsTable({
         <EnhancedTableToolbar
           title="All Items"
           numSelected={selected.size}
-          onDeleteItem={handleDeleteItem}
+          onDelete={handleDeleteItem}
         />
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>

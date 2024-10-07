@@ -1,5 +1,4 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
@@ -15,6 +14,10 @@ import Typography from "@mui/material/Typography";
 
 import { useSelection } from "@/hooks/useSelection";
 import { Order } from "@/types/order";
+import { Tooltip } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
 
 interface ItemsTableProps {
   count?: number;
@@ -26,6 +29,8 @@ interface ItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onUpdateOrder: (order: Order) => void;
+  onDeleteOrder: (orders: Order[]) => void;
 }
 
 export function OrdersTable({
@@ -35,6 +40,8 @@ export function OrdersTable({
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
+  onUpdateOrder,
+  onDeleteOrder,
 }: ItemsTableProps): React.JSX.Element {
   const rowIds = React.useMemo(() => {
     return rows.map((item) => item.orderId);
@@ -47,9 +54,24 @@ export function OrdersTable({
     (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
   const selectedAll = rows.length > 0 && selected?.size === rows.length;
 
+  const handleDeleteOrder = () => {
+    onDeleteOrder(
+      Array.from(selected).map(
+        (orderId) => rows.find((order) => order.orderId === orderId) as Order,
+      ),
+    );
+
+    deselectAll();
+  };
+
   return (
     <Card>
       <Box sx={{ overflowX: "auto" }}>
+        <EnhancedTableToolbar
+          title="All Orders"
+          numSelected={selected.size}
+          onDelete={handleDeleteOrder}
+        />
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>
             <TableRow>
@@ -73,6 +95,7 @@ export function OrdersTable({
               <TableCell>Order Status</TableCell>
               <TableCell>Cancel Comment</TableCell>
               <TableCell>User Id</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,6 +129,13 @@ export function OrdersTable({
                   <TableCell>{row.orderStatus}</TableCell>
                   <TableCell>{row.cancelComment}</TableCell>
                   <TableCell>{row.userId}</TableCell>
+                  <TableCell padding="none">
+                    <Tooltip title="Edit order">
+                      <IconButton onClick={() => onUpdateOrder(row)}>
+                        <EditNoteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
               );
             })}

@@ -5,13 +5,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-type DeleteItemModalProps = {
+type DeleteOrderModalProps = {
   open: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-const DeleteItemModal = ({ open, onClose, onSubmit }: DeleteItemModalProps) => {
+const DeleteOrderModal = ({
+  open,
+  onClose,
+  onSubmit,
+}: DeleteOrderModalProps) => {
   const handleClose = (_event: object, reason: string) => {
     if (reason === "backdropClick" || reason === "escapeKeyDown") {
       return;
@@ -21,10 +25,10 @@ const DeleteItemModal = ({ open, onClose, onSubmit }: DeleteItemModalProps) => {
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>Delete item</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Delete order</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Are you sure you want to delete this item?
+          Are you sure you want to delete this order?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -37,4 +41,4 @@ const DeleteItemModal = ({ open, onClose, onSubmit }: DeleteItemModalProps) => {
   );
 };
 
-export default DeleteItemModal;
+export default DeleteOrderModal;

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 interface PopoverController<T> {
-  anchorRef: React.MutableRefObject<T | null>;
+  anchorRef: React.MutableRefObject<T | null> | any; // use any to avoid type error with Button ref prop in MUI components
   handleOpen: () => void;
   handleClose: () => void;
   handleToggle: () => void;
