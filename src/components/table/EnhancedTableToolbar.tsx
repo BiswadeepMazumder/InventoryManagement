@@ -8,13 +8,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 type EnhancedTableToolbarProps = {
   title?: string;
   numSelected: number;
-  onDeleteItem: () => void;
+  onDelete: () => void;
 };
 
 const EnhancedTableToolbar = ({
   title,
   numSelected,
-  onDeleteItem,
+  onDelete,
 }: EnhancedTableToolbarProps) => {
   return (
     <Toolbar
@@ -53,7 +53,7 @@ const EnhancedTableToolbar = ({
       )}
       {numSelected > 0 && (
         <Tooltip title="Delete">
-          <IconButton onClick={onDeleteItem}>
+          <IconButton onClick={onDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

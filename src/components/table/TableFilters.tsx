@@ -5,24 +5,28 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { MagnifyingGlass as MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr/MagnifyingGlass";
 import { X as XIcon } from "@phosphor-icons/react/dist/ssr/X";
 
-type ItemsFiltersProps = {
+type TableFiltersProps = {
   value: string;
+  defaultValue?: string;
+  placeholder?: string;
   onChange: (value: string) => void;
   onCancelSearch: () => void;
 };
 
-export function ItemsFilters({
+const TableFilters = ({
   value,
+  defaultValue = "",
+  placeholder = "",
   onChange,
   onCancelSearch,
-}: ItemsFiltersProps): React.JSX.Element {
+}: TableFiltersProps): React.JSX.Element => {
   return (
     <Card sx={{ p: 2 }}>
       <OutlinedInput
         value={value}
-        defaultValue=""
+        defaultValue={defaultValue}
         fullWidth
-        placeholder="Search item"
+        placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         sx={{ maxWidth: "500px" }}
         startAdornment={
@@ -44,4 +48,6 @@ export function ItemsFilters({
       />
     </Card>
   );
-}
+};
+
+export default TableFilters;

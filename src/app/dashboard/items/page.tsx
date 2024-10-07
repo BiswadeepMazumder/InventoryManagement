@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 
-import { ItemsFilters } from "@/components/dashboard/item/ItemsFilters";
+import TableFilters from "@/components/table/TableFilters";
 import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
 
 import { Item } from "@/types/item";
@@ -59,7 +59,7 @@ export default function Page(): React.JSX.Element {
     const filteredRows = items.filter((row) => {
       return row.itemName.toLowerCase().includes(searched.toLowerCase());
     });
-    console.log("Filtered Rows", filteredRows);
+
     setSearchItems(filteredRows);
   }, [searched]);
 
@@ -186,9 +186,10 @@ export default function Page(): React.JSX.Element {
         </div>
       </Stack>
 
-      <ItemsFilters
+      <TableFilters
+        placeholder="Search items"
         value={searched}
-        onChange={(searchVal) => setSearched(searchVal)}
+        onChange={(searchVal: string) => setSearched(searchVal)}
         onCancelSearch={() => cancelSearch()}
       />
 
