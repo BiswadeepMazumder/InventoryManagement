@@ -1,5 +1,5 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,13 +12,13 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-
-import { useSelection } from "@/hooks/useSelection";
-import { Item } from "@/types/item";
-import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
 import IconButton from "@mui/material/IconButton";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { Tooltip } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+
+import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
+import useSelection from "@/hooks/useSelection";
+import { Item } from "@/types/item";
 
 interface ItemsTableProps {
   count?: number;
@@ -30,20 +30,20 @@ interface ItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onUpdateItem: (item: Item) => void;
-  onDeleteItem: (items: Item[]) => void;
+  onUpdate: (item: Item) => void;
+  onDelete: (items: Item[]) => void;
 }
 
-export function ItemsTable({
+const ItemsTable = ({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-  onUpdateItem,
-  onDeleteItem,
-}: ItemsTableProps): React.JSX.Element {
+  onUpdate,
+  onDelete,
+}: ItemsTableProps): React.JSX.Element => {
   const rowIds = React.useMemo(() => {
     return rows.map((item) => item.itemId);
   }, [rows]);
@@ -56,7 +56,7 @@ export function ItemsTable({
   const selectedAll = rows.length > 0 && selected?.size === rows.length;
 
   const handleDeleteItem = () => {
-    onDeleteItem(
+    onDelete(
       Array.from(selected).map(
         (id) => rows.find((row) => row.itemId === id) as Item,
       ),
@@ -132,7 +132,7 @@ export function ItemsTable({
                   <TableCell>{row.categoryCode}</TableCell>
                   <TableCell padding="none">
                     <Tooltip title="Edit item">
-                      <IconButton onClick={() => onUpdateItem(row)}>
+                      <IconButton onClick={() => onUpdate(row)}>
                         <EditNoteIcon />
                       </IconButton>
                     </Tooltip>
@@ -155,4 +155,6 @@ export function ItemsTable({
       />
     </Card>
   );
-}
+};
+
+export default ItemsTable;

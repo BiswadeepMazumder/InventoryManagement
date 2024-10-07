@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -9,23 +11,25 @@ import Typography from "@mui/material/Typography";
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 
-import { OrdersTable } from "@/components/dashboard/order/OrdersTable";
+import OrdersTable from "@/components/dashboard/order/OrdersTable";
+import TableFilters from "@/components/table/TableFilters";
+import CreateOrderModal from "@/components/dashboard/order/CreateOrderModal";
+import UpdateOrderModal from "@/components/dashboard/order/UpdateOrderModal";
+import DeleteOrderModal from "@/components/dashboard/order/DeleteOrderModal";
+import ExportPopover from "@/components/table/ExportPopover";
 
 import { Order } from "@/types/order";
+
 import useFetchOrders from "@/hooks/useFetchOrders";
-import { usePopover } from "@/hooks/usePopover";
-import { toast, ToastContainer } from "react-toastify";
+import usePopover from "@/hooks/usePopover";
+
 import ExportSheet from "@/utils/export-sheet";
-import ExportPopover from "@/components/table/ExportPopover";
-import CreateOrderModal from "@/components/dashboard/order/CreateOrderModal";
+
 import {
   createOrder,
   deleteOrder,
   updateOrder,
 } from "@/services/order.services";
-import TableFilters from "@/components/table/TableFilters";
-import UpdateOrderModal from "@/components/dashboard/order/UpdateOrderModal";
-import DeleteOrderModal from "@/components/dashboard/order/DeleteOrderModal";
 
 const applyPagination = (
   rows: Order[],
@@ -38,6 +42,7 @@ const applyPagination = (
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -147,8 +152,14 @@ export default function Page(): React.JSX.Element {
 
   const handleExport = (type: string) => {
     console.log("Exporting orders", type);
-    if (type) {
-      ExportSheet({ data: orders, fileType: type as "csv" | "xlsx" });
+    try {
+      if (type) {
+        ExportSheet({ data: orders, fileType: type as "csv" | "xlsx" });
+        toast("Orders exported");
+      }
+    } catch (error) {
+      console.error("Error exporting orders", error);
+      if (error) toast(error.toString());
     }
   };
 
@@ -195,8 +206,8 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
-        onUpdateOrder={handleOpenUpdateModal}
-        onDeleteOrder={handleOpenDeleteModal}
+        onUpdate={handleOpenUpdateModal}
+        onDelete={handleOpenDeleteModal}
       />
 
       <CreateOrderModal

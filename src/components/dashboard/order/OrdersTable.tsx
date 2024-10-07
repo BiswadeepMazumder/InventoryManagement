@@ -1,9 +1,9 @@
 import * as React from "react";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,13 +11,13 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
-
-import { useSelection } from "@/hooks/useSelection";
-import { Order } from "@/types/order";
-import { Tooltip } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+
 import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
+import useSelection from "@/hooks/useSelection";
+import { Order } from "@/types/order";
 
 interface ItemsTableProps {
   count?: number;
@@ -29,20 +29,20 @@ interface ItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onUpdateOrder: (order: Order) => void;
-  onDeleteOrder: (orders: Order[]) => void;
+  onUpdate: (order: Order) => void;
+  onDelete: (orders: Order[]) => void;
 }
 
-export function OrdersTable({
+const OrdersTable = ({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-  onUpdateOrder,
-  onDeleteOrder,
-}: ItemsTableProps): React.JSX.Element {
+  onUpdate,
+  onDelete,
+}: ItemsTableProps): React.JSX.Element => {
   const rowIds = React.useMemo(() => {
     return rows.map((item) => item.orderId);
   }, [rows]);
@@ -55,7 +55,7 @@ export function OrdersTable({
   const selectedAll = rows.length > 0 && selected?.size === rows.length;
 
   const handleDeleteOrder = () => {
-    onDeleteOrder(
+    onDelete(
       Array.from(selected).map(
         (orderId) => rows.find((order) => order.orderId === orderId) as Order,
       ),
@@ -131,7 +131,7 @@ export function OrdersTable({
                   <TableCell>{row.userId}</TableCell>
                   <TableCell padding="none">
                     <Tooltip title="Edit order">
-                      <IconButton onClick={() => onUpdateOrder(row)}>
+                      <IconButton onClick={() => onUpdate(row)}>
                         <EditNoteIcon />
                       </IconButton>
                     </Tooltip>
@@ -154,4 +154,6 @@ export function OrdersTable({
       />
     </Card>
   );
-}
+};
+
+export default OrdersTable;

@@ -1,33 +1,35 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 
+import ItemsTable from "@/components/dashboard/item/ItemsTable";
 import TableFilters from "@/components/table/TableFilters";
-import { ItemsTable } from "@/components/dashboard/item/ItemsTable";
+import CreateItemModal from "@/components/dashboard/item/CreateItemModal";
+import UpdateItemModal from "@/components/dashboard/item/UpdateItemModal";
+import DeleteItemModal from "@/components/dashboard/item/DeleteItemModal";
+import ExportPopover from "@/components/table/ExportPopover";
 
 import { Item } from "@/types/item";
+
 import useFetchItems from "@/hooks/useFetchItems";
-import CreateItemModal from "@/components/dashboard/item/CreateItemModal";
+import usePopover from "@/hooks/usePopover";
+
+import ExportSheet from "@/utils/export-sheet";
+
 import {
   createItem,
   deleteItemById,
   updateItemById,
 } from "@/services/item.services";
-import UpdateItemModal from "@/components/dashboard/item/UpdateItemModal";
-import DeleteItemModal from "@/components/dashboard/item/DeleteItemModal";
-import ExportSheet from "@/utils/export-sheet";
-import ExportPopover from "@/components/table/ExportPopover";
-import { usePopover } from "@/hooks/usePopover";
 
 const applyPagination = (
   rows: Item[],
@@ -151,9 +153,14 @@ export default function Page(): React.JSX.Element {
   };
 
   const handleExport = (type: string) => {
-    console.log("Exporting items", type);
-    if (type) {
-      ExportSheet({ data: items, fileType: type as "csv" | "xlsx" });
+    try {
+      if (type) {
+        ExportSheet({ data: items, fileType: type as "csv" | "xlsx" });
+        toast("Items exported");
+      }
+    } catch (error) {
+      console.error("Error exporting items", error);
+      if (error) toast(error.toString());
     }
   };
 
@@ -200,8 +207,8 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
-        onUpdateItem={handleOpenUpdateModal}
-        onDeleteItem={handleOpenDeleteModal}
+        onUpdate={handleOpenUpdateModal}
+        onDelete={handleOpenDeleteModal}
       />
 
       <CreateItemModal
