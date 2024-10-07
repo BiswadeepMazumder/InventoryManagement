@@ -1,6 +1,4 @@
 import * as React from "react";
-import { nanoid } from "nanoid";
-import { z as zod } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -15,29 +13,11 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
 
-const schema = zod.object({
-  itemId: zod.string(),
-  itemName: zod.string().min(1, { message: "itemName is required" }),
-  itemUnitPrice: zod.coerce
-    .number()
-    .min(1, { message: "itemUnitPrice is required" }),
-  currentStock: zod.coerce
-    .number()
-    .min(1, { message: "currentStock is required" }),
-  status: zod.coerce.number().min(1, { message: "status is required" }),
-  categoryCode: zod.string().min(1, { message: "categoryCode is required" }),
-});
-
-type Values = zod.infer<typeof schema>;
-
-const defaultValues = {
-  itemId: nanoid(),
-  itemName: "",
-  itemUnitPrice: 0,
-  currentStock: 0,
-  status: 0,
-  categoryCode: "",
-} satisfies Values;
+import {
+  schema,
+  defaultValues,
+  Values,
+} from "@/components/dashboard/item/schema";
 
 type CreateItemModalProps = {
   open: boolean;
