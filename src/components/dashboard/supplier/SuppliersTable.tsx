@@ -1,5 +1,5 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
@@ -12,8 +12,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
-import { useSelection } from "@/hooks/useSelection";
+import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
+import useSelection from "@/hooks/useSelection";
 import { Supplier } from "@/types/supplier";
 
 interface SuppliersTableProps {
@@ -26,16 +30,20 @@ interface SuppliersTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onUpdate: (supplier: Supplier) => void;
+  onDelete: (suppliers: Supplier[]) => void;
 }
 
-export function SuppliersTable({
+const SuppliersTable = ({
   count = 0,
   rows = [],
   page = 0,
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-}: SuppliersTableProps): React.JSX.Element {
+  onUpdate,
+  onDelete,
+}: SuppliersTableProps): React.JSX.Element => {
   const rowIds = React.useMemo(() => {
     return rows.map((item) => item.supplierId);
   }, [rows]);
@@ -47,9 +55,27 @@ export function SuppliersTable({
     (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
   const selectedAll = rows.length > 0 && selected?.size === rows.length;
 
+  const handleDeleteSupplier = () => {
+    onDelete(
+      Array.from(selected).map(
+        (supplierId) =>
+          rows.find(
+            (supplier) => supplier.supplierId === supplierId,
+          ) as Supplier,
+      ),
+    );
+
+    deselectAll();
+  };
+
   return (
     <Card>
       <Box sx={{ overflowX: "auto" }}>
+        <EnhancedTableToolbar
+          title="All Suppliers"
+          numSelected={selected.size}
+          onDelete={handleDeleteSupplier}
+        />
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>
             <TableRow>
@@ -71,6 +97,7 @@ export function SuppliersTable({
               <TableCell>Supplier City</TableCell>
               <TableCell>Supplier Zip Code</TableCell>
               <TableCell>Supplier Phone Number</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -107,6 +134,13 @@ export function SuppliersTable({
                   <TableCell>{row.supplierCity}</TableCell>
                   <TableCell>{row.supplierZipCode}</TableCell>
                   <TableCell>{row.supplierPhoneNumber}</TableCell>
+                  <TableCell padding="none">
+                    <Tooltip title="Edit supplier">
+                      <IconButton onClick={() => onUpdate(row)}>
+                        <EditNoteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
               );
             })}
@@ -125,4 +159,6 @@ export function SuppliersTable({
       />
     </Card>
   );
-}
+};
+
+export default SuppliersTable;
