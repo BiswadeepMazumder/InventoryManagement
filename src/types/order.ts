@@ -2,7 +2,7 @@ export interface Order {
   orderId: string;
   orderDate: string;
   orderName: string;
-  userId: number;
+  userId: string;
   orderAmount: number;
   orderStatus: number;
   cancelComment: string;
@@ -14,7 +14,7 @@ export interface OrderItems {
   itemId: string;
   orderDate: string;
   itemCount: number;
-  itemName: number;
+  itemName: string;
   totalPrice: number;
-  orderStatus: string;
+  orderStatus: number;
 }
