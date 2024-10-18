@@ -1,4 +1,9 @@
 import React from "react";
+import { useRouter } from "next/navigation";
+
+import { ArrowCircleRight as ArrowCircleRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowCircleRight";
+import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -11,8 +16,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import type { SxProps } from "@mui/material/styles";
-import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
-import { ArrowCircleRight as ArrowCircleRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowCircleRight";
 
 export interface Supplier {
   id: string;
@@ -30,6 +33,12 @@ export function Suppliers({
   suppliers = [],
   sx,
 }: SuppliersProps): React.JSX.Element {
+  const router = useRouter();
+
+  const handleViewAll = () => {
+    router.push("dashboard/suppliers");
+  };
+
   return (
     <Card sx={sx}>
       <CardHeader title="Suppliers" />
@@ -74,6 +83,7 @@ export function Suppliers({
           endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
           size="small"
           variant="text"
+          onClick={handleViewAll}
         >
           View all
         </Button>
