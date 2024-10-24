@@ -19,17 +19,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 const statusMap = {
-  pending: { label: "Pending", color: "warning" },
-  completed: { label: "Completed", color: "success" },
-  refunded: { label: "Refunded", color: "error" },
+  0: { label: "Order Canceled", color: "error" },
+  1: { label: "Order Placed", color: "info" },
+  2: { label: "Order Accepted by Supplier", color: "primary" },
+  3: { label: "Order Ready", color: "success" },
+  4: { label: "Order in Transit", color: "warning" },
+  5: { label: "Order Delivered", color: "success" },
 } as const;
+//   pending: { label: "Pending", color: "warning" },
+//   completed: { label: "Completed", color: "success" },
+//   refunded: { label: "Refunded", color: "error" },
 
 export interface Order {
   id: string;
   createdAt: Date;
   amount: number;
   orderName: string;
-  status: number; // "pending" | "completed" | "refunded"
+  status: 0 | 1 | 2 | 3 | 4 | 5; // "pending" | "completed" | "refunded"
 }
 
 export interface RecentOrdersProps {
