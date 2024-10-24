@@ -5,6 +5,10 @@ import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 
 import useFetchLowStockItem from "@/hooks/useFetchLowStockItem";
+import useFetchSuppliers from "@/hooks/useFetchSuppliers";
+import useFetchOrders from "@/hooks/useFetchOrders";
+import useFetchUpcomingOrders from "@/hooks/useFetchUpcomingOrders";
+import useFetchPastOrders from "@/hooks/useFetchPastOrders";
 
 import { PastOrder } from "@/components/dashboard/overview/PastOrder";
 import { LowStock } from "@/components/dashboard/overview/LowStock";
@@ -14,14 +18,19 @@ import { RecentOrders } from "@/components/dashboard/overview/RecentOrders";
 import { Statistics } from "@/components/dashboard/overview/Statistics";
 import { ItemStock } from "@/components/dashboard/overview/ItemStock";
 import { Suppliers } from "@/components/dashboard/overview/Suppliers";
-import useFetchSuppliers from "@/hooks/useFetchSuppliers";
-import useFetchOrders from "@/hooks/useFetchOrders";
 
 export default function Page(): React.JSX.Element {
+  // Fetch order data
+  const { orders, loading: ordersLoading } = useFetchOrders("user-id");
+  const { orders: upcomingOrders, loading: upcomingOrdersLoading } =
+    useFetchUpcomingOrders("user-id");
+  const { orders: pastOrders, loading: pastOrdersLoading } =
+    useFetchPastOrders("user-id");
   const { items: lowStockItems, loading: lowStockLoading } =
     useFetchLowStockItem("user-id");
+
+  // Fetch supplier data
   const { suppliers, loading: suppliersLoading } = useFetchSuppliers("user-id");
-  const { orders, loading: ordersLoading } = useFetchOrders("user-id");
 
   const createRandomImage = (name: string) => {
     return `https://avatar.iran.liara.run/public/boy?username=${name}`;
@@ -42,8 +51,6 @@ export default function Page(): React.JSX.Element {
     createdAt: dayjs(order.orderDate).toDate(),
   }));
 
-  console.log("ordersData", ordersData);
-
   const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
 
   return (
@@ -51,26 +58,31 @@ export default function Page(): React.JSX.Element {
       {/* Current Order */}
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
         <CurrentOrder
-          diff={16}
-          trend="up"
+          // diff={16}
+          // trend="up"
           sx={{ height: "100%" }}
-          value="7,278"
+          value={orders.length.toString()}
         />
       </Grid>
 
       {/* Upcoming Order */}
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
         <UpcomingOrder
-          diff={29}
-          trend="down"
+          // diff={29}
+          // trend="down"
           sx={{ height: "100%" }}
-          value="4,502"
+          value={upcomingOrders.length.toString()}
         />
       </Grid>
 
       {/* Past Order */}
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <PastOrder diff={12} trend="up" sx={{ height: "100%" }} value="6,452" />
+        <PastOrder
+          // diff={12}
+          // trend="up"
+          sx={{ height: "100%" }}
+          value={pastOrders.length.toString()}
+        />
       </Grid>
 
       {/* Low Stock */}
