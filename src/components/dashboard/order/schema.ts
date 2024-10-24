@@ -40,7 +40,7 @@ export const defaultValues = {
   orderName: "",
   userId: "",
   orderAmount: 0,
-  orderStatus: 0,
+  orderStatus: 0 | 1 | 2 | 3 | 4 | 5,
   cancelComment: "",
   orderItems: [
     {
@@ -50,7 +50,7 @@ export const defaultValues = {
       itemCount: 0,
       itemName: "",
       totalPrice: 0,
-      orderStatus: 0,
+      orderStatus: 0 | 1 | 2 | 3 | 4 | 5,
     },
   ],
 } satisfies Values;
