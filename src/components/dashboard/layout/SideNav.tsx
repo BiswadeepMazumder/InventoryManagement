@@ -52,7 +52,7 @@ export function SideNav(): React.JSX.Element {
         "--SideNav-background": "var(--mui-palette-neutral-950)",
         "--SideNav-color": "var(--mui-palette-common-white)",
         "--NavItem-color": "var(--mui-palette-neutral-300)",
-        "--NavItem-hover-background": "rgba(255, 255, 255, 0.04)",
+        "--NavItem-hover-background": "rgba(255, 255, 255, 0.10)",
         "--NavItem-active-background": "var(--mui-palette-primary-main)",
         "--NavItem-active-color": "var(--mui-palette-primary-contrastText)",
         "--NavItem-disabled-color": "var(--mui-palette-neutral-500)",
@@ -75,6 +75,7 @@ export function SideNav(): React.JSX.Element {
         "&::-webkit-scrollbar": { display: "none" },
       }}
     >
+      {/* Logo */}
       <Stack spacing={2} sx={{ p: 3 }}>
         <Box
           component={RouterLink}
@@ -84,11 +85,19 @@ export function SideNav(): React.JSX.Element {
           <Logo color="light" height={32} width={122} />
         </Box>
       </Stack>
+
+      {/* Divider */}
       <Divider sx={{ borderColor: "var(--mui-palette-neutral-700)" }} />
+
+      {/* Nav Items */}
       <Box component="nav" sx={{ flex: "1 1 auto", p: "12px" }}>
         {renderNavItems({ pathname, items: navItems })}
       </Box>
+
+      {/* Divider */}
       <Divider sx={{ borderColor: "var(--mui-palette-neutral-700)" }} />
+
+      {/* Sign Out */}
       <Stack spacing={2} sx={{ p: "12px" }}>
         <Button
           variant="contained"
@@ -155,7 +164,7 @@ function NavItem({
 
   return (
     <li>
-      <Box
+      <Button
         {...(href
           ? {
               component: external ? "a" : RouterLink,
@@ -185,6 +194,9 @@ function NavItem({
             backgroundColor: "var(--NavItem-active-background)",
             color: "var(--NavItem-active-color)",
           }),
+          "&:hover": {
+            backgroundColor: "var(--NavItem-hover-background)",
+          },
         }}
       >
         <Box
@@ -220,7 +232,7 @@ function NavItem({
             {title}
           </Typography>
         </Box>
-      </Box>
+      </Button>
     </li>
   );
 }

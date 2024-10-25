@@ -1,4 +1,9 @@
 import * as React from "react";
+import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+
+import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -12,21 +17,25 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
-import dayjs from "dayjs";
 
 const statusMap = {
-  pending: { label: "Pending", color: "warning" },
-  completed: { label: "Completed", color: "success" },
-  refunded: { label: "Refunded", color: "error" },
+  0: { label: "Order Canceled", color: "error" },
+  1: { label: "Order Placed", color: "info" },
+  2: { label: "Order Accepted by Supplier", color: "primary" },
+  3: { label: "Order Ready", color: "success" },
+  4: { label: "Order in Transit", color: "warning" },
+  5: { label: "Order Delivered", color: "success" },
 } as const;
+//   pending: { label: "Pending", color: "warning" },
+//   completed: { label: "Completed", color: "success" },
+//   refunded: { label: "Refunded", color: "error" },
 
 export interface Order {
   id: string;
   createdAt: Date;
-  price: string;
+  amount: number;
   orderName: string;
-  status: "pending" | "completed" | "refunded";
+  status: number; // "pending" | "completed" | "refunded"
 }
 
 export interface RecentOrdersProps {
@@ -38,6 +47,12 @@ export function RecentOrders({
   orders = [],
   sx,
 }: RecentOrdersProps): React.JSX.Element {
+  const router = useRouter();
+
+  const handleViewAll = () => {
+    router.push("dashboard/orders");
+  };
+
   return (
     <Card sx={sx}>
       <CardHeader title="Recent Orders" />
@@ -48,14 +63,16 @@ export function RecentOrders({
             <TableRow>
               <TableCell>Order ID</TableCell>
               <TableCell sortDirection="desc">Date</TableCell>
-              <TableCell>Price</TableCell>
+              <TableCell>Amount</TableCell>
               <TableCell>Order Name</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {orders.map((order) => {
-              const { label, color } = statusMap[order.status] ?? {
+              const { label, color } = statusMap[
+                order.status as 0 | 1 | 2 | 3 | 4 | 5
+              ] ?? {
                 label: "Unknown",
                 color: "default",
               };
@@ -66,7 +83,7 @@ export function RecentOrders({
                   <TableCell>
                     {dayjs(order.createdAt).format("MM/DD/YYYY")}
                   </TableCell>
-                  <TableCell>{order.price}</TableCell>
+                  <TableCell>{order.amount}</TableCell>
                   <TableCell>{order.orderName}</TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />
@@ -84,6 +101,7 @@ export function RecentOrders({
           endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
           size="small"
           variant="text"
+          onClick={handleViewAll}
         >
           View all
         </Button>
