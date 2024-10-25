@@ -42,11 +42,7 @@ export function LowStock({
               spacing={3}
             >
               <Stack spacing={1}>
-                <Typography
-                  color="text.secondary"
-                  gutterBottom
-                  variant="overline"
-                >
+                <Typography color="text.primary" gutterBottom variant="h5">
                   Low Stock
                 </Typography>
                 <Typography variant="h4">

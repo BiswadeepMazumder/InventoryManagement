@@ -51,7 +51,7 @@ export function PastOrder({
               spacing={3}
             >
               <Stack spacing={1}>
-                <Typography color="text.secondary" variant="overline">
+                <Typography color="text.primary" variant="h5">
                   Past Order
                 </Typography>
                 <Typography variant="h4">{value}</Typography>
