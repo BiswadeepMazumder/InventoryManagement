@@ -35,7 +35,7 @@ export interface Order {
   createdAt: Date;
   amount: number;
   orderName: string;
-  status: 0 | 1 | 2 | 3 | 4 | 5; // "pending" | "completed" | "refunded"
+  status: number; // "pending" | "completed" | "refunded"
 }
 
 export interface RecentOrdersProps {
@@ -70,7 +70,9 @@ export function RecentOrders({
           </TableHead>
           <TableBody>
             {orders.map((order) => {
-              const { label, color } = statusMap[order.status] ?? {
+              const { label, color } = statusMap[
+                order.status as 0 | 1 | 2 | 3 | 4 | 5
+              ] ?? {
                 label: "Unknown",
                 color: "default",
               };
