@@ -9,6 +9,7 @@ import useFetchSuppliers from "@/hooks/useFetchSuppliers";
 import useFetchOrders from "@/hooks/useFetchOrders";
 import useFetchUpcomingOrders from "@/hooks/useFetchUpcomingOrders";
 import useFetchPastOrders from "@/hooks/useFetchPastOrders";
+import useFetchItems from "@/hooks/useFetchItems";
 
 import { PastOrder } from "@/components/dashboard/overview/PastOrder";
 import { LowStock } from "@/components/dashboard/overview/LowStock";
@@ -32,12 +33,16 @@ export default function Page(): React.JSX.Element {
   // Fetch supplier data
   const { suppliers, loading: suppliersLoading } = useFetchSuppliers("user-id");
 
+  // Fetch item data
+  const { items, loading: itemsLoading } = useFetchItems("user-id");
+
   const loading =
     ordersLoading ||
     upcomingOrdersLoading ||
     pastOrdersLoading ||
     lowStockLoading ||
-    suppliersLoading;
+    suppliersLoading ||
+    itemsLoading;
 
   const createRandomImage = (name: string) => {
     return `https://avatar.iran.liara.run/public/boy?username=${name}`;
@@ -59,6 +64,27 @@ export default function Page(): React.JSX.Element {
   }));
 
   const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
+
+  // Get item categories for the ItemStock chart
+  const itemCategories = items.map((item) => item.categoryCode);
+  console.log("[DEBUG] itemCategories", itemCategories);
+
+  // Get unique item categories
+  const uniqueItemCategories = [...new Set(itemCategories)];
+  console.log("[DEBUG] uniqueItemCategories", uniqueItemCategories);
+
+  // Get the count of each item category
+  const itemCounts = uniqueItemCategories.map((category) => {
+    return itemCategories.filter((item) => item === category).length;
+  });
+  console.log("[DEBUG] itemCounts", itemCounts);
+
+  // Get Percentage of each item category
+  const totalItems = itemCategories.length;
+  const itemPercentages = itemCounts.map((count) =>
+    Math.round((count / totalItems) * 100),
+  );
+  console.log("[DEBUG] itemPercentages", itemPercentages);
 
   if (loading) {
     return <Grid>Loading...</Grid>;
@@ -135,8 +161,8 @@ export default function Page(): React.JSX.Element {
       {/* Item Stock */}
       <Grid size={{ lg: 4, md: 4, xs: 12 }}>
         <ItemStock
-          chartSeries={[63, 15, 22]}
-          labels={["Category 1", "Category 2", "Category 3"]}
+          chartSeries={itemPercentages}
+          labels={uniqueItemCategories}
           sx={{ height: "100%" }}
         />
       </Grid>
