@@ -32,6 +32,13 @@ export default function Page(): React.JSX.Element {
   // Fetch supplier data
   const { suppliers, loading: suppliersLoading } = useFetchSuppliers("user-id");
 
+  const loading =
+    ordersLoading ||
+    upcomingOrdersLoading ||
+    pastOrdersLoading ||
+    lowStockLoading ||
+    suppliersLoading;
+
   const createRandomImage = (name: string) => {
     return `https://avatar.iran.liara.run/public/boy?username=${name}`;
   };
@@ -52,6 +59,10 @@ export default function Page(): React.JSX.Element {
   }));
 
   const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
+
+  if (loading) {
+    return <Grid>Loading...</Grid>;
+  }
 
   return (
     <Grid container spacing={3}>
