@@ -53,6 +53,11 @@ export function RecentOrders({
     router.push("dashboard/orders");
   };
 
+  // sort orders by date
+  const sortedOrders = orders.sort((a, b) => {
+    return a.createdAt.getTime() - b.createdAt.getTime();
+  });
+
   return (
     <Card sx={sx}>
       <CardHeader title="Recent Orders" />
@@ -69,7 +74,7 @@ export function RecentOrders({
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
+            {sortedOrders.map((order) => {
               const { label, color } = statusMap[
                 order.status as 0 | 1 | 2 | 3 | 4 | 5
               ] ?? {
