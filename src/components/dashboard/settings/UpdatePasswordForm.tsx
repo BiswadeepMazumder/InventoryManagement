@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,11 +12,26 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 
-export function UpdatePasswordForm(): React.JSX.Element {
+type UpdatePasswordFormProps = {
+  onChangePassword: (currentPassword: string, newPassword: string) => void;
+};
+
+export function UpdatePasswordForm({
+  onChangePassword,
+}: UpdatePasswordFormProps): React.JSX.Element {
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        const currentPassword = formData.get("currentPassword") as string;
+        const newPassword = formData.get("newPassword") as string;
+
+        onChangePassword(currentPassword, newPassword);
+
+        // Clear form fields after submission
+        event.currentTarget.reset();
       }}
     >
       <Card>
@@ -25,14 +40,18 @@ export function UpdatePasswordForm(): React.JSX.Element {
         <CardContent>
           <Stack spacing={3} sx={{ maxWidth: "sm" }}>
             <FormControl fullWidth>
-              <InputLabel>Password</InputLabel>
-              <OutlinedInput label="Password" name="password" type="password" />
+              <InputLabel>Current Password</InputLabel>
+              <OutlinedInput
+                label="Current Password"
+                name="currentPassword"
+                type="password"
+              />
             </FormControl>
             <FormControl fullWidth>
-              <InputLabel>Confirm password</InputLabel>
+              <InputLabel>New Password</InputLabel>
               <OutlinedInput
-                label="Confirm password"
-                name="confirmPassword"
+                label="New Password"
+                name="newPassword"
                 type="password"
               />
             </FormControl>
@@ -40,7 +59,9 @@ export function UpdatePasswordForm(): React.JSX.Element {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained">Update</Button>
+          <Button variant="contained" type="submit">
+            Update
+          </Button>
         </CardActions>
       </Card>
     </form>
