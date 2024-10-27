@@ -13,7 +13,7 @@ import { SignOut as SignOutIcon } from "@phosphor-icons/react/dist/ssr/SignOut";
 import { User as UserIcon } from "@phosphor-icons/react/dist/ssr/User";
 
 import { paths } from "@/paths";
-import { authClient } from "@/utils/client";
+import { authClient, NAME_DELIMITER } from "@/utils/client";
 import { logger } from "@/utils/default-logger";
 import { useUser } from "@/hooks/useUser";
 
@@ -28,7 +28,11 @@ export function UserPopover({
   onClose,
   open,
 }: UserPopoverProps): React.JSX.Element {
-  const { checkSession } = useUser();
+  const { user, checkSession } = useUser();
+
+  const displayName = (user?.displayName || "") as string;
+  const email = user?.email || "";
+  const [firstName, lastName] = displayName.split(NAME_DELIMITER);
 
   const router = useRouter();
 
@@ -61,9 +65,11 @@ export function UserPopover({
       slotProps={{ paper: { sx: { width: "240px" } } }}
     >
       <Box sx={{ p: "16px 20px " }}>
-        <Typography variant="subtitle1">Name</Typography>
+        <Typography variant="subtitle1">
+          {firstName} {lastName}
+        </Typography>
         <Typography color="text.secondary" variant="body2">
-          Email
+          {email}
         </Typography>
       </Box>
       <Divider />
@@ -71,6 +77,17 @@ export function UserPopover({
         disablePadding
         sx={{ p: "8px", "& .MuiMenuItem-root": { borderRadius: 1 } }}
       >
+        <MenuItem
+          component={RouterLink}
+          href={paths.dashboard.account}
+          onClick={onClose}
+        >
+          <ListItemIcon>
+            <UserIcon fontSize="var(--icon-fontSize-md)" />
+          </ListItemIcon>
+          Account
+        </MenuItem>
+
         <MenuItem
           component={RouterLink}
           href={paths.dashboard.settings}
@@ -81,16 +98,7 @@ export function UserPopover({
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem
-          component={RouterLink}
-          href={paths.dashboard.account}
-          onClick={onClose}
-        >
-          <ListItemIcon>
-            <UserIcon fontSize="var(--icon-fontSize-md)" />
-          </ListItemIcon>
-          Profile
-        </MenuItem>
+
         <MenuItem onClick={handleSignOut}>
           <ListItemIcon>
             <SignOutIcon fontSize="var(--icon-fontSize-md)" />
