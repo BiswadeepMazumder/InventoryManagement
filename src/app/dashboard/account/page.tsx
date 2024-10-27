@@ -1,18 +1,26 @@
+"use client";
+
 import * as React from "react";
-import type { Metadata } from "next";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 
-import { config } from "@/config";
 import { AccountDetailsForm } from "@/components/dashboard/account/AccountDetailsForm";
 import { AccountInfo } from "@/components/dashboard/account/AccountInfo";
-
-export const metadata = {
-  title: `Account | Dashboard | ${config.site.name}`,
-} satisfies Metadata;
+import { useUser } from "@/hooks/useUser";
+import { NAME_DELIMITER } from "@/utils/client";
 
 export default function Page(): React.JSX.Element {
+  const { user, isLoading } = useUser();
+  const displayName = (user?.displayName || "") as string;
+  const [firstName, lastName] = displayName.split(NAME_DELIMITER);
+
+  const email = user?.email;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Stack spacing={3}>
       <div>
@@ -20,10 +28,14 @@ export default function Page(): React.JSX.Element {
       </div>
       <Grid container spacing={3}>
         <Grid size={{ lg: 4, md: 6, xs: 12 }}>
-          <AccountInfo />
+          <AccountInfo firstName={firstName} lastName={lastName} />
         </Grid>
         <Grid size={{ lg: 8, md: 6, xs: 12 }}>
-          <AccountDetailsForm />
+          <AccountDetailsForm
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+          />
         </Grid>
       </Grid>
     </Stack>
