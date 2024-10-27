@@ -70,7 +70,7 @@ export function Suppliers({
               secondary={supplier.address}
               secondaryTypographyProps={{ variant: "body2" }}
             />
-            <IconButton edge="end">
+            <IconButton edge="end" onClick={handleViewAll}>
               <ArrowCircleRightIcon weight="bold" />
             </IconButton>
           </ListItem>
