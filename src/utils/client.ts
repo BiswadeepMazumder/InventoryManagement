@@ -3,6 +3,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 
 import { auth } from "@/firebase";
@@ -15,13 +16,15 @@ function generateToken(): string {
   return Array.from(arr, (v) => v.toString(16).padStart(2, "0")).join("");
 }
 
-const user = {
-  id: "USER-0001",
-  avatar: "/assets/avatar.png",
-  firstName: "First Name",
-  lastName: "Last Name",
-  email: "user@company.com",
-} satisfies User;
+// const user = {
+//   id: "USER-0001",
+//   avatar: "/assets/avatar.png",
+//   firstName: "First Name",
+//   lastName: "Last Name",
+//   email: "user@company.com",
+// } satisfies User;
+
+export const NAME_DELIMITER = "|%%|";
 
 export interface SignUpParams {
   firstName: string;
@@ -51,6 +54,10 @@ class AuthClient {
       );
       const user = userCredential.user;
       console.log("[DEBUG] User created:", user);
+
+      await updateProfile(user, {
+        displayName: `${firstName}${NAME_DELIMITER}${lastName}`,
+      });
 
       const token = generateToken();
       localStorage.setItem("auth-token", token);
