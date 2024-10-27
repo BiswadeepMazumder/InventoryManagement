@@ -19,27 +19,6 @@ export const fetchItems = async (userId: string): Promise<any> => {
   return response.data;
 };
 
-export const createItem = async (userId: string, item: Item): Promise<any> => {
-  const options = {
-    url: "",
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-    data: {
-      itemId: item.itemId,
-      itemName: item.itemName,
-      itemUnitPrice: item.itemUnitPrice,
-      currentStock: item.currentStock,
-      status: item.status,
-      categoryCode: item.categoryCode,
-    },
-  };
-  const response = await axios(options);
-  return response.data;
-};
-
 export const fetchLowStockItem = async (userId: string): Promise<any> => {
   const options = {
     url: `${API_ENDPOINT}/api/Item/lowstock`,
@@ -61,15 +40,32 @@ export const fetchItemById = async (
   itemId: string,
 ): Promise<any> => {
   const options = {
-    url: "",
+    url: `${API_ENDPOINT}/api/Item/${itemId}`,
     method: "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8",
     },
-    params: {
-      userId,
-      itemId,
+  };
+  const response = await axios(options);
+  return response.data;
+};
+
+export const createItem = async (userId: string, item: Item): Promise<any> => {
+  const options = {
+    url: `${API_ENDPOINT}/api/Item`,
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      itemId: item.itemId,
+      itemName: item.itemName,
+      itemUnitPrice: item.itemUnitPrice,
+      currentStock: item.currentStock,
+      status: item.status,
+      categoryCode: item.categoryCode,
     },
   };
   const response = await axios(options);
@@ -78,18 +74,17 @@ export const fetchItemById = async (
 
 export const updateItemById = async (
   userId: string,
-  itemId: string,
   item: Item,
 ): Promise<any> => {
   const options = {
-    url: "",
-    method: "POST",
+    url: `${API_ENDPOINT}/api/Item/${item.itemId}`,
+    method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8",
     },
     data: {
-      itemId: itemId,
+      itemId: item.itemId,
       itemName: item.itemName,
       itemUnitPrice: item.itemUnitPrice,
       currentStock: item.currentStock,
@@ -106,15 +101,11 @@ export const deleteItemById = async (
   itemId: string,
 ): Promise<any> => {
   const options = {
-    url: "",
+    url: `${API_ENDPOINT}/api/Item/${itemId}`,
     method: "DELETE",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8",
-    },
-    data: {
-      userId,
-      itemId,
     },
   };
   const response = await axios(options);
