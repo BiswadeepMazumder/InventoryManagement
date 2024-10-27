@@ -23,4 +23,20 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+
+// Create a promise that resolves when the user is authenticated
+const onAuthStateChangedPromise = new Promise((resolve, reject) => {
+  auth.onAuthStateChanged(
+    (user) => {
+      resolve(user);
+    },
+    (err) => {
+      reject(err);
+    },
+  );
+});
+
+// Export the promise so that it can be used in the app.js file
+export const onAuthStateInit = () => onAuthStateChangedPromise;
+
 export default app;

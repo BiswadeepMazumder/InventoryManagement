@@ -114,7 +114,7 @@ export default function CreateOrderModal({
                   />
                   {errors.cancelComment ? (
                     <FormHelperText>
-                      {errors.cancelComment.message}
+                      {errors.cancelComment.message?.toString()}
                     </FormHelperText>
                   ) : null}
                 </FormControl>

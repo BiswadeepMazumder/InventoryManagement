@@ -2,10 +2,15 @@
 
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  updatePassword,
+  updateProfile,
 } from "firebase/auth";
 
-import { auth } from "@/firebase";
+import { auth, onAuthStateInit } from "@/firebase";
 
 import type { User } from "@/types/user";
 
@@ -15,13 +20,15 @@ function generateToken(): string {
   return Array.from(arr, (v) => v.toString(16).padStart(2, "0")).join("");
 }
 
-const user = {
-  id: "USER-0001",
-  avatar: "/assets/avatar.png",
-  firstName: "First Name",
-  lastName: "Last Name",
-  email: "user@company.com",
-} satisfies User;
+// const user = {
+//   id: "USER-0001",
+//   avatar: "/assets/avatar.png",
+//   firstName: "First Name",
+//   lastName: "Last Name",
+//   email: "user@company.com",
+// } satisfies User;
+
+export const NAME_DELIMITER = "|%%|";
 
 export interface SignUpParams {
   firstName: string;
@@ -51,6 +58,10 @@ class AuthClient {
       );
       const user = userCredential.user;
       console.log("[DEBUG] User created:", user);
+
+      await updateProfile(user, {
+        displayName: `${firstName}${NAME_DELIMITER}${lastName}`,
+      });
 
       const token = generateToken();
       localStorage.setItem("auth-token", token);
@@ -90,22 +101,80 @@ class AuthClient {
     }
   }
 
-  async resetPassword(_: ResetPasswordParams): Promise<{ error?: string }> {
-    return { error: "Password reset not implemented" };
+  async changePassword({
+    currentPassword,
+    newPassword,
+  }: {
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<{ error?: string }> {
+    if (!auth.currentUser) {
+      return { error: "User is not signed in" };
+    }
+
+    if (!currentPassword || !newPassword) {
+      return { error: "Password is empty" };
+    }
+
+    if (currentPassword === newPassword) {
+      return { error: "New password is the same as the current password" };
+    }
+
+    try {
+      // Get current user
+      const auth = await onAuthStateInit();
+
+      // Re-authenticate user before changing password
+      const credential = EmailAuthProvider.credential(
+        auth.email,
+        currentPassword,
+      );
+      await reauthenticateWithCredential(auth, credential);
+
+      // Change password
+      await updatePassword(auth, newPassword);
+      return {};
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("[DEBUG] Error:", errorCode, errorMessage);
+
+      return { error: errorMessage };
+    }
   }
 
-  async getUser(): Promise<{ data?: User | null; error?: string }> {
+  async resetPassword({
+    email,
+  }: ResetPasswordParams): Promise<{ error?: string }> {
+    try {
+      // Send password reset email
+      await sendPasswordResetEmail(auth, email);
+      return {};
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("[DEBUG] Error:", errorCode, errorMessage);
+
+      return { error: errorMessage };
+    }
+  }
+
+  async getUser(): Promise<{ data?: any | null; error?: string }> {
     const token = localStorage.getItem("auth-token");
+    // console.log("[DEBUG] token", token);
+    const auth = await onAuthStateInit();
+    // console.log("[DEBUG] auth", auth);
 
     if (!token) {
       return { data: null };
     }
 
-    return { data: user };
+    return { data: auth };
   }
 
   async signOut(): Promise<{ error?: string }> {
     localStorage.removeItem("auth-token");
+    auth.signOut();
 
     return {};
   }

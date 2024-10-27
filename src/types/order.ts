@@ -5,7 +5,7 @@ export interface Order {
   userId: string;
   orderAmount: number;
   orderStatus: number; // 0 | 1 | 2 | 3 | 4 | 5
-  cancelComment: string;
+  cancelComment?: string | null | undefined;
   orderItems: OrderItems[];
 }
 

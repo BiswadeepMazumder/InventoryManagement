@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 
 import type { User } from "@/types/user";
 import { authClient } from "@/utils/client";
@@ -13,7 +13,7 @@ export interface UserContextValue {
   checkSession?: () => Promise<void>;
 }
 
-export const UserContext = React.createContext<UserContextValue | undefined>(
+export const UserContext = createContext<UserContextValue | undefined>(
   undefined,
 );
 
@@ -24,7 +24,7 @@ export interface UserProviderProps {
 export function UserProvider({
   children,
 }: UserProviderProps): React.JSX.Element {
-  const [state, setState] = React.useState<{
+  const [state, setState] = useState<{
     user: User | null;
     error: string | null;
     isLoading: boolean;
@@ -34,7 +34,7 @@ export function UserProvider({
     isLoading: true,
   });
 
-  const checkSession = React.useCallback(async (): Promise<void> => {
+  const checkSession = useCallback(async (): Promise<void> => {
     try {
       const { data, error } = await authClient.getUser();
 
@@ -66,7 +66,7 @@ export function UserProvider({
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     checkSession().catch((err: unknown) => {
       logger.error(err);
       // noop

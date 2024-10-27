@@ -1,18 +1,36 @@
+"use client";
+
 import * as React from "react";
-import type { Metadata } from "next";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { config } from "@/config";
-import { Theme } from "@/components/dashboard/settings/Theme";
+// import { Theme } from "@/components/dashboard/settings/Theme";
 // import { Notifications } from "@/components/dashboard/settings/notifications";
 import { UpdatePasswordForm } from "@/components/dashboard/settings/UpdatePasswordForm";
-
-export const metadata = {
-  title: `Settings | Dashboard | ${config.site.name}`,
-} satisfies Metadata;
+import { authClient } from "@/utils/client";
 
 export default function Page(): React.JSX.Element {
+  const { changePassword } = authClient;
+
+  const handleChangePassword = async (
+    currentPassword: string,
+    newPassword: string,
+  ) => {
+    const { error } = await changePassword({ currentPassword, newPassword });
+
+    if (error) {
+      console.error("[DEBUG] Error changing password:", error);
+      toast.error(error);
+      return;
+    }
+
+    console.log("[DEBUG] Password changed successfully");
+    toast.success("Password changed successfully");
+  };
+
   return (
     <Stack spacing={3}>
       <div>
@@ -20,7 +38,8 @@ export default function Page(): React.JSX.Element {
       </div>
       {/*<Theme />*/}
       {/*<Notifications />*/}
-      <UpdatePasswordForm />
+      <UpdatePasswordForm onChangePassword={handleChangePassword} />
+      <ToastContainer />
     </Stack>
   );
 }

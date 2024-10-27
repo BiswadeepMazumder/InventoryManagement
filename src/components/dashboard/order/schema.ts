@@ -12,7 +12,7 @@ export const schema = zod.object({
   orderStatus: zod.coerce
     .number()
     .min(1, { message: "orderStatus is required" }),
-  cancelComment: zod.string().min(1, { message: "cancelComment is required" }),
+  cancelComment: zod.string().nullable().optional(),
   orderItems: zod.array(
     zod.object({
       orderId: zod.string().min(1, { message: "orderId is required" }),

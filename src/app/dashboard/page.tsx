@@ -63,6 +63,40 @@ export default function Page(): React.JSX.Element {
     createdAt: dayjs(order.orderDate).toDate(),
   }));
 
+  // Count orders by month in this year and return to list, if it doesn't exist, return 0
+  const orderCountByMonthThisYear = Array(12).fill(0);
+  orders.forEach((order) => {
+    const orderDate = dayjs(order.orderDate);
+    if (orderDate.year() === dayjs().year()) {
+      const month = orderDate.month();
+      orderCountByMonthThisYear[month]++;
+    }
+  });
+
+  // Count orders by month in last year and return to list, if it doesn't exist, return 0
+  const orderCountByMonthLastYear = Array(12).fill(0);
+  orders.forEach((order) => {
+    const orderDate = dayjs(order.orderDate);
+    if (orderDate.year() === dayjs().year() - 1) {
+      const month = orderDate.month();
+      orderCountByMonthLastYear[month]++;
+    }
+  });
+
+  console.log("[DEBUG] orderCountByMonth", orderCountByMonthThisYear);
+  console.log("[DEBUG] orderCountByMonthLastYear", orderCountByMonthLastYear);
+
+  const statisticsData = [
+    {
+      name: "This year",
+      data: orderCountByMonthThisYear, // [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
+    },
+    {
+      name: "Last year",
+      data: orderCountByMonthLastYear, // [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
+    },
+  ];
+
   const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
 
   // Get item categories for the ItemStock chart
@@ -133,19 +167,7 @@ export default function Page(): React.JSX.Element {
 
       {/* Statistics */}
       <Grid size={{ lg: 8, md: 8, xs: 12 }}>
-        <Statistics
-          chartSeries={[
-            {
-              name: "This year",
-              data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20],
-            },
-            {
-              name: "Last year",
-              data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
-            },
-          ]}
-          sx={{ height: "100%" }}
-        />
+        <Statistics chartSeries={statisticsData} sx={{ height: "100%" }} />
       </Grid>
 
       {/* Suppliers */}

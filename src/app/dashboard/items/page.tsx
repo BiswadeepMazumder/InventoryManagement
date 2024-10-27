@@ -52,7 +52,7 @@ export default function Page(): React.JSX.Element {
   const [searchItems, setSearchItems] = useState<Item[]>([]);
 
   const exportPopover = usePopover<HTMLDivElement>();
-  const { items, loading } = useFetchItems("user-id");
+  const { items, loading, refresh } = useFetchItems("user-id");
 
   const itemsToDisplay = searched ? searchItems : items;
   const paginatedItems = applyPagination(itemsToDisplay, page, rowsPerPage);
@@ -96,7 +96,8 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await createItem("user-id", item);
       console.log("Item created", response);
-      toast(response.toString());
+      toast("Item created");
+      refresh();
     } catch (error) {
       console.error("Error creating item", error);
       if (error) toast(error.toString());
@@ -115,9 +116,10 @@ export default function Page(): React.JSX.Element {
   const handleUpdateItem = async (item: Item) => {
     console.log("Update item", item);
     try {
-      const response = await updateItemById("user-id", item.itemId, item);
+      const response = await updateItemById("user-id", item);
       console.log("Item Updated", response);
-      toast(response.toString());
+      toast("Item updated");
+      refresh();
     } catch (error) {
       console.error("Error updating item", error);
       if (error) toast(error.toString());
@@ -141,7 +143,8 @@ export default function Page(): React.JSX.Element {
       try {
         const response = await deleteItemById("user-id", item.itemId);
         console.log("Item Deleted", response);
-        toast(response.toString());
+        toast("Item deleted");
+        refresh();
       } catch (error) {
         console.error("Error deleting item", error);
         if (error) toast(error.toString());

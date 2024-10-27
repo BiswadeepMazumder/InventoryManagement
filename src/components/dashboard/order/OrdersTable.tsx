@@ -1,18 +1,22 @@
 import * as React from "react";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
+import dayjs from "dayjs";
+
+import {
+  Box,
+  Card,
+  Checkbox,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
 import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
@@ -120,7 +124,9 @@ const OrdersTable = ({
                     <Typography variant="subtitle2">{row.orderId}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2">{row.orderDate}</Typography>
+                    <Typography variant="subtitle2">
+                      {dayjs(row.orderDate).format("MM/DD/YYYY")}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">{row.orderName}</Typography>

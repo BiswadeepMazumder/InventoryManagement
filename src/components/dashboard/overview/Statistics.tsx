@@ -9,7 +9,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
 import { alpha, useTheme } from "@mui/material/styles";
 import type { SxProps } from "@mui/material/styles";
-import { ArrowClockwise as ArrowClockwiseIcon } from "@phosphor-icons/react/dist/ssr/ArrowClockwise";
+// import { ArrowClockwise as ArrowClockwiseIcon } from "@phosphor-icons/react/dist/ssr/ArrowClockwise";
 import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
 import type { ApexOptions } from "apexcharts";
 
@@ -29,22 +29,22 @@ export function Statistics({
   return (
     <Card sx={sx}>
       <CardHeader
-        action={
-          <Button
-            color="inherit"
-            size="small"
-            startIcon={
-              <ArrowClockwiseIcon fontSize="var(--icon-fontSize-md)" />
-            }
-          >
-            Sync
-          </Button>
-        }
+        // action={
+        //   <Button
+        //     color="inherit"
+        //     size="small"
+        //     startIcon={
+        //       <ArrowClockwiseIcon fontSize="var(--icon-fontSize-md)" />
+        //     }
+        //   >
+        //     Sync
+        //   </Button>
+        // }
         title="Statistics"
       />
       <CardContent>
         <Chart
-          height={350}
+          height={420}
           options={chartOptions}
           series={chartSeries}
           type="bar"
@@ -111,7 +111,7 @@ function useChartOptions(): ApexOptions {
     },
     yaxis: {
       labels: {
-        formatter: (value) => (value > 0 ? `${value}K` : `${value}`),
+        formatter: (value) => (value > 0 ? `${value}` : `${value}`),
         offsetX: -10,
         style: { colors: theme.palette.text.secondary },
       },
