@@ -97,7 +97,7 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await createOrder("user-id", order);
       console.log("Order created", response);
-      toast(response.toString());
+      toast("Order created");
     } catch (error) {
       console.error("Error creating order", error);
       if (error) toast(error.toString());
@@ -118,7 +118,7 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await updateOrder("user-id", order);
       console.log("Order updated", response);
-      toast(response.toString());
+      toast("Order updated");
     } catch (error) {
       console.error("Error updating order", error);
       if (error) toast(error.toString());
@@ -140,7 +140,7 @@ export default function Page(): React.JSX.Element {
       try {
         const response = await deleteOrder("user-id", order.orderId);
         console.log("Order deleted", response);
-        toast(response.toString());
+        toast("Order deleted");
       } catch (error) {
         console.error("Error deleting order", error);
         if (error) toast(error.toString());
