@@ -11,7 +11,7 @@ export const schema = zod.object({
     .min(1, { message: "orderAmount is required" }),
   orderStatus: zod.coerce
     .number()
-    .min(1, { message: "orderStatus is required" }),
+    .min(0, { message: "orderStatus is required" }),
   cancelComment: zod.string().nullable().optional(),
   orderItems: zod.array(
     zod.object({
@@ -27,7 +27,7 @@ export const schema = zod.object({
         .min(1, { message: "totalPrice is required" }),
       orderStatus: zod.coerce
         .number()
-        .min(1, { message: "orderStatus is required" }),
+        .min(0, { message: "orderStatus is required" }),
     }),
   ),
 });
@@ -35,12 +35,12 @@ export const schema = zod.object({
 export type Values = zod.infer<typeof schema>;
 
 export const defaultValues = {
-  orderId: nanoid(),
+  orderId: nanoid().toString().slice(0, 7), // Generate random id with 7 characters
   orderDate: new Date().toISOString(),
   orderName: "",
   userId: "",
   orderAmount: 0,
-  orderStatus: 0 | 1 | 2 | 3 | 4 | 5,
+  orderStatus: 0,
   cancelComment: "",
   orderItems: [
     {
@@ -50,7 +50,7 @@ export const defaultValues = {
       itemCount: 0,
       itemName: "",
       totalPrice: 0,
-      orderStatus: 0 | 1 | 2 | 3 | 4 | 5,
+      orderStatus: 0,
     },
   ],
 } satisfies Values;
