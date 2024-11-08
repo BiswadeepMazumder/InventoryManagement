@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,6 +21,7 @@ import {
   Values,
 } from "@/components/dashboard/order/schema";
 import { ORDER_STATUS } from "@/constants/order";
+import { useUser } from "@/hooks/useUser";
 
 type CreateOrderModalProps = {
   open: boolean;
@@ -36,9 +37,18 @@ export default function CreateOrderModal({
   const {
     control,
     handleSubmit,
+    setValue,
     setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
+  const { user } = useUser();
+
+  useEffect(() => {
+    // Set the userId to order form
+    if (user && user.uid) {
+      setValue("userId", user.uid.toString());
+    }
+  }, []);
 
   const handleCreateOrder = (values: Values) => {
     console.log("Create order", values);

@@ -53,7 +53,7 @@ export default function UpdateOrderModal({
     setValue("orderAmount", order.orderAmount);
     setValue("orderStatus", order.orderStatus);
     setValue("cancelComment", order.cancelComment);
-    setValue("orderItems", order.orderItems);
+    // setValue("orderItems", order.orderItems);
   }, [order]);
 
   const handleUpdateOrder = (values: Values) => {
