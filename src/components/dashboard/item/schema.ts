@@ -10,14 +10,14 @@ export const schema = zod.object({
   currentStock: zod.coerce
     .number()
     .min(1, { message: "currentStock is required" }),
-  status: zod.coerce.number().min(1, { message: "status is required" }),
+  status: zod.coerce.number().min(0, { message: "status is required" }),
   categoryCode: zod.string().min(1, { message: "categoryCode is required" }),
 });
 
 export type Values = zod.infer<typeof schema>;
 
 export const defaultValues = {
-  itemId: nanoid(),
+  itemId: nanoid().toString().slice(0, 7), // Generate random id with 7 characters
   itemName: "",
   itemUnitPrice: 0,
   currentStock: 0,
