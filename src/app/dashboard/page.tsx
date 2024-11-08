@@ -48,14 +48,18 @@ export default function Page(): React.JSX.Element {
     return `https://avatar.iran.liara.run/public/boy?username=${name}`;
   };
 
-  const suppliersData = suppliers.map((supplier) => ({
+  // get only first 5 suppliers and map to the format that Suppliers component needs
+  const suppliersSliced = suppliers.slice(0, 6);
+  const suppliersData = suppliersSliced.map((supplier) => ({
     id: supplier.supplierId,
     name: supplier.supplierName,
     image: createRandomImage(supplier.supplierName),
     address: supplier.supplierCity,
   }));
 
-  const ordersData = orders.map((order) => ({
+  // get only first 5 orders and map to the format that Statistics component needs
+  const ordersSliced = orders.slice(0, 7);
+  const ordersData = ordersSliced.map((order) => ({
     id: order.orderId,
     amount: order.orderAmount,
     orderName: order.orderName,
