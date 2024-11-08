@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,6 +12,8 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 import { Item } from "@/types/item";
 import {
@@ -74,7 +76,7 @@ export default function UpdateItemModal({
               name="itemName"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.itemName)}>
-                  <InputLabel>itemName</InputLabel>
+                  <InputLabel>Item Name</InputLabel>
                   <OutlinedInput {...field} label="itemName" />
                   {errors.itemName ? (
                     <FormHelperText>{errors.itemName.message}</FormHelperText>
@@ -82,12 +84,13 @@ export default function UpdateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="itemUnitPrice"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.itemUnitPrice)}>
-                  <InputLabel>itemUnitPrice</InputLabel>
+                  <InputLabel>Unit Price</InputLabel>
                   <OutlinedInput
                     {...field}
                     label="itemUnitPrice"
@@ -101,12 +104,13 @@ export default function UpdateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="currentStock"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.currentStock)}>
-                  <InputLabel>currentStock</InputLabel>
+                  <InputLabel>Current Stock</InputLabel>
                   <OutlinedInput
                     {...field}
                     label="currentStock"
@@ -120,12 +124,13 @@ export default function UpdateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="status"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.status)}>
-                  <InputLabel>status</InputLabel>
+                  <InputLabel>Status</InputLabel>
                   <OutlinedInput {...field} label="status" type="number" />
                   {errors.status ? (
                     <FormHelperText>{errors.status.message}</FormHelperText>
@@ -133,17 +138,22 @@ export default function UpdateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="categoryCode"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.categoryCode)}>
-                  <InputLabel>categoryCode</InputLabel>
-                  <OutlinedInput
-                    {...field}
-                    label="categoryCode"
-                    type="string"
-                  />
+                  <InputLabel>Category Code</InputLabel>
+                  <Select {...field} label="categoryCode">
+                    <MenuItem value="AB">AB</MenuItem>
+                    <MenuItem value="CD">CD</MenuItem>
+                    <MenuItem value="CF">CF</MenuItem>
+                    <MenuItem value="PP">PP</MenuItem>
+                    <MenuItem value="PS">PS</MenuItem>
+                    <MenuItem value="TO">TO</MenuItem>
+                    <MenuItem value="WT">WT</MenuItem>
+                  </Select>
                   {errors.categoryCode ? (
                     <FormHelperText>
                       {errors.categoryCode.message}
@@ -157,7 +167,7 @@ export default function UpdateItemModal({
         <DialogActions>
           <Button onClick={onClose}>Close</Button>
           <Button type="submit" autoFocus>
-            Update item
+            Update Item
           </Button>
         </DialogActions>
       </form>
