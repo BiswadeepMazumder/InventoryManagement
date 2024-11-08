@@ -20,6 +20,7 @@ import {
   defaultValues,
   Values,
 } from "@/components/dashboard/item/schema";
+import { ORDER_STATUS } from "@/constants/order";
 
 type CreateItemModalProps = {
   open: boolean;
@@ -118,7 +119,14 @@ export default function CreateItemModal({
               render={({ field }) => (
                 <FormControl error={Boolean(errors.status)}>
                   <InputLabel>Status</InputLabel>
-                  <OutlinedInput {...field} label="status" type="number" />
+                  <Select {...field} label="status">
+                    <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
+                    <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
+                    <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
+                    <MenuItem value={3}>{ORDER_STATUS[3].label}</MenuItem>
+                    <MenuItem value={4}>{ORDER_STATUS[4].label}</MenuItem>
+                    <MenuItem value={5}>{ORDER_STATUS[5].label}</MenuItem>
+                  </Select>
                   {errors.status ? (
                     <FormHelperText>{errors.status.message}</FormHelperText>
                   ) : null}
