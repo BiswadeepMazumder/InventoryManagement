@@ -19,6 +19,9 @@ import Tooltip from "@mui/material/Tooltip";
 import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
 import useSelection from "@/hooks/useSelection";
 import { Item } from "@/types/item";
+import Chip from "@mui/material/Chip";
+
+import { ORDER_STATUS } from "@/constants/order";
 
 interface ItemsTableProps {
   count?: number;
@@ -101,6 +104,13 @@ const ItemsTable = ({
             {rows.map((row) => {
               const isSelected = selected?.has(row.itemId);
 
+              const { label, color } = ORDER_STATUS[
+                row.status as 0 | 1 | 2 | 3 | 4 | 5
+              ] ?? {
+                label: "Unknown",
+                color: "default",
+              };
+
               return (
                 <TableRow hover key={row.itemId} selected={isSelected}>
                   <TableCell padding="checkbox">
@@ -128,7 +138,9 @@ const ItemsTable = ({
                   </TableCell>
                   <TableCell>{row.itemUnitPrice}</TableCell>
                   <TableCell>{row.currentStock}</TableCell>
-                  <TableCell>{row.status}</TableCell>
+                  <TableCell>
+                    <Chip color={color} label={label} size="small" />
+                  </TableCell>
                   <TableCell>{row.categoryCode}</TableCell>
                   <TableCell padding="none">
                     <Tooltip title="Edit item">

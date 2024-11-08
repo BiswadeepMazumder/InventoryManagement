@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,12 +12,15 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 import {
   schema,
   defaultValues,
   Values,
 } from "@/components/dashboard/item/schema";
+import { ORDER_STATUS } from "@/constants/order";
 
 type CreateItemModalProps = {
   open: boolean;
@@ -61,7 +64,7 @@ export default function CreateItemModal({
               name="itemName"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.itemName)}>
-                  <InputLabel>itemName</InputLabel>
+                  <InputLabel>Item Name</InputLabel>
                   <OutlinedInput {...field} label="itemName" />
                   {errors.itemName ? (
                     <FormHelperText>{errors.itemName.message}</FormHelperText>
@@ -69,12 +72,13 @@ export default function CreateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="itemUnitPrice"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.itemUnitPrice)}>
-                  <InputLabel>itemUnitPrice</InputLabel>
+                  <InputLabel>Unit Price</InputLabel>
                   <OutlinedInput
                     {...field}
                     label="itemUnitPrice"
@@ -88,12 +92,13 @@ export default function CreateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="currentStock"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.currentStock)}>
-                  <InputLabel>currentStock</InputLabel>
+                  <InputLabel>Current Stock</InputLabel>
                   <OutlinedInput
                     {...field}
                     label="currentStock"
@@ -107,30 +112,43 @@ export default function CreateItemModal({
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="status"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.status)}>
-                  <InputLabel>status</InputLabel>
-                  <OutlinedInput {...field} label="status" type="number" />
+                  <InputLabel>Status</InputLabel>
+                  <Select {...field} label="status">
+                    <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
+                    <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
+                    <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
+                    <MenuItem value={3}>{ORDER_STATUS[3].label}</MenuItem>
+                    <MenuItem value={4}>{ORDER_STATUS[4].label}</MenuItem>
+                    <MenuItem value={5}>{ORDER_STATUS[5].label}</MenuItem>
+                  </Select>
                   {errors.status ? (
                     <FormHelperText>{errors.status.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}
             />
+
             <Controller
               control={control}
               name="categoryCode"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.categoryCode)}>
-                  <InputLabel>categoryCode</InputLabel>
-                  <OutlinedInput
-                    {...field}
-                    label="categoryCode"
-                    type="string"
-                  />
+                  <InputLabel>Category Code</InputLabel>
+                  <Select {...field} label="categoryCode">
+                    <MenuItem value="AB">AB</MenuItem>
+                    <MenuItem value="CD">CD</MenuItem>
+                    <MenuItem value="CF">CF</MenuItem>
+                    <MenuItem value="PP">PP</MenuItem>
+                    <MenuItem value="PS">PS</MenuItem>
+                    <MenuItem value="TO">TO</MenuItem>
+                    <MenuItem value="WT">WT</MenuItem>
+                  </Select>
                   {errors.categoryCode ? (
                     <FormHelperText>
                       {errors.categoryCode.message}
@@ -144,7 +162,7 @@ export default function CreateItemModal({
         <DialogActions>
           <Button onClick={onClose}>Close</Button>
           <Button type="submit" autoFocus>
-            Create item
+            Create Item
           </Button>
         </DialogActions>
       </form>

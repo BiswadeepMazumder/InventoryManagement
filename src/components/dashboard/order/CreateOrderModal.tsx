@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,11 +12,16 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 import {
   schema,
   defaultValues,
   Values,
 } from "@/components/dashboard/order/schema";
+import { ORDER_STATUS } from "@/constants/order";
+import { useUser } from "@/hooks/useUser";
 
 type CreateOrderModalProps = {
   open: boolean;
@@ -32,9 +37,18 @@ export default function CreateOrderModal({
   const {
     control,
     handleSubmit,
+    setValue,
     setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
+  const { user } = useUser();
+
+  useEffect(() => {
+    // Set the userId to order form
+    if (user && user.uid) {
+      setValue("userId", user.uid.toString());
+    }
+  }, []);
 
   const handleCreateOrder = (values: Values) => {
     console.log("Create order", values);
@@ -60,7 +74,7 @@ export default function CreateOrderModal({
               name="orderName"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.orderName)}>
-                  <InputLabel>orderName</InputLabel>
+                  <InputLabel>Order Name</InputLabel>
                   <OutlinedInput {...field} label="orderName" />
                   {errors.orderName ? (
                     <FormHelperText>{errors.orderName.message}</FormHelperText>
@@ -74,7 +88,7 @@ export default function CreateOrderModal({
               name="orderAmount"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.orderAmount)}>
-                  <InputLabel>orderAmount</InputLabel>
+                  <InputLabel>Order Amount</InputLabel>
                   <OutlinedInput {...field} label="orderAmount" type="number" />
                   {errors.orderAmount ? (
                     <FormHelperText>
@@ -90,8 +104,15 @@ export default function CreateOrderModal({
               name="orderStatus"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.orderStatus)}>
-                  <InputLabel>orderStatus</InputLabel>
-                  <OutlinedInput {...field} label="orderStatus" type="number" />
+                  <InputLabel>Order Status</InputLabel>
+                  <Select {...field} label="orderStatus">
+                    <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
+                    <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
+                    <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
+                    <MenuItem value={3}>{ORDER_STATUS[3].label}</MenuItem>
+                    <MenuItem value={4}>{ORDER_STATUS[4].label}</MenuItem>
+                    <MenuItem value={5}>{ORDER_STATUS[5].label}</MenuItem>
+                  </Select>
                   {errors.orderStatus ? (
                     <FormHelperText>
                       {errors.orderStatus.message}
@@ -106,7 +127,7 @@ export default function CreateOrderModal({
               name="cancelComment"
               render={({ field }) => (
                 <FormControl error={Boolean(errors.cancelComment)}>
-                  <InputLabel>cancelComment</InputLabel>
+                  <InputLabel>Cancel Comment</InputLabel>
                   <OutlinedInput
                     {...field}
                     label="cancelComment"

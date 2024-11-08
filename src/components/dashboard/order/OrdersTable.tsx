@@ -22,6 +22,9 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
 import useSelection from "@/hooks/useSelection";
 import { Order } from "@/types/order";
+import Chip from "@mui/material/Chip";
+
+import { ORDER_STATUS } from "@/constants/order";
 
 interface ItemsTableProps {
   count?: number;
@@ -106,6 +109,13 @@ const OrdersTable = ({
             {rows.map((row) => {
               const isSelected = selected?.has(row.orderId);
 
+              const { label, color } = ORDER_STATUS[
+                row.orderStatus as 0 | 1 | 2 | 3 | 4 | 5
+              ] ?? {
+                label: "Unknown",
+                color: "default",
+              };
+
               return (
                 <TableRow hover key={row.orderId} selected={isSelected}>
                   <TableCell padding="checkbox">
@@ -132,7 +142,9 @@ const OrdersTable = ({
                     <Typography variant="subtitle2">{row.orderName}</Typography>
                   </TableCell>
                   <TableCell>{row.orderAmount}</TableCell>
-                  <TableCell>{row.orderStatus}</TableCell>
+                  <TableCell>
+                    <Chip color={color} label={label} size="small" />
+                  </TableCell>
                   <TableCell>{row.cancelComment}</TableCell>
                   <TableCell>{row.userId}</TableCell>
                   <TableCell padding="none">

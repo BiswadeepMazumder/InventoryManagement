@@ -18,14 +18,8 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-const statusMap = {
-  0: { label: "Order Canceled", color: "error" },
-  1: { label: "Order Placed", color: "info" },
-  2: { label: "Order Accepted by Supplier", color: "primary" },
-  3: { label: "Order Ready", color: "success" },
-  4: { label: "Order in Transit", color: "warning" },
-  5: { label: "Order Delivered", color: "success" },
-} as const;
+import { ORDER_STATUS } from "@/constants/order";
+
 //   pending: { label: "Pending", color: "warning" },
 //   completed: { label: "Completed", color: "success" },
 //   refunded: { label: "Refunded", color: "error" },
@@ -75,7 +69,7 @@ export function RecentOrders({
           </TableHead>
           <TableBody>
             {sortedOrders.map((order) => {
-              const { label, color } = statusMap[
+              const { label, color } = ORDER_STATUS[
                 order.status as 0 | 1 | 2 | 3 | 4 | 5
               ] ?? {
                 label: "Unknown",

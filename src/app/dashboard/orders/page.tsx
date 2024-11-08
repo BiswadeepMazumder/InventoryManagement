@@ -200,7 +200,7 @@ export default function Page(): React.JSX.Element {
       />
 
       <OrdersTable
-        count={paginatedOrders.length}
+        count={ordersToDisplay.length}
         page={page}
         rows={paginatedOrders}
         rowsPerPage={rowsPerPage}
