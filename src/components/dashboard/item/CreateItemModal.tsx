@@ -119,7 +119,7 @@ export default function CreateItemModal({
               render={({ field }) => (
                 <FormControl error={Boolean(errors.status)}>
                   <InputLabel>Status</InputLabel>
-                  <Select {...field} label="status">
+                  <Select {...field} label="status" disabled>
                     <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
                     <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
                     <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>

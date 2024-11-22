@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -30,6 +31,12 @@ import {
   deleteItemById,
   updateItemById,
 } from "@/services/item.services";
+import StatusFilters, {
+  FilterType as StatusFilterType,
+} from "@/components/table/StatusFilters";
+import CategoryCodeFilters, {
+  FilterType as CategoryCodeFilterType,
+} from "@/components/table/CategoryCodeFilters";
 
 const applyPagination = (
   rows: Item[],
@@ -45,25 +52,71 @@ export default function Page(): React.JSX.Element {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [searched, setSearched] = useState<string>("");
 
   const [selectedUpdateItem, setSelectedUpdateItem] = useState<Item>();
   const [selectedDeleteItem, setSelectedDeleteItem] = useState<Item[]>([]);
-  const [searchItems, setSearchItems] = useState<Item[]>([]);
+
+  const [filterItems, setFilterItems] = useState<Item[]>([]);
+
+  const [searched, setSearched] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState(StatusFilterType.None);
+  const [filterCategoryCode, setFilterCategoryCode] = useState(
+    CategoryCodeFilterType.None,
+  );
 
   const exportPopover = usePopover<HTMLDivElement>();
   const { items, loading, refresh } = useFetchItems("user-id");
 
-  const itemsToDisplay = searched ? searchItems : items;
+  const isSearch = searched.length > 0;
+  const isFilteredStatus = filterStatus !== StatusFilterType.None;
+  const isFilteredCategoryCode =
+    filterCategoryCode !== CategoryCodeFilterType.None;
+  const itemsToDisplay =
+    isSearch || isFilteredStatus || isFilteredCategoryCode
+      ? filterItems
+      : items;
+
+  console.log("isSearch", isSearch);
+  console.log("isFilteredStatus", isFilteredStatus);
+  console.log("isFilteredCategoryCode", isFilteredCategoryCode);
+
+  console.log("filterStatus", filterStatus);
+  console.log("filterCategoryCode", filterCategoryCode);
   const paginatedItems = applyPagination(itemsToDisplay, page, rowsPerPage);
 
+  // Filter items based on search text or status or category code
   useEffect(() => {
     const filteredRows = items.filter((row) => {
-      return row.itemName.toLowerCase().includes(searched.toLowerCase());
+      const results = [];
+
+      // search text
+      if (searched) {
+        const searchValue = searched.toLowerCase();
+        const _row = row.itemName.toLowerCase().includes(searchValue);
+        results.push(_row);
+      }
+
+      // status filter
+      if (filterStatus !== StatusFilterType.None) {
+        const _row = row.status === filterStatus;
+        results.push(_row);
+      }
+
+      // category code filter
+      if (filterCategoryCode !== CategoryCodeFilterType.None) {
+        const _row = row.categoryCode === filterCategoryCode;
+        results.push(_row);
+      }
+
+      // console.log("Results", results);
+      return results.every((result) => result);
     });
 
-    setSearchItems(filteredRows);
-  }, [searched]);
+    // console.log("Filtered rows", filteredRows);
+
+    setFilterItems(filteredRows);
+    setPage(0);
+  }, [searched, filterStatus, filterCategoryCode]);
 
   const cancelSearch = () => {
     setSearched("");
@@ -196,12 +249,28 @@ export default function Page(): React.JSX.Element {
         </div>
       </Stack>
 
-      <TableFilters
-        placeholder="Search items"
-        value={searched}
-        onChange={(searchVal: string) => setSearched(searchVal)}
-        onCancelSearch={() => cancelSearch()}
-      />
+      <Card sx={{ p: 2, display: "flex", gap: 2 }}>
+        <TableFilters
+          placeholder="Search items"
+          value={searched}
+          onChange={(searchVal: string) => setSearched(searchVal)}
+          onCancelSearch={() => cancelSearch()}
+        />
+
+        <StatusFilters
+          filterType={filterStatus}
+          onChangeFilter={(filterType: StatusFilterType) =>
+            setFilterStatus(filterType)
+          }
+        />
+
+        <CategoryCodeFilters
+          filterType={filterCategoryCode}
+          onChangeFilter={(filterType: CategoryCodeFilterType) =>
+            setFilterCategoryCode(filterType)
+          }
+        />
+      </Card>
 
       <ItemsTable
         count={itemsToDisplay.length}
