@@ -21,6 +21,6 @@ export const defaultValues = {
   itemName: "",
   itemUnitPrice: 0,
   currentStock: 0,
-  status: 0,
+  status: 1,
   categoryCode: "",
 } satisfies Values;
