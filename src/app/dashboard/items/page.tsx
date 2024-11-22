@@ -67,6 +67,7 @@ export default function Page(): React.JSX.Element {
   const exportPopover = usePopover<HTMLDivElement>();
   const { items, loading, refresh } = useFetchItems("user-id");
 
+  const isEmpty = items.length === 0;
   const isSearch = searched.length > 0;
   const isFilteredStatus = filterStatus !== StatusFilterType.None;
   const isFilteredCategoryCode =
@@ -116,7 +117,7 @@ export default function Page(): React.JSX.Element {
 
     setFilterItems(filteredRows);
     setPage(0);
-  }, [searched, filterStatus, filterCategoryCode]);
+  }, [items, searched, filterStatus, filterCategoryCode]);
 
   const cancelSearch = () => {
     setSearched("");
@@ -149,8 +150,8 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await createItem("user-id", item);
       console.log("Item created", response);
-      toast("Item created");
       refresh();
+      toast("Item created");
     } catch (error) {
       console.error("Error creating item", error);
       if (error) toast(error.toString());
@@ -171,8 +172,8 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await updateItemById("user-id", item);
       console.log("Item Updated", response);
-      toast("Item updated");
       refresh();
+      toast("Item updated");
     } catch (error) {
       console.error("Error updating item", error);
       if (error) toast(error.toString());
@@ -196,8 +197,8 @@ export default function Page(): React.JSX.Element {
       try {
         const response = await deleteItemById("user-id", item.itemId);
         console.log("Item Deleted", response);
-        toast("Item deleted");
         refresh();
+        toast("Item deleted");
       } catch (error) {
         console.error("Error deleting item", error);
         if (error) toast(error.toString());
@@ -220,7 +221,7 @@ export default function Page(): React.JSX.Element {
     }
   };
 
-  if (loading) {
+  if (loading && isEmpty) {
     return <div>Loading...</div>;
   }
 

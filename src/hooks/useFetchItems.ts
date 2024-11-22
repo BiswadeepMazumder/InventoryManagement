@@ -26,11 +26,15 @@ export const useFetchItems = (userId: string): UseFetchItems => {
     }
   }, [userId]);
 
+  const refresh = useCallback(() => {
+    fetch();
+  }, [fetch]);
+
   useEffect(() => {
     fetch();
   }, [fetch]);
 
-  return { items, loading, refresh: fetch };
+  return { items, loading, refresh: refresh };
 };
 
 export default useFetchItems;
