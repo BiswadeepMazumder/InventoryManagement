@@ -1,6 +1,7 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
+import { useRouter } from "next/navigation";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -25,6 +26,11 @@ export function Statistics({
   sx,
 }: StatisticsProps): React.JSX.Element {
   const chartOptions = useChartOptions();
+  const router = useRouter();
+
+  const handleViewOverview = () => {
+    router.push("dashboard/orders");
+  };
 
   return (
     <Card sx={sx}>
@@ -57,6 +63,7 @@ export function Statistics({
           color="inherit"
           endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
           size="small"
+          onClick={handleViewOverview}
         >
           Overview
         </Button>
@@ -71,7 +78,7 @@ function useChartOptions(): ApexOptions {
   return {
     chart: {
       background: "transparent",
-      stacked: true,
+      stacked: false,
       toolbar: { show: false },
     },
     colors: [
@@ -87,7 +94,7 @@ function useChartOptions(): ApexOptions {
       yaxis: { lines: { show: true } },
     },
     legend: { show: false },
-    plotOptions: { bar: { columnWidth: "40px" } },
+    plotOptions: { bar: { columnWidth: "20px", distributed: false } },
     stroke: { colors: ["transparent"], show: true, width: 2 },
     theme: { mode: theme.palette.mode },
     xaxis: {
