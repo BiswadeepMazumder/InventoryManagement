@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -67,7 +68,14 @@ export default function Page(): React.JSX.Element {
 
   useEffect(() => {
     const filteredRows = suppliers.filter((row) => {
-      return row.supplierName.toLowerCase().includes(searched.toLowerCase());
+      const searchValue = searched.toLowerCase();
+      return (
+        row.supplierName.toLowerCase().includes(searchValue) ||
+        row.supplierAddress.toLowerCase().includes(searchValue) ||
+        row.supplierCity.toLowerCase().includes(searchValue) ||
+        row.supplierZipCode.toString().includes(searchValue) ||
+        row.supplierPhoneNumber.toString().includes(searchValue)
+      );
     });
 
     setSearchSuppliers(filteredRows);
@@ -199,12 +207,14 @@ export default function Page(): React.JSX.Element {
         </div>
       </Stack>
 
-      <TableFilters
-        placeholder="Search suppliers"
-        value={searched}
-        onChange={(searchVal) => setSearched(searchVal)}
-        onCancelSearch={() => cancelSearch()}
-      />
+      <Card sx={{ p: 2, display: "flex", gap: 2 }}>
+        <TableFilters
+          placeholder="Search suppliers"
+          value={searched}
+          onChange={(searchVal) => setSearched(searchVal)}
+          onCancelSearch={() => cancelSearch()}
+        />
+      </Card>
 
       <SuppliersTable
         count={paginatedSuppliers.length}
