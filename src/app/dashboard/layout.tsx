@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import type { Metadata } from "next";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";

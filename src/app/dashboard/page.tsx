@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 
@@ -93,11 +93,11 @@ export default function Page(): React.JSX.Element {
   const statisticsData = [
     {
       name: "This year",
-      data: orderCountByMonthThisYear, // [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
+      data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20], // [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
     },
     {
       name: "Last year",
-      data: orderCountByMonthLastYear, // [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
+      data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13], // [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
     },
   ];
 

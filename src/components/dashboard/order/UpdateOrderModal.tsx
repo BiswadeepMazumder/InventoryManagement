@@ -21,7 +21,7 @@ import {
   defaultValues,
   Values,
 } from "@/components/dashboard/order/schema";
-import * as React from "react";
+import React from "react";
 import { ORDER_STATUS } from "@/constants/order";
 
 type CreateOrderModalProps = {
