@@ -1,35 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Order } from "@/types/order";
+import { useCallback, useEffect, useState } from "react";
 import { fetchOrders } from "@/services/order.services";
+import { Order } from "@/types/order";
 
 type UseFetchOrders = {
   orders: Order[];
   loading: boolean;
+  refresh: () => void;
 };
 
 export const useFetchOrders = (userId: string): UseFetchOrders => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchOrders(userId);
-        setOrders(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetch();
+  const fetch = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchOrders(userId);
+      setOrders(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }, [userId]);
 
-  return { orders, loading };
+  const refresh = useCallback(() => {
+    fetch();
+  }, [fetch]);
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  return { orders, loading, refresh };
 };
 
 export default useFetchOrders;

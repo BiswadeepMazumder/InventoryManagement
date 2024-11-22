@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -30,6 +31,9 @@ import {
   deleteOrder,
   updateOrder,
 } from "@/services/order.services";
+import StatusFilters, {
+  FilterType as StatusFilterType,
+} from "@/components/table/StatusFilters";
 
 const applyPagination = (
   rows: Order[],
@@ -46,25 +50,51 @@ export default function Page(): React.JSX.Element {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [searched, setSearched] = useState<string>("");
 
   const [selectedUpdateOrder, setSelectedUpdateOrder] = useState<Order>();
   const [selectedDeleteOrders, setSelectedDeleteOrders] = useState<Order[]>([]);
-  const [searchOrders, setSearchOrders] = useState<Order[]>([]);
+
+  const [filterOrders, setFilterOrders] = useState<Order[]>([]);
+
+  const [searched, setSearched] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState(StatusFilterType.None);
 
   const exportPopover = usePopover<HTMLDivElement>();
-  const { orders, loading } = useFetchOrders("user-id");
+  const { orders, loading, refresh } = useFetchOrders("user-id");
 
-  const ordersToDisplay = searched ? searchOrders : orders;
+  const isEmpty = orders.length === 0;
+  const isSearch = searched.length > 0;
+  const isFilteredStatus = filterStatus !== StatusFilterType.None;
+  const ordersToDisplay = isSearch || isFilteredStatus ? filterOrders : orders;
   const paginatedOrders = applyPagination(ordersToDisplay, page, rowsPerPage);
 
+  // Filter items based on search text or status or category code
   useEffect(() => {
     const filteredRows = orders.filter((row) => {
-      return row.orderName.toLowerCase().includes(searched.toLowerCase());
+      const results = [];
+
+      // search text
+      if (searched) {
+        const searchValue = searched.toLowerCase();
+        const _row = row.orderName.toLowerCase().includes(searchValue);
+        results.push(_row);
+      }
+
+      // status filter
+      if (filterStatus !== StatusFilterType.None) {
+        const _row = row.orderStatus === filterStatus;
+        results.push(_row);
+      }
+
+      // console.log("Results", results);
+      return results.every((result) => result);
     });
 
-    setSearchOrders(filteredRows);
-  }, [searched]);
+    // console.log("Filtered rows", filteredRows);
+
+    setFilterOrders(filteredRows);
+    setPage(0);
+  }, [orders, searched, filterStatus]);
 
   const cancelSearch = () => {
     setSearched("");
@@ -97,6 +127,7 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await createOrder("user-id", order);
       console.log("Order created", response);
+      refresh();
       toast("Order created");
     } catch (error) {
       console.error("Error creating order", error);
@@ -118,6 +149,7 @@ export default function Page(): React.JSX.Element {
     try {
       const response = await updateOrder("user-id", order);
       console.log("Order updated", response);
+      refresh();
       toast("Order updated");
     } catch (error) {
       console.error("Error updating order", error);
@@ -140,6 +172,7 @@ export default function Page(): React.JSX.Element {
       try {
         const response = await deleteOrder("user-id", order.orderId);
         console.log("Order deleted", response);
+        refresh();
         toast("Order deleted");
       } catch (error) {
         console.error("Error deleting order", error);
@@ -163,7 +196,7 @@ export default function Page(): React.JSX.Element {
     }
   };
 
-  if (loading) {
+  if (loading && isEmpty) {
     return <div>Loading...</div>;
   }
 
@@ -192,12 +225,21 @@ export default function Page(): React.JSX.Element {
         </div>
       </Stack>
 
-      <TableFilters
-        placeholder="Search orders"
-        value={searched}
-        onChange={(searchVal) => setSearched(searchVal)}
-        onCancelSearch={() => cancelSearch()}
-      />
+      <Card sx={{ p: 2, display: "flex", gap: 2 }}>
+        <TableFilters
+          placeholder="Search orders"
+          value={searched}
+          onChange={(searchVal) => setSearched(searchVal)}
+          onCancelSearch={() => cancelSearch()}
+        />
+
+        <StatusFilters
+          filterType={filterStatus}
+          onChangeFilter={(filterType: StatusFilterType) =>
+            setFilterStatus(filterType)
+          }
+        />
+      </Card>
 
       <OrdersTable
         count={ordersToDisplay.length}
