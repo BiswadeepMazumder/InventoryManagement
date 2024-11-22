@@ -34,7 +34,7 @@ export const useFetchItems = (userId: string): UseFetchItems => {
     fetch();
   }, [fetch]);
 
-  return { items, loading, refresh: refresh };
+  return { items, loading, refresh };
 };
 
 export default useFetchItems;

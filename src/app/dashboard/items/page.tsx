@@ -49,6 +49,7 @@ const applyPagination = (
 export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -72,17 +73,11 @@ export default function Page(): React.JSX.Element {
   const isFilteredStatus = filterStatus !== StatusFilterType.None;
   const isFilteredCategoryCode =
     filterCategoryCode !== CategoryCodeFilterType.None;
+
   const itemsToDisplay =
     isSearch || isFilteredStatus || isFilteredCategoryCode
       ? filterItems
       : items;
-
-  console.log("isSearch", isSearch);
-  console.log("isFilteredStatus", isFilteredStatus);
-  console.log("isFilteredCategoryCode", isFilteredCategoryCode);
-
-  console.log("filterStatus", filterStatus);
-  console.log("filterCategoryCode", filterCategoryCode);
   const paginatedItems = applyPagination(itemsToDisplay, page, rowsPerPage);
 
   // Filter items based on search text or status or category code
