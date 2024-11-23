@@ -21,7 +21,7 @@ import useSelection from "@/hooks/useSelection";
 import { Item } from "@/types/item";
 import Chip from "@mui/material/Chip";
 
-import { ORDER_STATUS } from "@/constants/order";
+import { ITEM_STATUS } from "@/constants/item";
 
 interface ItemsTableProps {
   count?: number;
@@ -104,9 +104,7 @@ const ItemsTable = ({
             {rows.map((row) => {
               const isSelected = selected?.has(row.itemId);
 
-              const { label, color } = ORDER_STATUS[
-                row.status as 0 | 1 | 2 | 3 | 4 | 5
-              ] ?? {
+              const { label, color } = ITEM_STATUS[row.status as 0 | 1] ?? {
                 label: "Unknown",
                 color: "default",
               };
