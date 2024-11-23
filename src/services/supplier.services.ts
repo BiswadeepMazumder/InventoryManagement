@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+const API_ENDPOINT =
+  process.env.NEXT_PUBLIC_API_ENDPOINT || process.env.API_ENDPOINT;
 
 export const fetchSuppliers = async (userId: string): Promise<any> => {
   const options = {

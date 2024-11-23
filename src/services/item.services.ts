@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Item } from "@/types/item";
 
-const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+const API_ENDPOINT =
+  process.env.NEXT_PUBLIC_API_ENDPOINT || process.env.API_ENDPOINT;
 
 export const fetchItems = async (userId: string): Promise<any> => {
   const options = {
