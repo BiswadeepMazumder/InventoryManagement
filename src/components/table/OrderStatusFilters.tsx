@@ -36,12 +36,6 @@ const FILTER_OPTIONS = [
 
 export enum FilterType {
   None = -1,
-  OrderCanceled = 0,
-  OrderPlaced = 1,
-  OrderAcceptedBySupplier = 2,
-  OrderReady = 3,
-  OrderInTransit = 4,
-  OrderDelivered = 5,
 }
 
 export type FiltersProps = {

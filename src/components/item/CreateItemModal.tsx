@@ -16,7 +16,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 import { schema, defaultValues, Values } from "@/components/item/schema";
-import { ITEM_STATUS } from "@/constants/item";
+import { ITEM_CATEGORY, ITEM_STATUS } from "@/constants/item";
 
 type CreateItemModalProps = {
   open: boolean;
@@ -133,13 +133,20 @@ export default function CreateItemModal({
                 <FormControl error={Boolean(errors.categoryCode)}>
                   <InputLabel>Category Code</InputLabel>
                   <Select {...field} label="categoryCode">
-                    <MenuItem value="AB">AB</MenuItem>
-                    <MenuItem value="CD">CD</MenuItem>
-                    <MenuItem value="CF">CF</MenuItem>
-                    <MenuItem value="PP">PP</MenuItem>
-                    <MenuItem value="PS">PS</MenuItem>
-                    <MenuItem value="TO">TO</MenuItem>
-                    <MenuItem value="WT">WT</MenuItem>
+                    <MenuItem value="AB">{ITEM_CATEGORY["AB"].label}</MenuItem>
+                    <MenuItem value="CD">{ITEM_CATEGORY["CD"].label}</MenuItem>
+                    <MenuItem value="CF">{ITEM_CATEGORY["CF"].label}</MenuItem>
+                    <MenuItem value="CH">{ITEM_CATEGORY["CH"].label}</MenuItem>
+                    <MenuItem value="CK">{ITEM_CATEGORY["CK"].label}</MenuItem>
+                    <MenuItem value="CO">{ITEM_CATEGORY["CO"].label}</MenuItem>
+                    <MenuItem value="FZ">{ITEM_CATEGORY["FZ"].label}</MenuItem>
+                    <MenuItem value="PP">{ITEM_CATEGORY["PP"].label}</MenuItem>
+                    <MenuItem value="PS">{ITEM_CATEGORY["PS"].label}</MenuItem>
+                    <MenuItem value="TO">{ITEM_CATEGORY["TO"].label}</MenuItem>
+                    <MenuItem value="SU">{ITEM_CATEGORY["SU"].label}</MenuItem>
+                    <MenuItem value="WT">{ITEM_CATEGORY["WT"].label}</MenuItem>
+                    <MenuItem value="OD">{ITEM_CATEGORY["OD"].label}</MenuItem>
+                    <MenuItem value="US">{ITEM_CATEGORY["US"].label}</MenuItem>
                   </Select>
                   {errors.categoryCode ? (
                     <FormHelperText>

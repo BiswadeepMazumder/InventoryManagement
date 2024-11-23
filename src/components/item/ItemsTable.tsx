@@ -21,7 +21,7 @@ import useSelection from "@/hooks/useSelection";
 import { Item } from "@/types/item";
 import Chip from "@mui/material/Chip";
 
-import { ITEM_STATUS } from "@/constants/item";
+import { ITEM_CATEGORY, ITEM_STATUS } from "@/constants/item";
 
 interface ItemsTableProps {
   count?: number;
@@ -104,9 +104,17 @@ const ItemsTable = ({
             {rows.map((row) => {
               const isSelected = selected?.has(row.itemId);
 
-              const { label, color } = ITEM_STATUS[row.status as 0 | 1] ?? {
+              const { label: statusLabel, color: statusColor } = ITEM_STATUS[
+                row.status as 0 | 1
+              ] ?? {
                 label: "Unknown",
                 color: "default",
+              };
+
+              const { label: categoryLabel } = ITEM_CATEGORY[
+                row.categoryCode as keyof typeof ITEM_CATEGORY
+              ] ?? {
+                label: "Unknown",
               };
 
               return (
@@ -137,9 +145,13 @@ const ItemsTable = ({
                   <TableCell>{row.itemUnitPrice}</TableCell>
                   <TableCell>{row.currentStock}</TableCell>
                   <TableCell>
-                    <Chip color={color} label={label} size="small" />
+                    <Chip
+                      color={statusColor}
+                      label={statusLabel}
+                      size="small"
+                    />
                   </TableCell>
-                  <TableCell>{row.categoryCode}</TableCell>
+                  <TableCell>{categoryLabel}</TableCell>
                   <TableCell padding="none">
                     <Tooltip title="Edit item">
                       <IconButton onClick={() => onUpdate(row)}>

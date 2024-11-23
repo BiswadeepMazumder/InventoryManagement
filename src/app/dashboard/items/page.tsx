@@ -31,12 +31,12 @@ import {
   deleteItemById,
   updateItemById,
 } from "@/services/item.services";
-import StatusFilters, {
+import ItemStatusFilters, {
   FilterType as StatusFilterType,
 } from "@/components/table/ItemStatusFilters";
-import CategoryCodeFilters, {
+import ItemCategoryCodeFilters, {
   FilterType as CategoryCodeFilterType,
-} from "@/components/table/CategoryCodeFilters";
+} from "@/components/table/ItemCategoryCodeFilters";
 
 const applyPagination = (
   rows: Item[],
@@ -253,14 +253,14 @@ export default function Page(): React.JSX.Element {
           onCancelSearch={() => cancelSearch()}
         />
 
-        <StatusFilters
+        <ItemStatusFilters
           filterType={filterStatus}
           onChangeFilter={(filterType: StatusFilterType) =>
             setFilterStatus(filterType)
           }
         />
 
-        <CategoryCodeFilters
+        <ItemCategoryCodeFilters
           filterType={filterCategoryCode}
           onChangeFilter={(filterType: CategoryCodeFilterType) =>
             setFilterCategoryCode(filterType)
