@@ -15,11 +15,7 @@ import Stack from "@mui/material/Stack";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/item/schema";
+import { schema, defaultValues, Values } from "@/components/item/schema";
 import { ORDER_STATUS } from "@/constants/order";
 
 type CreateItemModalProps = {

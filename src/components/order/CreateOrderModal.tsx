@@ -15,11 +15,7 @@ import Stack from "@mui/material/Stack";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/order/schema";
+import { schema, defaultValues, Values } from "@/components/order/schema";
 import { ORDER_STATUS } from "@/constants/order";
 import { useUser } from "@/hooks/useUser";
 

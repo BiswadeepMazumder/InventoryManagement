@@ -13,11 +13,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
 import Stack from "@mui/material/Stack";
 import { Supplier } from "@/types/supplier";
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/supplier/schema";
+import { schema, defaultValues, Values } from "@/components/supplier/schema";
 
 type CreateSupplierModalProps = {
   supplier: Supplier;

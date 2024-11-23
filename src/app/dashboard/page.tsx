@@ -11,14 +11,14 @@ import useFetchUpcomingOrders from "@/hooks/useFetchUpcomingOrders";
 import useFetchPastOrders from "@/hooks/useFetchPastOrders";
 import useFetchItems from "@/hooks/useFetchItems";
 
-import { PastOrder } from "@/components/dashboard/overview/PastOrder";
-import { LowStock } from "@/components/dashboard/overview/LowStock";
-import { CurrentOrder } from "@/components/dashboard/overview/CurrentOrder";
-import { UpcomingOrder } from "@/components/dashboard/overview/UpcomingOrder";
-import { RecentOrders } from "@/components/dashboard/overview/RecentOrders";
-import { Statistics } from "@/components/dashboard/overview/Statistics";
-import { ItemStock } from "@/components/dashboard/overview/ItemStock";
-import { Suppliers } from "@/components/dashboard/overview/Suppliers";
+import { PastOrder } from "@/components/overview/PastOrder";
+import { LowStock } from "@/components/overview/LowStock";
+import { CurrentOrder } from "@/components/overview/CurrentOrder";
+import { UpcomingOrder } from "@/components/overview/UpcomingOrder";
+import { RecentOrders } from "@/components/overview/RecentOrders";
+import { Statistics } from "@/components/overview/Statistics";
+import { ItemStock } from "@/components/overview/ItemStock";
+import { Suppliers } from "@/components/overview/Suppliers";
 
 export default function Page(): React.JSX.Element {
   // Fetch order data
