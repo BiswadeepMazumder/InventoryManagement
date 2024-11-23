@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 
@@ -10,6 +10,8 @@ import useFetchOrders from "@/hooks/useFetchOrders";
 import useFetchUpcomingOrders from "@/hooks/useFetchUpcomingOrders";
 import useFetchPastOrders from "@/hooks/useFetchPastOrders";
 import useFetchItems from "@/hooks/useFetchItems";
+
+import { ITEM_CATEGORY } from "@/constants/item";
 
 import { PastOrder } from "@/components/overview/PastOrder";
 import { LowStock } from "@/components/overview/LowStock";
@@ -36,6 +38,8 @@ export default function Page(): React.JSX.Element {
   // Fetch item data
   const { items, loading: itemsLoading } = useFetchItems("user-id");
 
+  const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
+
   const loading =
     ordersLoading ||
     upcomingOrdersLoading ||
@@ -48,81 +52,103 @@ export default function Page(): React.JSX.Element {
     return `https://avatar.iran.liara.run/public/boy?username=${name}`;
   };
 
-  // get only first 5 suppliers and map to the format that Suppliers component needs
-  const suppliersSliced = suppliers.slice(0, 6);
-  const suppliersData = suppliersSliced.map((supplier) => ({
-    id: supplier.supplierId,
-    name: supplier.supplierName,
-    image: createRandomImage(supplier.supplierName),
-    address: supplier.supplierCity,
-  }));
+  const suppliersData = useMemo(() => {
+    // get only first 5 suppliers and map to the format that Suppliers component needs
+    const suppliersSliced = suppliers.slice(0, 6);
+    const suppliersData = suppliersSliced.map((supplier) => ({
+      id: supplier.supplierId,
+      name: supplier.supplierName,
+      image: createRandomImage(supplier.supplierName),
+      address: supplier.supplierCity,
+    }));
+    return suppliersData;
+  }, [suppliers]);
 
-  // get only first 5 orders and map to the format that Statistics component needs
-  const ordersSliced = orders.slice(0, 7);
-  const ordersData = ordersSliced.map((order) => ({
-    id: order.orderId,
-    amount: order.orderAmount,
-    orderName: order.orderName,
-    status: order.orderStatus,
-    createdAt: dayjs(order.orderDate).toDate(),
-  }));
+  const ordersData = useMemo(() => {
+    // get only first 5 orders and map to the format that Statistics component needs
+    const ordersSliced = orders.slice(0, 7);
+    const ordersData = ordersSliced.map((order) => ({
+      id: order.orderId,
+      amount: order.orderAmount,
+      orderName: order.orderName,
+      status: order.orderStatus,
+      createdAt: dayjs(order.orderDate).toDate(),
+    }));
+    return ordersData;
+  }, [orders]);
 
-  // Count orders by month in this year and return to list, if it doesn't exist, return 0
-  const orderCountByMonthThisYear = Array(12).fill(0);
-  orders.forEach((order) => {
-    const orderDate = dayjs(order.orderDate);
-    if (orderDate.year() === dayjs().year()) {
-      const month = orderDate.month();
-      orderCountByMonthThisYear[month]++;
-    }
-  });
+  const statisticsData = useMemo(() => {
+    // Count orders by month in this year and return to list, if it doesn't exist, return 0
+    const orderCountByMonthThisYear = Array(12).fill(0);
+    orders.forEach((order) => {
+      const orderDate = dayjs(order.orderDate);
+      if (orderDate.year() === dayjs().year()) {
+        const month = orderDate.month();
+        orderCountByMonthThisYear[month]++;
+      }
+    });
 
-  // Count orders by month in last year and return to list, if it doesn't exist, return 0
-  const orderCountByMonthLastYear = Array(12).fill(0);
-  orders.forEach((order) => {
-    const orderDate = dayjs(order.orderDate);
-    if (orderDate.year() === dayjs().year() - 1) {
-      const month = orderDate.month();
-      orderCountByMonthLastYear[month]++;
-    }
-  });
+    // Count orders by month in last year and return to list, if it doesn't exist, return 0
+    const orderCountByMonthLastYear = Array(12).fill(0);
+    orders.forEach((order) => {
+      const orderDate = dayjs(order.orderDate);
+      if (orderDate.year() === dayjs().year() - 1) {
+        const month = orderDate.month();
+        orderCountByMonthLastYear[month]++;
+      }
+    });
 
-  console.log("[DEBUG] orderCountByMonth", orderCountByMonthThisYear);
-  console.log("[DEBUG] orderCountByMonthLastYear", orderCountByMonthLastYear);
+    // console.log("[DEBUG] orderCountByMonth", orderCountByMonthThisYear);
+    // console.log("[DEBUG] orderCountByMonthLastYear", orderCountByMonthLastYear);
 
-  const statisticsData = [
-    {
-      name: "This year",
-      data: orderCountByMonthThisYear, // [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
-    },
-    {
-      name: "Last year",
-      data: orderCountByMonthLastYear, // [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
-    },
-  ];
+    const statistics = [
+      {
+        name: "This year",
+        data: orderCountByMonthThisYear, // [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
+      },
+      {
+        name: "Last year",
+        data: orderCountByMonthLastYear, // [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
+      },
+    ];
 
-  const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
+    return statistics;
+  }, [orders]);
 
-  // Get item categories for the ItemStock chart
-  const itemCategories = items.map((item) => item.categoryCode);
-  console.log("[DEBUG] itemCategories", itemCategories);
+  const itemStock = useMemo((): {
+    uniqueItemCategories: any;
+    itemPercentages: any;
+  } => {
+    // Get item categories for the ItemStock chart
+    const itemCategories = items.map((item) => {
+      const { label } = ITEM_CATEGORY[
+        item.categoryCode as keyof typeof ITEM_CATEGORY
+      ] ?? {
+        label: "Unknown",
+      };
+      return label;
+    });
+    // console.log("[DEBUG] itemCategories", itemCategories);
 
-  // Get unique item categories
-  const uniqueItemCategories = [...new Set(itemCategories)];
-  console.log("[DEBUG] uniqueItemCategories", uniqueItemCategories);
+    // Get unique item categories
+    const uniqueItemCategories = [...new Set(itemCategories)];
+    // console.log("[DEBUG] uniqueItemCategories", uniqueItemCategories);
 
-  // Get the count of each item category
-  const itemCounts = uniqueItemCategories.map((category) => {
-    return itemCategories.filter((item) => item === category).length;
-  });
-  console.log("[DEBUG] itemCounts", itemCounts);
+    // Get the count of each item category
+    const itemCounts = uniqueItemCategories.map((category) => {
+      return itemCategories.filter((item) => item === category).length;
+    });
+    // console.log("[DEBUG] itemCounts", itemCounts);
 
-  // Get Percentage of each item category
-  const totalItems = itemCategories.length;
-  const itemPercentages = itemCounts.map((count) =>
-    Math.round((count / totalItems) * 100),
-  );
-  console.log("[DEBUG] itemPercentages", itemPercentages);
+    // Get Percentage of each item category
+    const totalItems = itemCategories.length;
+    const itemPercentages = itemCounts.map((count) =>
+      Math.round((count / totalItems) * 100),
+    );
+    // console.log("[DEBUG] itemPercentages", itemPercentages);
+
+    return { uniqueItemCategories, itemPercentages };
+  }, [items]);
 
   if (loading) {
     return <Grid>Loading...</Grid>;
@@ -187,8 +213,8 @@ export default function Page(): React.JSX.Element {
       {/* Item Stock */}
       <Grid size={{ lg: 4, md: 4, xs: 12 }}>
         <ItemStock
-          chartSeries={itemPercentages}
-          labels={uniqueItemCategories}
+          chartSeries={itemStock.itemPercentages}
+          labels={itemStock.uniqueItemCategories}
           sx={{ height: "100%" }}
         />
       </Grid>
