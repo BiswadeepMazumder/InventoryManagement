@@ -16,11 +16,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 import { Order } from "@/types/order";
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/order/schema";
+import { schema, defaultValues, Values } from "@/components/order/schema";
 import React from "react";
 import { ORDER_STATUS } from "@/constants/order";
 
@@ -75,6 +71,20 @@ export default function UpdateOrderModal({
       <form onSubmit={handleSubmit(handleUpdateOrder)}>
         <DialogContent>
           <Stack spacing={2}>
+            <Controller
+              control={control}
+              name="orderId"
+              render={({ field }) => (
+                <FormControl error={Boolean(errors.orderId)}>
+                  <InputLabel>Order Id</InputLabel>
+                  <OutlinedInput {...field} label="orderId" disabled />
+                  {errors.orderId ? (
+                    <FormHelperText>{errors.orderId.message}</FormHelperText>
+                  ) : null}
+                </FormControl>
+              )}
+            />
+
             <Controller
               control={control}
               name="orderName"

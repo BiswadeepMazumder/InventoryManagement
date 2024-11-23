@@ -16,11 +16,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 import { Item } from "@/types/item";
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/item/schema";
+import { schema, defaultValues, Values } from "@/components/item/schema";
 import { ORDER_STATUS } from "@/constants/order";
 
 type CreateItemModalProps = {
@@ -72,6 +68,20 @@ export default function UpdateItemModal({
       <form onSubmit={handleSubmit(handleUpdateItem)}>
         <DialogContent>
           <Stack spacing={2}>
+            <Controller
+              control={control}
+              name="itemId"
+              render={({ field }) => (
+                <FormControl error={Boolean(errors.itemId)}>
+                  <InputLabel>Item Id</InputLabel>
+                  <OutlinedInput {...field} label="itemId" disabled />
+                  {errors.itemId ? (
+                    <FormHelperText>{errors.itemId.message}</FormHelperText>
+                  ) : null}
+                </FormControl>
+              )}
+            />
+
             <Controller
               control={control}
               name="itemName"
