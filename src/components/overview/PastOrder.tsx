@@ -31,7 +31,7 @@ export function PastOrder({
   const router = useRouter();
 
   const handleViewOrders = () => {
-    router.push("dashboard/orders");
+    router.push("dashboard/orders?filter=past");
   };
 
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;

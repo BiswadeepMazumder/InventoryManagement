@@ -31,7 +31,7 @@ export function CurrentOrder({
   const router = useRouter();
 
   const handleViewOrders = () => {
-    router.push("dashboard/orders");
+    router.push("dashboard/orders?filter=current");
   };
 
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
