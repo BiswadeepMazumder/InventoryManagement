@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -15,49 +15,29 @@ import Stack from "@mui/material/Stack";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import { Order } from "@/types/order";
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/order/schema";
-import React from "react";
+import { schema, defaultValues, Values } from "@/components/item/schema";
 import { ORDER_STATUS } from "@/constants/order";
 
-type CreateOrderModalProps = {
-  order: Order;
+type CreateItemModalProps = {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: Values) => void;
 };
 
-export default function UpdateOrderModal({
-  order,
+export default function CreateItemModal({
   open,
   onClose,
   onSubmit,
-}: CreateOrderModalProps) {
+}: CreateItemModalProps) {
   const {
     control,
     handleSubmit,
     setError,
-    setValue,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  useEffect(() => {
-    setValue("orderId", order.orderId);
-    setValue("orderDate", order.orderDate);
-    setValue("orderName", order.orderName);
-    setValue("userId", order.userId);
-    setValue("orderAmount", order.orderAmount);
-    setValue("orderStatus", order.orderStatus);
-    setValue("cancelComment", order.cancelComment);
-    // setValue("orderItems", order.orderItems);
-  }, [order]);
-
-  const handleUpdateOrder = (values: Values) => {
-    console.log("Update order", values);
+  const handleCreateItem = (values: Values) => {
+    console.log("Create item", values);
     onSubmit(values);
     onClose();
   };
@@ -71,19 +51,19 @@ export default function UpdateOrderModal({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>Update order</DialogTitle>
-      <form onSubmit={handleSubmit(handleUpdateOrder)}>
+      <DialogTitle>Create a new item</DialogTitle>
+      <form onSubmit={handleSubmit(handleCreateItem)}>
         <DialogContent>
           <Stack spacing={2}>
             <Controller
               control={control}
-              name="orderName"
+              name="itemName"
               render={({ field }) => (
-                <FormControl error={Boolean(errors.orderName)}>
-                  <InputLabel>Order Name</InputLabel>
-                  <OutlinedInput {...field} label="orderName" />
-                  {errors.orderName ? (
-                    <FormHelperText>{errors.orderName.message}</FormHelperText>
+                <FormControl error={Boolean(errors.itemName)}>
+                  <InputLabel>Item Name</InputLabel>
+                  <OutlinedInput {...field} label="itemName" />
+                  {errors.itemName ? (
+                    <FormHelperText>{errors.itemName.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}
@@ -91,14 +71,18 @@ export default function UpdateOrderModal({
 
             <Controller
               control={control}
-              name="orderAmount"
+              name="itemUnitPrice"
               render={({ field }) => (
-                <FormControl error={Boolean(errors.orderAmount)}>
-                  <InputLabel>Order Amount</InputLabel>
-                  <OutlinedInput {...field} label="orderAmount" type="number" />
-                  {errors.orderAmount ? (
+                <FormControl error={Boolean(errors.itemUnitPrice)}>
+                  <InputLabel>Unit Price</InputLabel>
+                  <OutlinedInput
+                    {...field}
+                    label="itemUnitPrice"
+                    type="number"
+                  />
+                  {errors.itemUnitPrice ? (
                     <FormHelperText>
-                      {errors.orderAmount.message}
+                      {errors.itemUnitPrice.message}
                     </FormHelperText>
                   ) : null}
                 </FormControl>
@@ -107,11 +91,31 @@ export default function UpdateOrderModal({
 
             <Controller
               control={control}
-              name="orderStatus"
+              name="currentStock"
               render={({ field }) => (
-                <FormControl error={Boolean(errors.orderStatus)}>
-                  <InputLabel>Order Status</InputLabel>
-                  <Select {...field} label="orderStatus">
+                <FormControl error={Boolean(errors.currentStock)}>
+                  <InputLabel>Current Stock</InputLabel>
+                  <OutlinedInput
+                    {...field}
+                    label="currentStock"
+                    type="number"
+                  />
+                  {errors.currentStock ? (
+                    <FormHelperText>
+                      {errors.currentStock.message}
+                    </FormHelperText>
+                  ) : null}
+                </FormControl>
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="status"
+              render={({ field }) => (
+                <FormControl error={Boolean(errors.status)}>
+                  <InputLabel>Status</InputLabel>
+                  <Select {...field} label="status" disabled>
                     <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
                     <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
                     <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
@@ -119,10 +123,8 @@ export default function UpdateOrderModal({
                     <MenuItem value={4}>{ORDER_STATUS[4].label}</MenuItem>
                     <MenuItem value={5}>{ORDER_STATUS[5].label}</MenuItem>
                   </Select>
-                  {errors.orderStatus ? (
-                    <FormHelperText>
-                      {errors.orderStatus.message}
-                    </FormHelperText>
+                  {errors.status ? (
+                    <FormHelperText>{errors.status.message}</FormHelperText>
                   ) : null}
                 </FormControl>
               )}
@@ -130,18 +132,22 @@ export default function UpdateOrderModal({
 
             <Controller
               control={control}
-              name="cancelComment"
+              name="categoryCode"
               render={({ field }) => (
-                <FormControl error={Boolean(errors.cancelComment)}>
-                  <InputLabel>Cancel Comment</InputLabel>
-                  <OutlinedInput
-                    {...field}
-                    label="cancelComment"
-                    type="string"
-                  />
-                  {errors.cancelComment ? (
+                <FormControl error={Boolean(errors.categoryCode)}>
+                  <InputLabel>Category Code</InputLabel>
+                  <Select {...field} label="categoryCode">
+                    <MenuItem value="AB">AB</MenuItem>
+                    <MenuItem value="CD">CD</MenuItem>
+                    <MenuItem value="CF">CF</MenuItem>
+                    <MenuItem value="PP">PP</MenuItem>
+                    <MenuItem value="PS">PS</MenuItem>
+                    <MenuItem value="TO">TO</MenuItem>
+                    <MenuItem value="WT">WT</MenuItem>
+                  </Select>
+                  {errors.categoryCode ? (
                     <FormHelperText>
-                      {errors.cancelComment.message}
+                      {errors.categoryCode.message}
                     </FormHelperText>
                   ) : null}
                 </FormControl>
@@ -152,7 +158,7 @@ export default function UpdateOrderModal({
         <DialogActions>
           <Button onClick={onClose}>Close</Button>
           <Button type="submit" autoFocus>
-            Update order
+            Create Item
           </Button>
         </DialogActions>
       </form>

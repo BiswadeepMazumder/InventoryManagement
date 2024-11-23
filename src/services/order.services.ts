@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Order } from "@/types/order";
 
-const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+const API_ENDPOINT =
+  process.env.NEXT_PUBLIC_API_ENDPOINT || process.env.API_ENDPOINT;
 
 export const fetchUpcomingOrders = async (userId: string): Promise<any> => {
   const options = {
@@ -38,6 +39,25 @@ export const fetchPastOrders = async (userId: string): Promise<any> => {
 export const fetchOrders = async (userId: string): Promise<any> => {
   const options = {
     url: `${API_ENDPOINT}/api/Order`,
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    params: {
+      userId,
+    },
+  };
+  const response = await axios(options);
+  return response.data;
+};
+
+export const fetchOrderById = async (
+  userId: string,
+  orderId: string,
+): Promise<any> => {
+  const options = {
+    url: `${API_ENDPOINT}/ViewOrderDetail${orderId}`,
     method: "GET",
     headers: {
       Accept: "application/json",

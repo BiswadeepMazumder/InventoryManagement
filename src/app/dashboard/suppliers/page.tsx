@@ -12,11 +12,11 @@ import Typography from "@mui/material/Typography";
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 
-import SuppliersTable from "@/components/dashboard/supplier/SuppliersTable";
+import SuppliersTable from "@/components/supplier/SuppliersTable";
 import TableFilters from "@/components/table/TableFilters";
-import CreateSupplierModal from "@/components/dashboard/supplier/CreateSupplierModal";
-import UpdateSupplierModal from "@/components/dashboard/supplier/UpdateSupplierModal";
-import DeleteSupplierModal from "@/components/dashboard/supplier/DeleteSupplierModal";
+import CreateSupplierModal from "@/components/supplier/CreateSupplierModal";
+import UpdateSupplierModal from "@/components/supplier/UpdateSupplierModal";
+import DeleteSupplierModal from "@/components/supplier/DeleteSupplierModal";
 import ExportPopover from "@/components/table/ExportPopover";
 
 import { Supplier } from "@/types/supplier";

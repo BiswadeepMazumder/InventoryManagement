@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 
 // import { Theme } from "@/components/dashboard/settings/Theme";
 // import { Notifications } from "@/components/dashboard/settings/notifications";
-import { UpdatePasswordForm } from "@/components/dashboard/settings/UpdatePasswordForm";
+import { UpdatePasswordForm } from "@/components/settings/UpdatePasswordForm";
 import { authClient } from "@/utils/client";
 
 export default function Page(): React.JSX.Element {

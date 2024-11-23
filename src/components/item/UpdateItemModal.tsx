@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -15,20 +15,19 @@ import Stack from "@mui/material/Stack";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import {
-  schema,
-  defaultValues,
-  Values,
-} from "@/components/dashboard/item/schema";
+import { Item } from "@/types/item";
+import { schema, defaultValues, Values } from "@/components/item/schema";
 import { ORDER_STATUS } from "@/constants/order";
 
 type CreateItemModalProps = {
+  item: Item;
   open: boolean;
   onClose: () => void;
   onSubmit: (values: Values) => void;
 };
 
-export default function CreateItemModal({
+export default function UpdateItemModal({
+  item,
   open,
   onClose,
   onSubmit,
@@ -37,11 +36,21 @@ export default function CreateItemModal({
     control,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const handleCreateItem = (values: Values) => {
-    console.log("Create item", values);
+  useEffect(() => {
+    setValue("itemId", item.itemId);
+    setValue("itemName", item.itemName);
+    setValue("itemUnitPrice", item.itemUnitPrice);
+    setValue("currentStock", item.currentStock);
+    setValue("status", item.status);
+    setValue("categoryCode", item.categoryCode);
+  }, [item]);
+
+  const handleUpdateItem = (values: Values) => {
+    console.log("Update item", values);
     onSubmit(values);
     onClose();
   };
@@ -55,10 +64,24 @@ export default function CreateItemModal({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>Create a new item</DialogTitle>
-      <form onSubmit={handleSubmit(handleCreateItem)}>
+      <DialogTitle>Update item</DialogTitle>
+      <form onSubmit={handleSubmit(handleUpdateItem)}>
         <DialogContent>
           <Stack spacing={2}>
+            <Controller
+              control={control}
+              name="itemId"
+              render={({ field }) => (
+                <FormControl error={Boolean(errors.itemId)}>
+                  <InputLabel>Item Id</InputLabel>
+                  <OutlinedInput {...field} label="itemId" disabled />
+                  {errors.itemId ? (
+                    <FormHelperText>{errors.itemId.message}</FormHelperText>
+                  ) : null}
+                </FormControl>
+              )}
+            />
+
             <Controller
               control={control}
               name="itemName"
@@ -119,7 +142,7 @@ export default function CreateItemModal({
               render={({ field }) => (
                 <FormControl error={Boolean(errors.status)}>
                   <InputLabel>Status</InputLabel>
-                  <Select {...field} label="status" disabled>
+                  <Select {...field} label="status">
                     <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
                     <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
                     <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
@@ -162,7 +185,7 @@ export default function CreateItemModal({
         <DialogActions>
           <Button onClick={onClose}>Close</Button>
           <Button type="submit" autoFocus>
-            Create Item
+            Update Item
           </Button>
         </DialogActions>
       </form>

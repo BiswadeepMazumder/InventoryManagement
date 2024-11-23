@@ -5,8 +5,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
 
-import { AccountDetailsForm } from "@/components/dashboard/account/AccountDetailsForm";
-import { AccountInfo } from "@/components/dashboard/account/AccountInfo";
+import { AccountDetailsForm } from "@/components/account/AccountDetailsForm";
+import { AccountInfo } from "@/components/account/AccountInfo";
 import { useUser } from "@/hooks/useUser";
 import { NAME_DELIMITER } from "@/utils/client";
 

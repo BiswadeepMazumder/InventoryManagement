@@ -95,7 +95,7 @@ const OrdersTable = ({
                   }}
                 />
               </TableCell>
-              <TableCell>Order Id</TableCell>
+              {/*<TableCell>Order Id</TableCell>*/}
               <TableCell>Order Date</TableCell>
               <TableCell>Order Name</TableCell>
               <TableCell>Order Amount</TableCell>
@@ -130,9 +130,9 @@ const OrdersTable = ({
                       }}
                     />
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">{row.orderId}</Typography>
-                  </TableCell>
+                  {/*<TableCell>*/}
+                  {/*  <Typography variant="subtitle2">{row.orderId}</Typography>*/}
+                  {/*</TableCell>*/}
                   <TableCell>
                     <Typography variant="subtitle2">
                       {dayjs(row.orderDate).format("MM/DD/YYYY")}
