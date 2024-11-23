@@ -1,12 +1,14 @@
 import React from "react";
 
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { fetchItemById, fetchItems } from "@/services/item.services";
-import { Item } from "@/types/item";
-import Chip from "@mui/material/Chip";
+
 import { ORDER_STATUS } from "@/constants/order";
+import { Item } from "@/types/item";
+
+import { fetchItemById, fetchItems } from "@/services/item.services";
 
 interface PageProps {
   params: { id: string };

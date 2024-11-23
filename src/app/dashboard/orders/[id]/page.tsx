@@ -1,14 +1,15 @@
 import React from "react";
-import "react-toastify/dist/ReactToastify.css";
+import dayjs from "dayjs";
 
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
+
 import { ORDER_STATUS } from "@/constants/order";
-import { fetchOrderById, fetchOrders } from "@/services/order.services";
 import { Order } from "@/types/order";
-import dayjs from "dayjs";
+
+import { fetchOrderById, fetchOrders } from "@/services/order.services";
 
 interface PageProps {
   params: { id: string };
