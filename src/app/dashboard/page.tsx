@@ -19,7 +19,7 @@ import { CurrentOrder } from "@/components/overview/CurrentOrder";
 import { UpcomingOrder } from "@/components/overview/UpcomingOrder";
 import { RecentOrders } from "@/components/overview/RecentOrders";
 import { Statistics } from "@/components/overview/Statistics";
-import { ItemStock } from "@/components/overview/ItemStock";
+import { ItemCategories } from "@/components/overview/ItemCategories";
 import { Suppliers } from "@/components/overview/Suppliers";
 
 export default function Page(): React.JSX.Element {
@@ -115,11 +115,11 @@ export default function Page(): React.JSX.Element {
     return statistics;
   }, [orders]);
 
-  const itemStock = useMemo((): {
+  const itemCategories = useMemo((): {
     uniqueItemCategories: any;
     itemPercentages: any;
   } => {
-    // Get item categories for the ItemStock chart
+    // Get item categories for the itemCategories chart
     const itemCategories = items.map((item) => {
       const { label } = ITEM_CATEGORY[
         item.categoryCode as keyof typeof ITEM_CATEGORY
@@ -212,9 +212,9 @@ export default function Page(): React.JSX.Element {
 
       {/* Item Stock */}
       <Grid size={{ lg: 4, md: 4, xs: 12 }}>
-        <ItemStock
-          chartSeries={itemStock.itemPercentages}
-          labels={itemStock.uniqueItemCategories}
+        <ItemCategories
+          chartSeries={itemCategories.itemPercentages}
+          labels={itemCategories.uniqueItemCategories}
           sx={{ height: "100%" }}
         />
       </Grid>
