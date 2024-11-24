@@ -4,18 +4,28 @@ import { alpha } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
-type EnhancedTableToolbarProps = {
+const iconMap: { [key: string]: React.ElementType } = {
+  delete: DeleteIcon,
+  add: ControlPointIcon,
+};
+
+interface EnhancedTableToolbarProps {
   title?: string;
   numSelected: number;
-  onDelete: () => void;
-};
+  iconName: string;
+  onClick: () => void;
+}
 
 const EnhancedTableToolbar = ({
   title,
   numSelected,
-  onDelete,
+  iconName,
+  onClick,
 }: EnhancedTableToolbarProps) => {
+  const IconComponent = iconMap[iconName];
+
   return (
     <Toolbar
       sx={[
@@ -52,9 +62,9 @@ const EnhancedTableToolbar = ({
         </Typography>
       )}
       {numSelected > 0 && (
-        <Tooltip title="Delete">
-          <IconButton onClick={onDelete}>
-            <DeleteIcon />
+        <Tooltip title={iconName.toUpperCase()}>
+          <IconButton onClick={onClick}>
+            <IconComponent />
           </IconButton>
         </Tooltip>
       )}
