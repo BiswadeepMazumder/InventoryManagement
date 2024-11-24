@@ -50,20 +50,24 @@ export function ItemStock({
           <Stack
             direction="row"
             spacing={2}
-            sx={{ alignItems: "center", justifyContent: "center" }}
+            sx={{
+              alignItems: "center",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
           >
             {chartSeries.map((item, index) => {
               const label = labels[index];
               const Icon = iconMapping[label];
 
               return (
-                <Stack key={label} spacing={1} sx={{ alignItems: "center" }}>
+                <Card key={label} sx={{ p: 1, display: "flex", gap: 1 }}>
                   {Icon ? <Icon fontSize="var(--icon-fontSize-lg)" /> : null}
                   <Typography variant="h6">{label}</Typography>
                   <Typography color="text.secondary" variant="subtitle2">
                     {item}%
                   </Typography>
-                </Stack>
+                </Card>
               );
             })}
           </Stack>

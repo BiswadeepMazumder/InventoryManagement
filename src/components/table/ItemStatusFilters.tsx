@@ -20,8 +20,6 @@ const FILTER_OPTIONS = [
 
 export enum FilterType {
   None = -1,
-  ProductUnavailable = 0,
-  ProductAvailable = 1,
 }
 
 export type FiltersProps = {
