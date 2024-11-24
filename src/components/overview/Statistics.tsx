@@ -28,7 +28,7 @@ export function Statistics({
   const chartOptions = useChartOptions();
   const router = useRouter();
 
-  const handleViewOverview = () => {
+  const handleViewAll = () => {
     router.push("dashboard/orders");
   };
 
@@ -46,7 +46,7 @@ export function Statistics({
         //     Sync
         //   </Button>
         // }
-        title="Statistics"
+        title="Order Statistics"
       />
       <CardContent>
         <Chart
@@ -63,9 +63,9 @@ export function Statistics({
           color="inherit"
           endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
           size="small"
-          onClick={handleViewOverview}
+          onClick={handleViewAll}
         >
-          Overview
+          View all
         </Button>
       </CardActions>
     </Card>

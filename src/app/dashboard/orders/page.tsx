@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -20,11 +21,10 @@ import DeleteOrderModal from "@/components/order/DeleteOrderModal";
 import ExportPopover from "@/components/table/ExportPopover";
 
 import { Order } from "@/types/order";
+import ExportSheet from "@/utils/export-sheet";
 
 import useFetchOrders from "@/hooks/useFetchOrders";
 import usePopover from "@/hooks/usePopover";
-
-import ExportSheet from "@/utils/export-sheet";
 
 import {
   createOrder,
@@ -44,6 +44,7 @@ const applyPagination = (
 };
 
 export default function Page(): React.JSX.Element {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -62,14 +63,49 @@ export default function Page(): React.JSX.Element {
   const exportPopover = usePopover<HTMLDivElement>();
   const { orders, loading, refresh } = useFetchOrders("user-id");
 
+  const isParams = searchParams.has("filter");
   const isEmpty = orders.length === 0;
   const isSearch = searched.length > 0;
   const isFilteredStatus = filterStatus !== StatusFilterType.None;
-  const ordersToDisplay = isSearch || isFilteredStatus ? filterOrders : orders;
+
+  const ordersToDisplay =
+    isParams || isSearch || isFilteredStatus ? filterOrders : orders;
   const paginatedOrders = applyPagination(ordersToDisplay, page, rowsPerPage);
 
-  // Filter items based on search text or status or category code
+  // Filter orders based on params in URL (filter=current|past|upcoming)
   useEffect(() => {
+    if (!isParams) return;
+
+    const params = searchParams.get("filter");
+
+    const filteredRows = orders.filter((row) => {
+      const results = [];
+
+      if (params === "current") {
+        const _row =
+          row.orderStatus === StatusFilterType.OrderPlaced ||
+          row.orderStatus === StatusFilterType.OrderAccepted ||
+          row.orderStatus === StatusFilterType.OrderReady;
+        results.push(_row);
+      } else if (params === "past") {
+        const _row = row.orderStatus === StatusFilterType.OrderDelivered;
+        results.push(_row);
+      } else if (params === "upcoming") {
+        const _row = row.orderStatus === StatusFilterType.OrderInTransit;
+        results.push(_row);
+      }
+
+      return results.every((result) => result);
+    });
+
+    setFilterOrders(filteredRows);
+    setPage(0);
+  }, [searchParams, orders]);
+
+  // Filter orders based on search text or status or category code
+  useEffect(() => {
+    if (!searched && filterStatus === StatusFilterType.None) return;
+
     const filteredRows = orders.filter((row) => {
       const results = [];
 
@@ -86,11 +122,8 @@ export default function Page(): React.JSX.Element {
         results.push(_row);
       }
 
-      // console.log("Results", results);
       return results.every((result) => result);
     });
-
-    // console.log("Filtered rows", filteredRows);
 
     setFilterOrders(filteredRows);
     setPage(0);

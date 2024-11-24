@@ -20,6 +20,8 @@ const FILTER_OPTIONS = [
 
 export enum FilterType {
   None = -1,
+  ProductUnavailable = ITEM_STATUS["0"].value,
+  ProductAvailable = ITEM_STATUS["1"].value,
 }
 
 export type FiltersProps = {

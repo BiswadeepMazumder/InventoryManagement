@@ -22,22 +22,22 @@ const iconMapping = {
   Phone: PhoneIcon,
 } as Record<string, Icon>;
 
-export interface ItemStockProps {
+export interface ItemCategoriesProps {
   chartSeries: number[];
   labels: string[];
   sx?: SxProps;
 }
 
-export function ItemStock({
+export function ItemCategories({
   chartSeries,
   labels,
   sx,
-}: ItemStockProps): React.JSX.Element {
+}: ItemCategoriesProps): React.JSX.Element {
   const chartOptions = useChartOptions(labels);
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Item Stock" />
+      <CardHeader title="Item Categories" />
       <CardContent>
         <Stack spacing={2}>
           <Chart
