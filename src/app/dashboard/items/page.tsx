@@ -33,7 +33,7 @@ import {
 } from "@/services/item.services";
 import StatusFilters, {
   FilterType as StatusFilterType,
-} from "@/components/table/StatusFilters";
+} from "@/components/table/ItemStatusFilters";
 import CategoryCodeFilters, {
   FilterType as CategoryCodeFilterType,
 } from "@/components/table/CategoryCodeFilters";

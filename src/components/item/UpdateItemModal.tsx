@@ -17,7 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { Item } from "@/types/item";
 import { schema, defaultValues, Values } from "@/components/item/schema";
-import { ORDER_STATUS } from "@/constants/order";
+import { ITEM_STATUS } from "@/constants/item";
 
 type CreateItemModalProps = {
   item: Item;
@@ -143,12 +143,8 @@ export default function UpdateItemModal({
                 <FormControl error={Boolean(errors.status)}>
                   <InputLabel>Status</InputLabel>
                   <Select {...field} label="status">
-                    <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
-                    <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
-                    <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
-                    <MenuItem value={3}>{ORDER_STATUS[3].label}</MenuItem>
-                    <MenuItem value={4}>{ORDER_STATUS[4].label}</MenuItem>
-                    <MenuItem value={5}>{ORDER_STATUS[5].label}</MenuItem>
+                    <MenuItem value={0}>{ITEM_STATUS[0].label}</MenuItem>
+                    <MenuItem value={1}>{ITEM_STATUS[1].label}</MenuItem>
                   </Select>
                   {errors.status ? (
                     <FormHelperText>{errors.status.message}</FormHelperText>

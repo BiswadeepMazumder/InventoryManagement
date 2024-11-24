@@ -33,7 +33,7 @@ import {
 } from "@/services/order.services";
 import StatusFilters, {
   FilterType as StatusFilterType,
-} from "@/components/table/StatusFilters";
+} from "@/components/table/OrderStatusFilters";
 
 const applyPagination = (
   rows: Order[],

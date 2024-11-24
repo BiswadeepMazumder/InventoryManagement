@@ -5,7 +5,7 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import { ORDER_STATUS } from "@/constants/order";
+import { ITEM_STATUS } from "@/constants/item";
 import { Item } from "@/types/item";
 
 import { fetchItemById, fetchItems } from "@/services/item.services";
@@ -30,9 +30,7 @@ export default async function Page({
     return <div>Item not found</div>;
   }
 
-  const { label, color } = ORDER_STATUS[
-    item.status as 0 | 1 | 2 | 3 | 4 | 5
-  ] ?? {
+  const { label, color } = ITEM_STATUS[item.status as 0 | 1] ?? {
     label: "Unknown",
     color: "default",
   };
