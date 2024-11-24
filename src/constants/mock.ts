@@ -1131,6 +1131,46 @@ const ITEM_DATA = [
 
 const ORDER_DATA = [
   {
+    orderId: "OD_4365",
+    orderDate: "2024-08-01T00:00:00",
+    orderName: "AUG_01",
+    userId: "US01",
+    orderAmount: 234234.0,
+    orderStatus: 5,
+    cancelComment: "Order Complete",
+    orderItems: [],
+  },
+  {
+    orderId: "OD_7058",
+    orderDate: "2024-08-01T00:00:00",
+    orderName: "AUG_01",
+    userId: "US01",
+    orderAmount: 234.0,
+    orderStatus: 1,
+    cancelComment: "",
+    orderItems: [
+      {
+        orderId: "OD_7058",
+        itemId: "CD0380",
+        orderDate: "2024-08-01T00:00:00",
+        itemCount: 456,
+        itemName: "Life Savers",
+        totalPrice: 9915.0,
+        orderStatus: 4,
+      },
+    ],
+  },
+  {
+    orderId: "OD_7136",
+    orderDate: "2024-08-01T00:00:00",
+    orderName: "AUG_01",
+    userId: "US01",
+    orderAmount: 234.0,
+    orderStatus: 5,
+    cancelComment: "",
+    orderItems: [],
+  },
+  {
     orderId: "OD02301",
     orderDate: "2024-07-11T00:00:00",
     orderName: "JUl_03",
