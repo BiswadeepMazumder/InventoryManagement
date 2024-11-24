@@ -77,7 +77,8 @@ const OrdersTable = ({
         <EnhancedTableToolbar
           title="All Orders"
           numSelected={selected.size}
-          onDelete={handleDeleteOrder}
+          iconName="delete"
+          onClick={handleDeleteOrder}
         />
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>

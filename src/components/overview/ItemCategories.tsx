@@ -61,7 +61,11 @@ export function ItemCategories({
               const Icon = iconMapping[label];
 
               return (
-                <Card key={label} sx={{ p: 1, display: "flex", gap: 1 }}>
+                <Card
+                  variant="outlined"
+                  key={label}
+                  sx={{ p: 1, display: "flex", gap: 1 }}
+                >
                   {Icon ? <Icon fontSize="var(--icon-fontSize-lg)" /> : null}
                   <Typography variant="h6">{label}</Typography>
                   <Typography color="text.secondary" variant="subtitle2">
