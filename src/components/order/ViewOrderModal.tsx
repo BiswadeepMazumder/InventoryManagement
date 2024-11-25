@@ -13,8 +13,8 @@ import {
   OutlinedInput,
   FormHelperText,
   Stack,
-  Select,
-  MenuItem,
+  Typography,
+  Chip,
 } from "@mui/material";
 
 import { ORDER_STATUS } from "@/constants/order";
@@ -22,6 +22,7 @@ import { Order, OrderItems } from "@/types/order";
 
 import { schema, defaultValues, Values } from "@/components/order/schema";
 import OrderItemsTable from "@/components/order/OrderItemsTable";
+import { formatDate, formatNumberWithCommas } from "@/utils/format";
 
 const applyOrderItemsPagination = (
   rows: OrderItems[],
@@ -31,19 +32,19 @@ const applyOrderItemsPagination = (
   return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 };
 
-interface UpdateOrderModalProps {
+interface ViewOrderModalProps {
   order: Order;
   open: boolean;
   onClose: () => void;
   onSubmit: (values: Values) => void;
 }
 
-export default function UpdateOrderModal({
+export default function ViewOrderModal({
   order,
   open,
   onClose,
   onSubmit,
-}: UpdateOrderModalProps) {
+}: ViewOrderModalProps) {
   const {
     control,
     handleSubmit,
@@ -86,7 +87,7 @@ export default function UpdateOrderModal({
   };
 
   const handleOrderItemPageChange = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setOrderItemPage(newPage);
@@ -99,90 +100,38 @@ export default function UpdateOrderModal({
     setOrderItemPage(0);
   };
 
+  const { label, color } = ORDER_STATUS[
+    order.orderStatus as 0 | 1 | 2 | 3 | 4 | 5
+  ] ?? {
+    label: "Unknown",
+    color: "default",
+  };
+
   return (
     <Dialog open={open} onClose={handleClose} scroll="paper" fullWidth>
-      <DialogTitle>Update Order</DialogTitle>
+      <DialogTitle>Order Detail</DialogTitle>
       <form onSubmit={handleSubmit(handleUpdateOrder)}>
-        <DialogContent>
+        <DialogContent dividers>
           <Stack spacing={2}>
             <Stack sx={{ flexDirection: "row", gap: 2 }}>
               <Stack spacing={2} sx={{ flex: 1 }}>
-                <Controller
-                  control={control}
-                  name="orderId"
-                  render={({ field }) => (
-                    <FormControl error={Boolean(errors.orderId)}>
-                      <InputLabel>Order Id</InputLabel>
-                      <OutlinedInput {...field} label="orderId" disabled />
-                      {errors.orderId ? (
-                        <FormHelperText>
-                          {errors.orderId.message}
-                        </FormHelperText>
-                      ) : null}
-                    </FormControl>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="orderAmount"
-                  render={({ field }) => (
-                    <FormControl error={Boolean(errors.orderAmount)}>
-                      <InputLabel>Order Amount</InputLabel>
-                      <OutlinedInput
-                        {...field}
-                        label="orderAmount"
-                        type="number"
-                      />
-                      {errors.orderAmount ? (
-                        <FormHelperText>
-                          {errors.orderAmount.message}
-                        </FormHelperText>
-                      ) : null}
-                    </FormControl>
-                  )}
-                />
+                <Typography variant="body1">
+                  <strong>Name:</strong> {order.orderName}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Date:</strong> {formatDate(order.orderDate)}
+                </Typography>
               </Stack>
 
               <Stack spacing={2} sx={{ flex: 1 }}>
-                <Controller
-                  control={control}
-                  name="orderName"
-                  render={({ field }) => (
-                    <FormControl error={Boolean(errors.orderName)}>
-                      <InputLabel>Order Name</InputLabel>
-                      <OutlinedInput {...field} label="orderName" />
-                      {errors.orderName ? (
-                        <FormHelperText>
-                          {errors.orderName.message}
-                        </FormHelperText>
-                      ) : null}
-                    </FormControl>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="orderStatus"
-                  render={({ field }) => (
-                    <FormControl error={Boolean(errors.orderStatus)}>
-                      <InputLabel>Order Status</InputLabel>
-                      <Select {...field} label="orderStatus">
-                        <MenuItem value={0}>{ORDER_STATUS[0].label}</MenuItem>
-                        <MenuItem value={1}>{ORDER_STATUS[1].label}</MenuItem>
-                        <MenuItem value={2}>{ORDER_STATUS[2].label}</MenuItem>
-                        <MenuItem value={3}>{ORDER_STATUS[3].label}</MenuItem>
-                        <MenuItem value={4}>{ORDER_STATUS[4].label}</MenuItem>
-                        <MenuItem value={5}>{ORDER_STATUS[5].label}</MenuItem>
-                      </Select>
-                      {errors.orderStatus ? (
-                        <FormHelperText>
-                          {errors.orderStatus.message}
-                        </FormHelperText>
-                      ) : null}
-                    </FormControl>
-                  )}
-                />
+                <Typography variant="body1">
+                  <strong>Amount:</strong> $
+                  {formatNumberWithCommas(order.orderAmount)}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Status:</strong>{" "}
+                  <Chip color={color} label={label} size="small" />
+                </Typography>
               </Stack>
             </Stack>
 
@@ -197,6 +146,7 @@ export default function UpdateOrderModal({
                       {...field}
                       label="cancelComment"
                       type="string"
+                      disabled
                     />
                     {errors.cancelComment ? (
                       <FormHelperText>
@@ -222,9 +172,9 @@ export default function UpdateOrderModal({
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Close</Button>
-          <Button type="submit" autoFocus>
-            Update Order
-          </Button>
+          {/*<Button type="submit" autoFocus>*/}
+          {/*  Update Order*/}
+          {/*</Button>*/}
         </DialogActions>
       </form>
     </Dialog>

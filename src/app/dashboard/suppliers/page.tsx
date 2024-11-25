@@ -154,7 +154,10 @@ export default function Page(): React.JSX.Element {
     for (const supplier of selectedDeleteSuppliers) {
       console.log("Deleting supplier", supplier);
       try {
-        const response = await deleteSupplier("user-id", supplier.supplierId);
+        const response = await deleteSupplier(
+          "user-id",
+          supplier.supplierId as string,
+        );
         console.log("Supplier deleted", response);
         toast(response.toString());
       } catch (error) {
@@ -255,7 +258,7 @@ export default function Page(): React.JSX.Element {
         onClick={handleExport}
       />
 
-      <ToastContainer />
+      <ToastContainer limit={1} pauseOnHover={false} closeOnClick />
     </Stack>
   );
 }

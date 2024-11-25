@@ -17,17 +17,12 @@ import usePopover from "@/hooks/usePopover";
 
 import OrdersTable from "@/components/order/OrdersTable";
 import TableFilters from "@/components/table/TableFilters";
-import CreateOrderModal from "@/components/order/CreateOrderModal";
 import PlaceOrderModal from "@/components/order/PlaceOrderModal";
-import UpdateOrderModal from "@/components/order/UpdateOrderModal";
+import ViewOrderModal from "@/components/order/ViewOrderModal";
 import DeleteOrderModal from "@/components/order/DeleteOrderModal";
 import ExportPopover from "@/components/table/ExportPopover";
 
-import {
-  createOrder,
-  deleteOrder,
-  updateOrder,
-} from "@/services/order.services";
+import { deleteOrder, updateOrder } from "@/services/order.services";
 import StatusFilters, {
   FilterType as StatusFilterType,
 } from "@/components/table/OrderStatusFilters";
@@ -45,13 +40,11 @@ export default function Page(): React.JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openPlaceModal, setOpenPlaceModal] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const [selectedPlaceOrder, setSelectedPlaceOrder] = useState<Order>();
-  const [selectedUpdateOrder, setSelectedUpdateOrder] = useState<Order>();
+  const [selectedViewOrder, setSelectedViewOrder] = useState<Order>();
   const [selectedDeleteOrders, setSelectedDeleteOrders] = useState<Order[]>([]);
 
   const [filterOrders, setFilterOrders] = useState<Order[]>([]);
@@ -133,7 +126,7 @@ export default function Page(): React.JSX.Element {
   };
 
   const handlePageChange = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -146,34 +139,13 @@ export default function Page(): React.JSX.Element {
     setPage(0);
   };
 
-  const handleOpenCreateModal = () => {
-    setOpenCreateModal(true);
+  const handleOpenViewModal = (order: Order) => {
+    setSelectedViewOrder(order);
+    setOpenViewModal(true);
   };
 
-  const handleCloseCreateModal = () => {
-    setOpenCreateModal(false);
-  };
-
-  const handleCreateOrder = async (order: Order) => {
-    console.log("Creating order", order);
-    try {
-      const response = await createOrder("user-id", order);
-      console.log("Order created", response);
-      refresh();
-      toast("Order created");
-    } catch (error) {
-      console.error("Error creating order", error);
-      if (error) toast(error.toString());
-    }
-  };
-
-  const handleOpenUpdateModal = (order: Order) => {
-    setSelectedUpdateOrder(order);
-    setOpenUpdateModal(true);
-  };
-
-  const handleCloseUpdateModal = () => {
-    setOpenUpdateModal(false);
+  const handleCloseViewModal = () => {
+    setOpenViewModal(false);
   };
 
   const handlePlaceOrder = async (order: Order) => {
@@ -189,8 +161,7 @@ export default function Page(): React.JSX.Element {
     }
   };
 
-  const handleOpenPlaceModal = (order: Order) => {
-    setSelectedPlaceOrder(order);
+  const handleOpenPlaceModal = () => {
     setOpenPlaceModal(true);
   };
 
@@ -198,7 +169,7 @@ export default function Page(): React.JSX.Element {
     setOpenPlaceModal(false);
   };
 
-  const handleUpdateOrder = async (order: Order) => {
+  const handleViewOrder = async (order: Order) => {
     console.log("Updating order", order);
     try {
       const response = await updateOrder("user-id", order);
@@ -272,9 +243,9 @@ export default function Page(): React.JSX.Element {
           <Button
             startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
             variant="contained"
-            onClick={handleOpenCreateModal}
+            onClick={handleOpenPlaceModal}
           >
-            Add
+            Place New Order
           </Button>
         </div>
       </Stack>
@@ -302,32 +273,22 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
-        onPlace={handleOpenPlaceModal}
-        onUpdate={handleOpenUpdateModal}
+        onSelect={handleOpenViewModal}
         onDelete={handleOpenDeleteModal}
       />
 
-      <CreateOrderModal
-        open={openCreateModal}
-        onClose={handleCloseCreateModal}
-        onSubmit={handleCreateOrder}
+      <PlaceOrderModal
+        open={openPlaceModal}
+        onClose={handleClosePlaceModal}
+        onSubmit={handlePlaceOrder}
       />
 
-      {selectedPlaceOrder && (
-        <PlaceOrderModal
-          open={openPlaceModal}
-          onClose={handleClosePlaceModal}
-          order={selectedPlaceOrder}
-          onSubmit={handlePlaceOrder}
-        />
-      )}
-
-      {selectedUpdateOrder && (
-        <UpdateOrderModal
-          open={openUpdateModal}
-          onClose={handleCloseUpdateModal}
-          order={selectedUpdateOrder}
-          onSubmit={handleUpdateOrder}
+      {selectedViewOrder && (
+        <ViewOrderModal
+          open={openViewModal}
+          onClose={handleCloseViewModal}
+          order={selectedViewOrder}
+          onSubmit={handleViewOrder}
         />
       )}
 
@@ -344,7 +305,7 @@ export default function Page(): React.JSX.Element {
         onClick={handleExport}
       />
 
-      <ToastContainer />
+      <ToastContainer limit={1} pauseOnHover={false} closeOnClick />
     </Stack>
   );
 }

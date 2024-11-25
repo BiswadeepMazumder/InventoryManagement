@@ -39,7 +39,8 @@ export default function Page(): React.JSX.Element {
       {/*<Theme />*/}
       {/*<Notifications />*/}
       <UpdatePasswordForm onChangePassword={handleChangePassword} />
-      <ToastContainer />
+
+      <ToastContainer limit={1} pauseOnHover={false} closeOnClick />
     </Stack>
   );
 }

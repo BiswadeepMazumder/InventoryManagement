@@ -2,7 +2,6 @@ import React from "react";
 
 import {
   Box,
-  Button,
   Card,
   Checkbox,
   Chip,
@@ -17,7 +16,7 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import InfoIcon from "@mui/icons-material/Info";
 
 import { Order } from "@/types/order";
 import { ORDER_STATUS } from "@/constants/order";
@@ -36,8 +35,7 @@ interface ItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onPlace: (order: Order) => void;
-  onUpdate: (order: Order) => void;
+  onSelect: (order: Order) => void;
   onDelete: (orders: Order[]) => void;
 }
 
@@ -48,8 +46,7 @@ const OrdersTable = ({
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
-  onPlace,
-  onUpdate,
+  onSelect,
   onDelete,
 }: ItemsTableProps): React.JSX.Element => {
   const rowIds = React.useMemo(() => {
@@ -105,7 +102,6 @@ const OrdersTable = ({
               <TableCell>Order Status</TableCell>
               <TableCell>User Id</TableCell>
               <TableCell></TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -156,14 +152,11 @@ const OrdersTable = ({
                   </TableCell>
                   <TableCell>{row.userId}</TableCell>
                   <TableCell padding="none">
-                    <Tooltip title="Edit Order">
-                      <IconButton onClick={() => onUpdate(row)}>
-                        <EditNoteIcon />
+                    <Tooltip title="View Order">
+                      <IconButton onClick={() => onSelect(row)}>
+                        <InfoIcon />
                       </IconButton>
                     </Tooltip>
-                  </TableCell>
-                  <TableCell padding="none">
-                    <Button onClick={() => onPlace(row)}>Place Order</Button>
                   </TableCell>
                 </TableRow>
               );

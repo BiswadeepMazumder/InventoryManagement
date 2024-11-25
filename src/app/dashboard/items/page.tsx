@@ -307,7 +307,7 @@ export default function Page(): React.JSX.Element {
         onClick={handleExport}
       />
 
-      <ToastContainer />
+      <ToastContainer limit={1} pauseOnHover={false} closeOnClick />
     </Stack>
   );
 }

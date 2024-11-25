@@ -1,5 +1,5 @@
 export interface Supplier {
-  supplierId: string;
+  supplierId?: string;
   supplierName: string;
   supplierAddress: string;
   supplierCity: string;

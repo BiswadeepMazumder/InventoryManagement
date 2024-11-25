@@ -34,7 +34,6 @@ export default function CreateOrderModal({
     control,
     handleSubmit,
     setValue,
-    setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
   const { user } = useUser();
@@ -65,6 +64,20 @@ export default function CreateOrderModal({
       <form onSubmit={handleSubmit(handleCreateOrder)}>
         <DialogContent>
           <Stack spacing={2}>
+            <Controller
+              control={control}
+              name="orderId"
+              render={({ field }) => (
+                <FormControl error={Boolean(errors.orderId)}>
+                  <InputLabel>Order Id</InputLabel>
+                  <OutlinedInput {...field} label="orderId" disabled />
+                  {errors.orderId ? (
+                    <FormHelperText>{errors.orderId.message}</FormHelperText>
+                  ) : null}
+                </FormControl>
+              )}
+            />
+
             <Controller
               control={control}
               name="orderName"
