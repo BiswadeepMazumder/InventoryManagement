@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  Card,
+  Chip,
+  Divider,
+  Stack,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Table,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 import { Item } from "@/types/item";
-import Chip from "@mui/material/Chip";
-
 import { ITEM_CATEGORY, ITEM_STATUS } from "@/constants/item";
-import { IconButton } from "@mui/material";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import { formatNumberWithCommas } from "@/utils/format";
 
 interface AddItemsTableProps {
   count?: number;
@@ -29,7 +33,7 @@ interface AddItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onAdd: (item: Item) => void;
+  onAdd: (item: Item, quantity: number) => void;
 }
 
 const AddItemsTable = ({
@@ -41,6 +45,38 @@ const AddItemsTable = ({
   onRowsPerPageChange,
   onAdd,
 }: AddItemsTableProps): React.JSX.Element => {
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+
+  const handleQuantityChange = (
+    itemId: string,
+    value: string,
+    currentStock: number,
+  ) => {
+    // limit the quantity to be a positive integer
+    if (parseInt(value) < 0) {
+      return;
+    }
+
+    // limit the quantity to be less than or equal to the current stock
+    if (parseInt(value) > currentStock) {
+      return;
+    }
+
+    // update the quantity in the state
+    setQuantities((prev) => ({
+      ...prev,
+      [itemId]: parseInt(value, 10) || 0,
+    }));
+  };
+
+  const handleAdd = (item: Item, quantity: number) => {
+    onAdd(item, quantity);
+    setQuantities((prev) => ({
+      ...prev,
+      [item.itemId]: 0,
+    }));
+  };
+
   return (
     <Card variant="outlined">
       <Box sx={{ overflowX: "auto" }}>
@@ -48,10 +84,12 @@ const AddItemsTable = ({
           <TableHead>
             <TableRow>
               <TableCell>Item Name</TableCell>
-              <TableCell>Item Unit Price</TableCell>
-              <TableCell>Current Stock</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell align="right">Unit Price</TableCell>
+              <TableCell align="right">Current Stock</TableCell>
+              <TableCell align="center">Status</TableCell>
               <TableCell>Category Code</TableCell>
+              <TableCell align="center">Quantity</TableCell>
+              <TableCell align="right">Total Price</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -78,14 +116,20 @@ const AddItemsTable = ({
                       direction="row"
                       spacing={2}
                     >
-                      <Typography variant="subtitle2">
-                        {row.itemName}
-                      </Typography>
+                      <Tooltip title={row.itemId}>
+                        <Typography variant="subtitle2">
+                          {row.itemName}
+                        </Typography>
+                      </Tooltip>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.itemUnitPrice}</TableCell>
-                  <TableCell>{row.currentStock}</TableCell>
-                  <TableCell>
+                  <TableCell align="right">
+                    {formatNumberWithCommas(row.itemUnitPrice)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {formatNumberWithCommas(row.currentStock)}
+                  </TableCell>
+                  <TableCell align="center">
                     <Chip
                       color={statusColor}
                       label={statusLabel}
@@ -93,8 +137,33 @@ const AddItemsTable = ({
                     />
                   </TableCell>
                   <TableCell>{categoryLabel}</TableCell>
-                  <TableCell padding="none">
-                    <IconButton onClick={() => onAdd(row)}>
+                  <TableCell align="center" padding="none">
+                    <TextField
+                      type="number"
+                      value={quantities[row.itemId] || ""}
+                      onChange={(e) =>
+                        handleQuantityChange(
+                          row.itemId,
+                          e.target.value,
+                          row.currentStock,
+                        )
+                      }
+                    />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="button">
+                      $
+                      {formatNumberWithCommas(
+                        row.itemUnitPrice * (quantities[row.itemId] || 0),
+                      )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      onClick={() =>
+                        handleAdd(row, quantities[row.itemId] || 1)
+                      }
+                    >
                       <ControlPointIcon />
                     </IconButton>
                   </TableCell>

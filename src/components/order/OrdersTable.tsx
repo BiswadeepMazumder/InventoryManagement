@@ -1,11 +1,11 @@
 import React from "react";
 
-import dayjs from "dayjs";
-
 import {
   Box,
+  Button,
   Card,
   Checkbox,
+  Chip,
   Divider,
   Table,
   TableBody,
@@ -19,12 +19,12 @@ import {
 } from "@mui/material";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
-import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
-import useSelection from "@/hooks/useSelection";
 import { Order } from "@/types/order";
-import Chip from "@mui/material/Chip";
-
 import { ORDER_STATUS } from "@/constants/order";
+import { formatDate, formatNumberWithCommas } from "@/utils/format";
+import useSelection from "@/hooks/useSelection";
+
+import EnhancedTableToolbar from "@/components/table/EnhancedTableToolbar";
 
 interface ItemsTableProps {
   count?: number;
@@ -36,6 +36,7 @@ interface ItemsTableProps {
     newPage: number,
   ) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onPlace: (order: Order) => void;
   onUpdate: (order: Order) => void;
   onDelete: (orders: Order[]) => void;
 }
@@ -47,6 +48,7 @@ const OrdersTable = ({
   rowsPerPage = 0,
   onPageChange,
   onRowsPerPageChange,
+  onPlace,
   onUpdate,
   onDelete,
 }: ItemsTableProps): React.JSX.Element => {
@@ -101,8 +103,8 @@ const OrdersTable = ({
               <TableCell>Order Name</TableCell>
               <TableCell>Order Amount</TableCell>
               <TableCell>Order Status</TableCell>
-              <TableCell>Cancel Comment</TableCell>
               <TableCell>User Id</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -136,24 +138,32 @@ const OrdersTable = ({
                   {/*</TableCell>*/}
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {dayjs(row.orderDate).format("MM/DD/YYYY")}
+                      {formatDate(row.orderDate)}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2">{row.orderName}</Typography>
+                    <Tooltip title={row.orderId}>
+                      <Typography variant="subtitle2">
+                        {row.orderName}
+                      </Typography>
+                    </Tooltip>
                   </TableCell>
-                  <TableCell>{row.orderAmount}</TableCell>
+                  <TableCell>
+                    {formatNumberWithCommas(row.orderAmount)}
+                  </TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />
                   </TableCell>
-                  <TableCell>{row.cancelComment}</TableCell>
                   <TableCell>{row.userId}</TableCell>
                   <TableCell padding="none">
-                    <Tooltip title="Edit order">
+                    <Tooltip title="Edit Order">
                       <IconButton onClick={() => onUpdate(row)}>
                         <EditNoteIcon />
                       </IconButton>
                     </Tooltip>
+                  </TableCell>
+                  <TableCell padding="none">
+                    <Button onClick={() => onPlace(row)}>Place Order</Button>
                   </TableCell>
                 </TableRow>
               );

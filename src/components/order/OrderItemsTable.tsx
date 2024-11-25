@@ -1,12 +1,15 @@
 import React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import {
+  Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+} from "@mui/material";
 import { OrderItems } from "@/types/order";
-import TablePagination from "@mui/material/TablePagination";
-import Card from "@mui/material/Card";
+import { formatNumberWithCommas } from "@/utils/format";
 
 interface OrderItemsTableProps {
   count?: number;
@@ -33,6 +36,7 @@ export default function OrderItemsTable({
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>Item Id</TableCell>
             <TableCell>Item Name</TableCell>
             <TableCell align="right">Item Count</TableCell>
             <TableCell align="right">Total Price</TableCell>
@@ -44,11 +48,16 @@ export default function OrderItemsTable({
               key={row.itemId}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
+              <TableCell>{row.itemId}</TableCell>
               <TableCell component="th" scope="row">
                 {row.itemName}
               </TableCell>
-              <TableCell align="right">{row.itemCount}</TableCell>
-              <TableCell align="right">{row.totalPrice}</TableCell>
+              <TableCell align="right">
+                {formatNumberWithCommas(row.itemCount)}
+              </TableCell>
+              <TableCell align="right">
+                {formatNumberWithCommas(row.totalPrice)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

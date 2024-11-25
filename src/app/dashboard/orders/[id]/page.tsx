@@ -1,5 +1,4 @@
 import React from "react";
-import dayjs from "dayjs";
 
 import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
@@ -8,6 +7,7 @@ import Chip from "@mui/material/Chip";
 
 import { ORDER_STATUS } from "@/constants/order";
 import { Order } from "@/types/order";
+import { formatDate, formatNumberWithCommas } from "@/utils/format";
 
 import { fetchOrderById, fetchOrders } from "@/services/order.services";
 
@@ -50,9 +50,11 @@ export default async function Page({
         <Stack spacing={1} sx={{ flex: "1 1 auto" }}>
           <Typography variant="h6">Name: {order.orderName}</Typography>
           <Typography variant="body1">
-            Date: {dayjs(order.orderDate).format("MM/DD/YYYY")}
+            Date: {formatDate(order.orderDate)}
           </Typography>
-          <Typography variant="body1">Amount: ${order.orderAmount}</Typography>
+          <Typography variant="body1">
+            Amount: ${formatNumberWithCommas(order.orderAmount)}
+          </Typography>
           <Typography variant="body1">
             Status: <Chip color={color} label={label} size="small" />
           </Typography>
