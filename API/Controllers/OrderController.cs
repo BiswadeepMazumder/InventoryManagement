@@ -200,6 +200,12 @@ namespace API.Controllers
                     return NotFound();
                 }
 
+                // Check if the order's status is 1 (which means it is eligible for cancellation)
+                if (order.OrderStatus != 1)
+                {
+                    return BadRequest("Order cannot be cancelled anymore. Please contact the supplier.");
+                }
+
                 // Update the cancel comment and order status
                 order.CancelComment = cancelOrderDTO.CancelComment;
                 order.OrderStatus = 0;  // Change the order status to '0' (Canceled)
