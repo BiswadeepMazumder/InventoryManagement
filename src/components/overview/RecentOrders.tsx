@@ -60,7 +60,6 @@ export function RecentOrders({
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Order ID</TableCell>
               <TableCell sortDirection="desc">Date</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Order Name</TableCell>
@@ -78,7 +77,6 @@ export function RecentOrders({
 
               return (
                 <TableRow hover key={order.id}>
-                  <TableCell>{order.id}</TableCell>
                   <TableCell>{formatDate(order.createdAt)}</TableCell>
                   <TableCell>{formatNumberWithCommas(order.amount)}</TableCell>
                   <TableCell>{order.orderName}</TableCell>
