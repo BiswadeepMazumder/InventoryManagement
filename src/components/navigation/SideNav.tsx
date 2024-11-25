@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowSquareUpRight";
@@ -16,23 +15,15 @@ import { paths } from "@/paths";
 import { isNavItemActive } from "@/utils/is-nav-item-active";
 import { Logo } from "@/components/logo/Logo";
 
-import { logger } from "@/utils/default-logger";
-import { useUser } from "@/hooks/useUser";
-
 import { navItems } from "./config";
 import { navIcons } from "./NavIcons";
 import { authClient } from "@/utils/client";
+import { useUser } from "@/hooks/useUser";
+import { logger } from "@/utils/default-logger";
 
-export interface MobileNavProps {
-  onClose?: () => void;
-  open?: boolean;
-  items?: NavItemConfig[];
-}
+const STORE_NAME = process.env.NEXT_PUBLIC_STORE_NAME || process.env.STORE_NAME;
 
-export function MobileNav({
-  open,
-  onClose,
-}: MobileNavProps): React.JSX.Element {
+export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
   const router = useRouter();
   const { checkSession } = useUser();
@@ -58,43 +49,42 @@ export function MobileNav({
   }, [checkSession, router]);
 
   return (
-    <Drawer
-      PaperProps={{
-        sx: {
-          "--MobileNav-background": "var(--mui-palette-neutral-950)",
-          "--MobileNav-color": "var(--mui-palette-common-white)",
-          "--NavItem-color": "var(--mui-palette-neutral-300)",
-          "--NavItem-hover-background": "rgba(255, 255, 255, 0.10)",
-          "--NavItem-active-background": "var(--mui-palette-primary-main)",
-          "--NavItem-active-color": "var(--mui-palette-primary-contrastText)",
-          "--NavItem-disabled-color": "var(--mui-palette-neutral-500)",
-          "--NavItem-icon-color": "var(--mui-palette-neutral-400)",
-          "--NavItem-icon-active-color":
-            "var(--mui-palette-primary-contrastText)",
-          "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
-          backgroundColor: "var(--MobileNav-background)",
-          color: "var(--MobileNav-color)",
-          display: "flex",
-          flexDirection: "column",
-          maxWidth: "100%",
-          scrollbarWidth: "none",
-          width: "var(--MobileNav-width)",
-          zIndex: "var(--MobileNav-zIndex)",
-          "&::-webkit-scrollbar": { display: "none" },
-        },
+    <Box
+      sx={{
+        "--SideNav-background": "var(--mui-palette-neutral-950)",
+        "--SideNav-color": "var(--mui-palette-common-white)",
+        "--NavItem-color": "var(--mui-palette-neutral-300)",
+        "--NavItem-hover-background": "rgba(255, 255, 255, 0.10)",
+        "--NavItem-active-background": "var(--mui-palette-primary-main)",
+        "--NavItem-active-color": "var(--mui-palette-primary-contrastText)",
+        "--NavItem-disabled-color": "var(--mui-palette-neutral-500)",
+        "--NavItem-icon-color": "var(--mui-palette-neutral-400)",
+        "--NavItem-icon-active-color":
+          "var(--mui-palette-primary-contrastText)",
+        "--NavItem-icon-disabled-color": "var(--mui-palette-neutral-600)",
+        backgroundColor: "var(--SideNav-background)",
+        color: "var(--SideNav-color)",
+        display: { xs: "none", lg: "flex" },
+        flexDirection: "column",
+        height: "100%",
+        left: 0,
+        maxWidth: "100%",
+        position: "fixed",
+        scrollbarWidth: "none",
+        top: 0,
+        width: "var(--SideNav-width)",
+        zIndex: "var(--SideNav-zIndex)",
+        "&::-webkit-scrollbar": { display: "none" },
       }}
-      onClose={onClose}
-      open={open}
     >
       {/* Logo */}
-      <Stack spacing={2} sx={{ p: 3 }}>
-        <Box
-          component={RouterLink}
-          href={paths.home}
-          sx={{ display: "inline-flex" }}
-        >
+      <Stack p={2} flexDirection="row" alignItems="center">
+        <Box component={RouterLink} href={paths.home} sx={{ display: "flex" }}>
           <Logo color="light" height={32} width={122} />
         </Box>
+        <Typography color="inherit" variant="subtitle1">
+          {STORE_NAME}
+        </Typography>
       </Stack>
 
       {/* Divider */}
@@ -122,7 +112,7 @@ export function MobileNav({
           Sign out
         </Button>
       </Stack>
-    </Drawer>
+    </Box>
   );
 }
 

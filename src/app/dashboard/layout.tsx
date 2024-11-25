@@ -5,8 +5,8 @@ import Container from "@mui/material/Container";
 import GlobalStyles from "@mui/material/GlobalStyles";
 
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { MainNav } from "@/components/layout/MainNav";
-import { SideNav } from "@/components/layout/SideNav";
+import { MainNav } from "@/components/navigation/MainNav";
+import { SideNav } from "@/components/navigation/SideNav";
 import { config } from "@/config";
 
 export const metadata = {
@@ -25,7 +25,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
           body: {
             "--MainNav-height": "56px",
             "--MainNav-zIndex": 1000,
-            "--SideNav-width": "280px",
+            "--SideNav-width": "320px",
             "--SideNav-zIndex": 1100,
             "--MobileNav-width": "320px",
             "--MobileNav-zIndex": 1100,
