@@ -18,7 +18,7 @@ import ListItemText from "@mui/material/ListItemText";
 import type { SxProps } from "@mui/material/styles";
 
 export interface Supplier {
-  id: string;
+  id: string | undefined;
   image: string;
   name: string;
   address: string;
