@@ -73,15 +73,17 @@ export const fetchOrderById = async (
 
 export const createOrder = async (userId: string, order: any): Promise<any> => {
   const options = {
-    url: `${API_ENDPOINT}/api/Order`,
+    url: `${API_ENDPOINT}/CreateOrder`,
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8",
     },
     data: {
-      userId,
-      order,
+      orderName: order.orderName,
+      orderAmount: order.orderAmount,
+      orderItems: order.orderItems,
+      userId: userId,
     },
   };
   const response = await axios(options);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
@@ -13,6 +13,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
   Typography,
   Stack,
 } from "@mui/material";
@@ -63,6 +67,7 @@ export default function PlaceOrderModal({
   onSubmit,
 }: PlaceOrderModalProps) {
   const {
+    control,
     handleSubmit,
     setValue,
     getValues,
@@ -245,6 +250,23 @@ export default function PlaceOrderModal({
         <DialogTitle>Place Order</DialogTitle>
         <DialogContent dividers>
           <Stack spacing={2}>
+            <Stack>
+              <Controller
+                control={control}
+                name="orderName"
+                render={({ field }) => (
+                  <FormControl error={Boolean(errors.orderName)}>
+                    <InputLabel>Order Name</InputLabel>
+                    <OutlinedInput {...field} label="orderName" />
+                    {errors.orderName ? (
+                      <FormHelperText>
+                        {errors.orderName.message}
+                      </FormHelperText>
+                    ) : null}
+                  </FormControl>
+                )}
+              />
+            </Stack>
             <Stack sx={{ flexDirection: "row", gap: 2 }}>
               <Stack spacing={2} sx={{ flex: 1 }}>
                 <Typography variant="body1">
