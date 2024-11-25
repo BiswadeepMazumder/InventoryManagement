@@ -27,7 +27,7 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Item
+        // GET: api/All_Items
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ItemDTO>>> GetItems()
@@ -44,8 +44,6 @@ namespace API.Controllers
 
             return Ok(items);
         }
-
-
 
         // GET: api/LowStock Items
         [HttpGet("lowstock")]
@@ -68,8 +66,6 @@ namespace API.Controllers
              .ToListAsync();
                  return Ok(lowStockItems);
         }
-
-
 
         // GET: api/Item/5
         [HttpGet("{id}")]

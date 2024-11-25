@@ -41,18 +41,11 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
 
 var app = builder.Build();
 
- //try
-    //{
-       // if (app.Environment.IsDevelopment())
+
 app.UseSwagger();
-                 // to use swagger ui in production
+
 app.UseSwaggerUI();
-             //}
-    //}
- 
- 
-       // Console.WriteLine(ex.Message);
-       // return StatusCode(500, "An error occurred while processing your request.");
+
    
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())

@@ -95,43 +95,45 @@ namespace API.Controllers
                         return order;
                     }
 
-                    // POST: api/Orders
-            [HttpPost]
-            public async Task<ActionResult<OrderDTO>> CreateOrder(OrderDTO orderDTO)
+              // POST: api/Orders
+        [HttpPost("CreateNewOrder")]
+        public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody]OrderDTO orderDTO)
+        {
+            var order = new Orders
             {
-                        var order = new Orders
-                        {
-                            OrderId = orderDTO.OrderId,
-                            OrderDate = orderDTO.OrderDate,
-                            OrderName = orderDTO.OrderName,
-                            UserId = orderDTO.UserId,
-                            OrderAmount = orderDTO.OrderAmount,
-                            OrderStatus = orderDTO.OrderStatus,
-                            CancelComment = orderDTO.CancelComment
-                        };
+                OrderId = orderDTO.OrderId,
+                OrderDate = orderDTO.OrderDate,
+                OrderName = orderDTO.OrderName,
+                UserId = orderDTO.UserId,
+                OrderAmount = orderDTO.OrderAmount,
+                OrderStatus = orderDTO.OrderStatus,
+                CancelComment = orderDTO.CancelComment
+            };
 
-                        _context.Orders.Add(order);
+            _context.Orders.Add(order);
 
-                        foreach (var itemDTO in orderDTO.OrderItems)
-                        {
-                            var orderItem = new OrderItems
-                            {
-                                OrderId = itemDTO.OrderId,
-                                ItemId = itemDTO.ItemId,
-                                OrderDate = itemDTO.OrderDate,
-                                ItemCount = itemDTO.ItemCount,
-                                ItemName = itemDTO.ItemName,
-                                TotalPrice = itemDTO.TotalPrice,
-                                OrderStatus = itemDTO.OrderStatus
-                            };
+            foreach (var itemDTO in orderDTO.OrderItems)
+            {
+                var orderItem = new OrderItems
+                {
+                    OrderId = itemDTO.OrderId,
+                    ItemId = itemDTO.ItemId,
+                    OrderDate = itemDTO.OrderDate,
+                    ItemCount = itemDTO.ItemCount,
+                    ItemName = itemDTO.ItemName,
+                    TotalPrice = itemDTO.TotalPrice,
+                    OrderStatus = itemDTO.OrderStatus
+                };
 
-                            _context.OrderItems.Add(orderItem);
-                        }
+                _context.OrderItems.Add(orderItem);
+            }
 
-                        await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-                        return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, orderDTO);
-                    }
+            return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, orderDTO);
+        }
+
+            
                     // PUT: api/Orders/5
             [HttpPut("ModifyOrder{id}")]
             public async Task<IActionResult> CancelOrder(string id, OrderDTO orderDTO)
@@ -200,6 +202,7 @@ namespace API.Controllers
             // GET: api/Order/PastOrders
             [HttpGet("PastOrders")]
           public async Task<ActionResult<IEnumerable<OrderDTO>>> ViewPastOrders()
+
             {
                 var pastOrders = await _context.Orders
                     .Where(o => o.OrderStatus == 5)
@@ -216,5 +219,7 @@ namespace API.Controllers
 
                 return Ok(pastOrders);
             }
+
+            
  }
 }
