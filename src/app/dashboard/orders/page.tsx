@@ -24,8 +24,8 @@ import ExportPopover from "@/components/table/ExportPopover";
 
 import {
   cancelOrder,
+  createOrder,
   deleteOrder,
-  updateOrder,
 } from "@/services/order.services";
 import StatusFilters, {
   FilterType as StatusFilterType,
@@ -155,7 +155,7 @@ export default function Page(): React.JSX.Element {
   const handlePlaceOrder = async (order: Order) => {
     console.log("Placing order", order);
     try {
-      const response = await updateOrder("user-id", order);
+      const response = await createOrder("user-id", order);
       console.log("Order placed", response);
       refresh();
       toast("Order placed");
