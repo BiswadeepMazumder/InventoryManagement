@@ -47,7 +47,7 @@ export default function UpdateItemModal({
     setValue("currentStock", item.currentStock);
     setValue("status", item.status);
     setValue("categoryCode", item.categoryCode);
-  }, [item]);
+  }, [item, setValue]);
 
   const handleUpdateItem = (values: Values) => {
     console.log("Update item", values);

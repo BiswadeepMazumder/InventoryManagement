@@ -99,7 +99,7 @@ export default function Page(): React.JSX.Element {
 
     setFilterOrders(filteredRows);
     setPage(0);
-  }, [searchParams, orders]);
+  }, [orders, searchParams, isParams]);
 
   // Filter orders based on search text or status or category code
   useEffect(() => {

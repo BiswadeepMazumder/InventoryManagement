@@ -85,7 +85,7 @@ export default function PlaceOrderModal({
 
   useEffect(() => {
     setValue("orderItems", order.orderItems);
-  }, [order]);
+  }, [order, setValue]);
 
   const { items, loading: itemsLoading } = useFetchItems("user-id");
   const [itemPage, setItemPage] = useState(0);

@@ -44,7 +44,7 @@ export default function CreateOrderModal({
     if (user && user.uid) {
       setValue("userId", user.uid.toString());
     }
-  }, []);
+  }, [user, setValue]);
 
   const handleCreateOrder = (values: Values) => {
     console.log("Create order", values);

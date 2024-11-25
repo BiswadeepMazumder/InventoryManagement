@@ -42,7 +42,7 @@ export default function UpdateSupplierModal({
     setValue("supplierCity", supplier.supplierCity);
     setValue("supplierZipCode", supplier.supplierZipCode);
     setValue("supplierPhoneNumber", supplier.supplierPhoneNumber);
-  }, [supplier]);
+  }, [supplier, setValue]);
 
   const handleUpdateSupplier = (values: Values) => {
     console.log("Update supplier", values);
