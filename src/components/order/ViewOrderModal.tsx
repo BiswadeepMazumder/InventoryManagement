@@ -73,8 +73,8 @@ export default function ViewOrderModal({
     setValue("orderItems", order.orderItems);
   }, [order, setValue]);
 
-  const handleUpdateOrder = (values: Values) => {
-    console.log("Update order", values);
+  const handleCancelOrder = (values: Values) => {
+    console.log("Cancel Order", values);
     onSubmit(values);
     onClose();
   };
@@ -110,7 +110,7 @@ export default function ViewOrderModal({
   return (
     <Dialog open={open} onClose={handleClose} scroll="paper" fullWidth>
       <DialogTitle>Order Detail</DialogTitle>
-      <form onSubmit={handleSubmit(handleUpdateOrder)}>
+      <form onSubmit={handleSubmit(handleCancelOrder)}>
         <DialogContent dividers>
           <Stack spacing={2}>
             <Stack sx={{ flexDirection: "row", gap: 2 }}>
@@ -129,34 +129,39 @@ export default function ViewOrderModal({
                   {formatNumberWithCommas(order.orderAmount)}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Status:</strong>{" "}
+                  <strong>Status:</strong>
                   <Chip color={color} label={label} size="small" />
                 </Typography>
               </Stack>
             </Stack>
 
-            <Stack>
-              <Controller
-                control={control}
-                name="cancelComment"
-                render={({ field }) => (
-                  <FormControl error={Boolean(errors.cancelComment)}>
-                    <InputLabel>Cancel Comment</InputLabel>
-                    <OutlinedInput
-                      {...field}
-                      label="cancelComment"
-                      type="string"
-                      disabled
-                    />
-                    {errors.cancelComment ? (
-                      <FormHelperText>
-                        {errors.cancelComment.message}
-                      </FormHelperText>
-                    ) : null}
-                  </FormControl>
-                )}
-              />
-            </Stack>
+            {order.orderStatus == 1 && (
+              <Stack gap={2}>
+                <Controller
+                  control={control}
+                  name="cancelComment"
+                  render={({ field }) => (
+                    <FormControl error={Boolean(errors.cancelComment)}>
+                      <InputLabel>Cancel Comment</InputLabel>
+                      <OutlinedInput
+                        {...field}
+                        label="cancelComment"
+                        type="string"
+                        disabled={order.orderStatus !== 1}
+                      />
+                      {errors.cancelComment ? (
+                        <FormHelperText>
+                          {errors.cancelComment.message}
+                        </FormHelperText>
+                      ) : null}
+                    </FormControl>
+                  )}
+                />
+                <Button variant="outlined" type="submit" autoFocus>
+                  Cancel Order
+                </Button>
+              </Stack>
+            )}
 
             <Stack spacing={2}>
               <OrderItemsTable
