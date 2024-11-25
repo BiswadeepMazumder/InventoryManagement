@@ -79,7 +79,7 @@ export default function Page(): React.JSX.Element {
     });
 
     setSearchSuppliers(filteredRows);
-  }, [searched]);
+  }, [suppliers, searched]);
 
   const cancelSearch = () => {
     setSearched("");

@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 
 import { ArrowRight as ArrowRightIcon } from "@phosphor-icons/react/dist/ssr/ArrowRight";
 
@@ -19,6 +18,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 import { ORDER_STATUS } from "@/constants/order";
+import { formatDate, formatNumberWithCommas } from "@/utils/format";
 
 //   pending: { label: "Pending", color: "warning" },
 //   completed: { label: "Completed", color: "success" },
@@ -79,10 +79,8 @@ export function RecentOrders({
               return (
                 <TableRow hover key={order.id}>
                   <TableCell>{order.id}</TableCell>
-                  <TableCell>
-                    {dayjs(order.createdAt).format("MM/DD/YYYY")}
-                  </TableCell>
-                  <TableCell>{order.amount}</TableCell>
+                  <TableCell>{formatDate(order.createdAt)}</TableCell>
+                  <TableCell>{formatNumberWithCommas(order.amount)}</TableCell>
                   <TableCell>{order.orderName}</TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />

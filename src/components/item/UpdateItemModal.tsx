@@ -19,7 +19,7 @@ import { Item } from "@/types/item";
 import { schema, defaultValues, Values } from "@/components/item/schema";
 import { ITEM_CATEGORY, ITEM_STATUS } from "@/constants/item";
 
-type CreateItemModalProps = {
+type UpdateItemModalProps = {
   item: Item;
   open: boolean;
   onClose: () => void;
@@ -31,7 +31,7 @@ export default function UpdateItemModal({
   open,
   onClose,
   onSubmit,
-}: CreateItemModalProps) {
+}: UpdateItemModalProps) {
   const {
     control,
     handleSubmit,
@@ -47,7 +47,7 @@ export default function UpdateItemModal({
     setValue("currentStock", item.currentStock);
     setValue("status", item.status);
     setValue("categoryCode", item.categoryCode);
-  }, [item]);
+  }, [item, setValue]);
 
   const handleUpdateItem = (values: Values) => {
     console.log("Update item", values);

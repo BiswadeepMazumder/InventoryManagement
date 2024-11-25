@@ -74,7 +74,8 @@ const SuppliersTable = ({
         <EnhancedTableToolbar
           title="All Suppliers"
           numSelected={selected.size}
-          onDelete={handleDeleteSupplier}
+          iconName="delete"
+          onClick={handleDeleteSupplier}
         />
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>

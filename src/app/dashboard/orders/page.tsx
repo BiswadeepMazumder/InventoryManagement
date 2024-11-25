@@ -5,26 +5,23 @@ import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-
+import { Button, Card, Stack, Typography } from "@mui/material";
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
 import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
-
-import OrdersTable from "@/components/order/OrdersTable";
-import TableFilters from "@/components/table/TableFilters";
-import CreateOrderModal from "@/components/order/CreateOrderModal";
-import UpdateOrderModal from "@/components/order/UpdateOrderModal";
-import DeleteOrderModal from "@/components/order/DeleteOrderModal";
-import ExportPopover from "@/components/table/ExportPopover";
 
 import { Order } from "@/types/order";
 import ExportSheet from "@/utils/export-sheet";
 
 import useFetchOrders from "@/hooks/useFetchOrders";
 import usePopover from "@/hooks/usePopover";
+
+import OrdersTable from "@/components/order/OrdersTable";
+import TableFilters from "@/components/table/TableFilters";
+import CreateOrderModal from "@/components/order/CreateOrderModal";
+import PlaceOrderModal from "@/components/order/PlaceOrderModal";
+import UpdateOrderModal from "@/components/order/UpdateOrderModal";
+import DeleteOrderModal from "@/components/order/DeleteOrderModal";
+import ExportPopover from "@/components/table/ExportPopover";
 
 import {
   createOrder,
@@ -49,9 +46,11 @@ export default function Page(): React.JSX.Element {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openPlaceModal, setOpenPlaceModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
+  const [selectedPlaceOrder, setSelectedPlaceOrder] = useState<Order>();
   const [selectedUpdateOrder, setSelectedUpdateOrder] = useState<Order>();
   const [selectedDeleteOrders, setSelectedDeleteOrders] = useState<Order[]>([]);
 
@@ -100,7 +99,7 @@ export default function Page(): React.JSX.Element {
 
     setFilterOrders(filteredRows);
     setPage(0);
-  }, [searchParams, orders]);
+  }, [orders, searchParams, isParams]);
 
   // Filter orders based on search text or status or category code
   useEffect(() => {
@@ -177,16 +176,38 @@ export default function Page(): React.JSX.Element {
     setOpenUpdateModal(false);
   };
 
+  const handlePlaceOrder = async (order: Order) => {
+    console.log("Placing order", order);
+    try {
+      const response = await updateOrder("user-id", order);
+      console.log("Order placed", response);
+      refresh();
+      toast("Order placed");
+    } catch (error) {
+      console.error("Error placing order", error);
+      if (error) toast(error.toString());
+    }
+  };
+
+  const handleOpenPlaceModal = (order: Order) => {
+    setSelectedPlaceOrder(order);
+    setOpenPlaceModal(true);
+  };
+
+  const handleClosePlaceModal = () => {
+    setOpenPlaceModal(false);
+  };
+
   const handleUpdateOrder = async (order: Order) => {
     console.log("Updating order", order);
     try {
       const response = await updateOrder("user-id", order);
       console.log("Order updated", response);
-      refresh();
       toast("Order updated");
-    } catch (error) {
+      refresh();
+    } catch (error: Error | any) {
       console.error("Error updating order", error);
-      if (error) toast(error.toString());
+      if (error) toast(error?.message.toString());
     }
   };
 
@@ -281,6 +302,7 @@ export default function Page(): React.JSX.Element {
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
+        onPlace={handleOpenPlaceModal}
         onUpdate={handleOpenUpdateModal}
         onDelete={handleOpenDeleteModal}
       />
@@ -290,6 +312,15 @@ export default function Page(): React.JSX.Element {
         onClose={handleCloseCreateModal}
         onSubmit={handleCreateOrder}
       />
+
+      {selectedPlaceOrder && (
+        <PlaceOrderModal
+          open={openPlaceModal}
+          onClose={handleClosePlaceModal}
+          order={selectedPlaceOrder}
+          onSubmit={handlePlaceOrder}
+        />
+      )}
 
       {selectedUpdateOrder && (
         <UpdateOrderModal
