@@ -186,21 +186,41 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            // DELETE: api/Orders/5
-            [HttpDelete("CancelOrder{id}")]
-            public async Task<IActionResult> CancelOrder(string id)
+            [HttpPut("CancelOrder/{id}")]
+            public async Task<IActionResult> CancelOrder(string id, [FromBody] CancelOrderDTO cancelOrderDTO)
             {
+                if (id != cancelOrderDTO.OrderId)
+                {
+                    return BadRequest("Order ID mismatch");
+                }
+
                 var order = await _context.Orders.FindAsync(id);
                 if (order == null)
                 {
                     return NotFound();
                 }
 
-                _context.Orders.Remove(order);
+                // Update the cancel comment and order status
+                order.CancelComment = cancelOrderDTO.CancelComment;
+                order.OrderStatus = 0;  // Change the order status to '0' (Canceled)
+
+                // Save the changes to the database
+                _context.Entry(order).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                // Return the updated order details
+                return Ok(new OrderDTO
+                {
+                    OrderId = order.OrderId,
+                    OrderDate = order.OrderDate,
+                    OrderName = order.OrderName,
+                    UserId = order.UserId,
+                    OrderAmount = order.OrderAmount,
+                    OrderStatus = order.OrderStatus,
+                    CancelComment = order.CancelComment
+                });
             }
+
 
             // GET: api/Order/UpcomingOrders
             [HttpGet("UpcomingOrders")]
