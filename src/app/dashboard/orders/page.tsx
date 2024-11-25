@@ -22,7 +22,11 @@ import ViewOrderModal from "@/components/order/ViewOrderModal";
 import DeleteOrderModal from "@/components/order/DeleteOrderModal";
 import ExportPopover from "@/components/table/ExportPopover";
 
-import { deleteOrder, updateOrder } from "@/services/order.services";
+import {
+  cancelOrder,
+  deleteOrder,
+  updateOrder,
+} from "@/services/order.services";
 import StatusFilters, {
   FilterType as StatusFilterType,
 } from "@/components/table/OrderStatusFilters";
@@ -170,14 +174,14 @@ export default function Page(): React.JSX.Element {
   };
 
   const handleViewOrder = async (order: Order) => {
-    console.log("Updating order", order);
+    console.log("Canceling order", order);
     try {
-      const response = await updateOrder("user-id", order);
-      console.log("Order updated", response);
-      toast("Order updated");
+      const response = await cancelOrder("user-id", order);
+      console.log("Order canceled", response);
       refresh();
+      toast("Order Canceled");
     } catch (error: Error | any) {
-      console.error("Error updating order", error);
+      console.error("Error canceling order", error);
       if (error) toast(error?.message.toString());
     }
   };

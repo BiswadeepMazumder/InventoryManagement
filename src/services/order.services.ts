@@ -134,3 +134,24 @@ export const deleteOrder = async (
   const response = await axios(options);
   return response.data;
 };
+
+export const cancelOrder = async (
+  userId: string,
+  order: Order,
+): Promise<any> => {
+  const options = {
+    url: `${API_ENDPOINT}/CancelOrder/${order.orderId}`,
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      orderId: order.orderId,
+      cancelComment: order.cancelComment,
+    },
+  };
+  const response = await axios(options);
+  console.log("Cancel Order Response", response);
+  return response.data;
+};
