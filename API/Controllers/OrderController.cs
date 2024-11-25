@@ -97,65 +97,66 @@ namespace API.Controllers
 
               // POST: api/Orders
         [HttpPost("CreateOrder")]
-    public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] OrderDTO orderDTO)
-    {
-        // Validate the incoming order data
-        // if (orderDTO == null || orderDTO.OrderItems == null || orderDTO.OrderItems.Count == 0)
-        // {
-        //     return BadRequest("Order data or items are missing.");
-        // }
-
-        // Manually generate OrderId (you can also use a GUID or sequential logic here)
-        var orderId = GenerateOrderId(); // Replace with your custom logic for order ID generation
-
-        // Create a new order instance
-        var order = new Orders
-        {
-            OrderId = orderId,  // Manually set OrderId
-            OrderDate = orderDTO.OrderDate,
-            OrderName = orderDTO.OrderName,
-            UserId = orderDTO.UserId,
-            OrderAmount = orderDTO.OrderAmount,
-            OrderStatus = orderDTO.OrderStatus,
-            CancelComment = orderDTO.CancelComment
-        };
-
-        try
-        {
-            // Add the order to the Orders table
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();  // Save to persist the order
-
-            // Process each order item and link it to the newly created order
-            foreach (var itemDTO in orderDTO.OrderItems)
+            public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO createOrderDTO)
             {
-                var orderItem = new OrderItems
+                // Validate the incoming order data
+                if (createOrderDTO == null || createOrderDTO.OrderItems == null || createOrderDTO.OrderItems.Count == 0)
                 {
-                    OrderId = order.OrderId,  // Link to the newly created OrderId
-                    ItemId = itemDTO.ItemId,  // Provided ItemId for the order item
-                    OrderDate = itemDTO.OrderDate,
-                    ItemCount = itemDTO.ItemCount,
-                    ItemName = itemDTO.ItemName,  // You can also retrieve this from the Items table if needed
-                    TotalPrice = itemDTO.TotalPrice,
-                    OrderStatus = itemDTO.OrderStatus
+                    return BadRequest("Order items are missing.");
+                }
+
+                // Manually generate OrderId (you can also use a GUID or sequential logic here)
+                var orderId = GenerateOrderId();  // Replace with your custom logic for order ID generation
+
+                // Create a new order instance with default values
+                var order = new Orders
+                {
+                    OrderId = orderId,  // Manually set OrderId
+                    OrderDate = DateTime.Now,  // Default to current system date
+                    OrderName = createOrderDTO.OrderName,  // Use the order name from the request
+                    UserId = "US01",  // Default user ID
+                    OrderAmount = createOrderDTO.OrderAmount,  // Use the order amount from the request
+                    OrderStatus = 1,  // Default status is 1 (Pending)
+                    CancelComment = "",  // Default cancel comment is blank
                 };
 
-                // Add the order item to the OrderItems table
-                _context.OrderItems.Add(orderItem);
+                try
+                {
+                    // Add the order to the Orders table
+                    _context.Orders.Add(order);
+                    await _context.SaveChangesAsync();  // Save to persist the order
+
+                    // Process each order item and link it to the newly created order
+                    foreach (var itemDTO in createOrderDTO.OrderItems)
+                    {
+                        var orderItem = new OrderItems
+                        {
+                            OrderId = order.OrderId,  // Link to the newly created OrderId
+                            ItemId = itemDTO.ItemId,  // Provided ItemId for the order item
+                            OrderDate = DateTime.Now,  // Default order date is system date
+                            ItemCount = itemDTO.ItemCount,  // Provided item count
+                            ItemName = itemDTO.ItemName,  // Provided item name
+                            TotalPrice = itemDTO.TotalPrice,  // Provided total price
+                            OrderStatus = 1  // Default status is 1 (Pending)
+                        };
+
+                        // Add the order item to the OrderItems table
+                        _context.OrderItems.Add(orderItem);
+                    }
+
+                    // Save the order items to the database
+                    await _context.SaveChangesAsync();
+
+                    // Return the created order along with its items
+                    return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, createOrderDTO);
+                }
+                catch (Exception ex)
+                {
+                    // Return error if something goes wrong
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
             }
 
-            // Save the order items to the database
-            await _context.SaveChangesAsync();
-
-            // Return the created order along with its items
-            return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, orderDTO);
-        }
-        catch (Exception ex)
-        {
-            // Return error if something goes wrong
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
             
                     // PUT: api/Orders/5
             [HttpPut("ModifyOrder{id}")]
