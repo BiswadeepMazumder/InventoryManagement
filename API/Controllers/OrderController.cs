@@ -96,43 +96,66 @@ namespace API.Controllers
                     }
 
               // POST: api/Orders
-        [HttpPost("CreateNewOrder")]
-        public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody]OrderDTO orderDTO)
+        [HttpPost("CreateOrder")]
+    public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] OrderDTO orderDTO)
+    {
+        // Validate the incoming order data
+        // if (orderDTO == null || orderDTO.OrderItems == null || orderDTO.OrderItems.Count == 0)
+        // {
+        //     return BadRequest("Order data or items are missing.");
+        // }
+
+        // Manually generate OrderId (you can also use a GUID or sequential logic here)
+        var orderId = GenerateOrderId(); // Replace with your custom logic for order ID generation
+
+        // Create a new order instance
+        var order = new Orders
         {
-            var order = new Orders
-            {
-                OrderId = orderDTO.OrderId,
-                OrderDate = orderDTO.OrderDate,
-                OrderName = orderDTO.OrderName,
-                UserId = orderDTO.UserId,
-                OrderAmount = orderDTO.OrderAmount,
-                OrderStatus = orderDTO.OrderStatus,
-                CancelComment = orderDTO.CancelComment
-            };
+            OrderId = orderId,  // Manually set OrderId
+            OrderDate = orderDTO.OrderDate,
+            OrderName = orderDTO.OrderName,
+            UserId = orderDTO.UserId,
+            OrderAmount = orderDTO.OrderAmount,
+            OrderStatus = orderDTO.OrderStatus,
+            CancelComment = orderDTO.CancelComment
+        };
 
+        try
+        {
+            // Add the order to the Orders table
             _context.Orders.Add(order);
+            await _context.SaveChangesAsync();  // Save to persist the order
 
+            // Process each order item and link it to the newly created order
             foreach (var itemDTO in orderDTO.OrderItems)
             {
                 var orderItem = new OrderItems
                 {
-                    OrderId = itemDTO.OrderId,
-                    ItemId = itemDTO.ItemId,
+                    OrderId = order.OrderId,  // Link to the newly created OrderId
+                    ItemId = itemDTO.ItemId,  // Provided ItemId for the order item
                     OrderDate = itemDTO.OrderDate,
                     ItemCount = itemDTO.ItemCount,
-                    ItemName = itemDTO.ItemName,
+                    ItemName = itemDTO.ItemName,  // You can also retrieve this from the Items table if needed
                     TotalPrice = itemDTO.TotalPrice,
                     OrderStatus = itemDTO.OrderStatus
                 };
 
+                // Add the order item to the OrderItems table
                 _context.OrderItems.Add(orderItem);
             }
 
+            // Save the order items to the database
             await _context.SaveChangesAsync();
 
+            // Return the created order along with its items
             return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, orderDTO);
         }
-
+        catch (Exception ex)
+        {
+            // Return error if something goes wrong
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
             
                     // PUT: api/Orders/5
             [HttpPut("ModifyOrder{id}")]
@@ -184,7 +207,7 @@ namespace API.Controllers
             public async Task<ActionResult<IEnumerable<OrderDTO>>> ViewUpcomingOrders()
             {
                 var upcomingOrders = await _context.Orders
-                    .Where(o => o.OrderStatus >= 3)
+                    .Where(o => o.OrderStatus == 3 || o.OrderStatus == 4)
                     .Select(order => new OrderDTO
                     {
                         OrderId = order.OrderId,
@@ -220,6 +243,11 @@ namespace API.Controllers
                 return Ok(pastOrders);
             }
 
-            
+            // Sample OrderId generation method (you can replace this with your actual logic)
+    private string GenerateOrderId()
+    {
+        // Simple example: generates OrderId in format 'OD' + current date + random number
+        return "OD" + "_" + new Random().Next(1111, 9999).ToString();
+    }
  }
 }
