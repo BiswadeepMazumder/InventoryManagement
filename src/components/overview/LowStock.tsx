@@ -28,7 +28,7 @@ export function LowStock({
   const router = useRouter();
 
   const handleViewItems = () => {
-    router.push("dashboard/items");
+    router.push(`dashboard/items?search=${name}`);
   };
 
   return (
