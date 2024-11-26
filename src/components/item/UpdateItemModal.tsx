@@ -64,7 +64,7 @@ export default function UpdateItemModal({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
-      <DialogTitle>Update item</DialogTitle>
+      <DialogTitle>Update Item</DialogTitle>
       <form onSubmit={handleSubmit(handleUpdateItem)}>
         <DialogContent>
           <Stack spacing={2}>
