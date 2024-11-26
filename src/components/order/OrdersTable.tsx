@@ -82,19 +82,19 @@ const OrdersTable = ({
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      selectAll();
-                    } else {
-                      deselectAll();
-                    }
-                  }}
-                />
-              </TableCell>
+              {/*<TableCell padding="checkbox">*/}
+              {/*  <Checkbox*/}
+              {/*    checked={selectedAll}*/}
+              {/*    indeterminate={selectedSome}*/}
+              {/*    onChange={(event) => {*/}
+              {/*      if (event.target.checked) {*/}
+              {/*        selectAll();*/}
+              {/*      } else {*/}
+              {/*        deselectAll();*/}
+              {/*      }*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*</TableCell>*/}
               {/*<TableCell>Order Id</TableCell>*/}
               <TableCell>Order Date</TableCell>
               <TableCell>Order Name</TableCell>
@@ -117,18 +117,18 @@ const OrdersTable = ({
 
               return (
                 <TableRow hover key={row.orderId} selected={isSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        if (event.target.checked) {
-                          selectOne(row.orderId);
-                        } else {
-                          deselectOne(row.orderId);
-                        }
-                      }}
-                    />
-                  </TableCell>
+                  {/*<TableCell padding="checkbox">*/}
+                  {/*  <Checkbox*/}
+                  {/*    checked={isSelected}*/}
+                  {/*    onChange={(event) => {*/}
+                  {/*      if (event.target.checked) {*/}
+                  {/*        selectOne(row.orderId);*/}
+                  {/*      } else {*/}
+                  {/*        deselectOne(row.orderId);*/}
+                  {/*      }*/}
+                  {/*    }}*/}
+                  {/*  />*/}
+                  {/*</TableCell>*/}
                   {/*<TableCell>*/}
                   {/*  <Typography variant="subtitle2">{row.orderId}</Typography>*/}
                   {/*</TableCell>*/}
