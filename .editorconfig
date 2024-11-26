@@ -2,3 +2,6 @@
 
 # CS8629: Nullable value type may be null.
 dotnet_diagnostic.CS8629.severity = warning
+
+# Default severity for analyzer diagnostics with category 'CodeQuality'
+dotnet_analyzer_diagnostic.category-CodeQuality.severity = warning

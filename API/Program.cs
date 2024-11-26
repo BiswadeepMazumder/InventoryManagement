@@ -1,5 +1,6 @@
 using API.Data;
 using API.Models;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 // Enable CORS to allow cross-origin requests from the frontend
 builder.Services.AddCors(options =>

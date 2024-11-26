@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace API.Controllers
@@ -19,7 +20,7 @@ namespace API.Controllers
     {
             private readonly InventoryDbContext _context;
 
-            public OrderController(InventoryDbContext context)
+        public OrderController(InventoryDbContext context)
                     {
                         _context = context;
                     }
@@ -97,65 +98,59 @@ namespace API.Controllers
 
               // POST: api/Orders
         [HttpPost("CreateOrder")]
-            public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO createOrderDTO)
+public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO createOrderDTO )
+{
+    if (createOrderDTO == null || createOrderDTO.OrderItems == null || createOrderDTO.OrderItems.Count == 0)
+    {
+        return BadRequest("Order items are missing.");
+    }
+
+    var orderId = GenerateOrderId();  // Generate OrderId
+    var order = new Orders
+    {
+        OrderId = orderId,
+        OrderDate = DateTime.Now,
+        OrderName = createOrderDTO.OrderName,
+        UserId = "US01",
+        OrderAmount = createOrderDTO.OrderAmount,
+        OrderStatus = 1, // Pending status
+        CancelComment = ""
+    };
+
+    try
+    {
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync();  // Save order to DB
+
+        // Add items to the OrderItems table
+        foreach (var itemDTO in createOrderDTO.OrderItems)
+        {
+            var orderItem = new OrderItems
             {
-                // Validate the incoming order data
-                if (createOrderDTO == null || createOrderDTO.OrderItems == null || createOrderDTO.OrderItems.Count == 0)
-                {
-                    return BadRequest("Order items are missing.");
-                }
+                OrderId = order.OrderId,
+                ItemId = itemDTO.ItemId,
+                OrderDate = DateTime.Now,
+                ItemCount = itemDTO.ItemCount,
+                ItemName = itemDTO.ItemName,
+                TotalPrice = itemDTO.TotalPrice,
+                OrderStatus = 1
+            };
 
-                // Manually generate OrderId (you can also use a GUID or sequential logic here)
-                var orderId = GenerateOrderId();  // Replace with your custom logic for order ID generation
+            _context.OrderItems.Add(orderItem);
+        }
 
-                // Create a new order instance with default values
-                var order = new Orders
-                {
-                    OrderId = orderId,  // Manually set OrderId
-                    OrderDate = DateTime.Now,  // Default to current system date
-                    OrderName = createOrderDTO.OrderName,  // Use the order name from the request
-                    UserId = "US01",  // Default user ID
-                    OrderAmount = createOrderDTO.OrderAmount,  // Use the order amount from the request
-                    OrderStatus = 1,  // Default status is 1 (Pending)
-                    CancelComment = "",  // Default cancel comment is blank
-                };
+        await _context.SaveChangesAsync();
 
-                try
-                {
-                    // Add the order to the Orders table
-                    _context.Orders.Add(order);
-                    await _context.SaveChangesAsync();  // Save to persist the order
+      
 
-                    // Process each order item and link it to the newly created order
-                    foreach (var itemDTO in createOrderDTO.OrderItems)
-                    {
-                        var orderItem = new OrderItems
-                        {
-                            OrderId = order.OrderId,  // Link to the newly created OrderId
-                            ItemId = itemDTO.ItemId,  // Provided ItemId for the order item
-                            OrderDate = DateTime.Now,  // Default order date is system date
-                            ItemCount = itemDTO.ItemCount,  // Provided item count
-                            ItemName = itemDTO.ItemName,  // Provided item name
-                            TotalPrice = itemDTO.TotalPrice,  // Provided total price
-                            OrderStatus = 1  // Default status is 1 (Pending)
-                        };
+        return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, createOrderDTO);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Internal server error: {ex.Message}");
+    }
+}
 
-                        // Add the order item to the OrderItems table
-                        _context.OrderItems.Add(orderItem);
-                    }
-
-                    // Save the order items to the database
-                    await _context.SaveChangesAsync();
-
-                    // Return the created order along with its items
-                    return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, createOrderDTO);
-                }
-                catch (Exception ex)
-                {
-                    // Return error if something goes wrong
-                    return StatusCode(500, $"Internal server error: {ex.Message}");
-                }
-            }
 
             
                     // PUT: api/Orders/5
@@ -249,6 +244,26 @@ namespace API.Controllers
                 return Ok(upcomingOrders);
             }
 
+            // GET: api/Order/currentOrders
+            [HttpGet("CurrentOrders")]
+            public async Task<ActionResult<IEnumerable<OrderDTO>>> ViewCurrentOrders()
+            {
+                var currentOrders = await _context.Orders
+                    .Where(o => o.OrderStatus == 1)
+                    .Select(order => new OrderDTO
+                    {
+                        OrderId = order.OrderId,
+                        OrderName = order.OrderName,
+                        OrderDate = order.OrderDate,
+                        OrderAmount = order.OrderAmount,
+                        OrderStatus = order.OrderStatus,
+                        CancelComment = order.CancelComment
+                    })
+                    .ToListAsync();
+
+                return Ok(currentOrders);
+            }
+
             // GET: api/Order/PastOrders
             [HttpGet("PastOrders")]
           public async Task<ActionResult<IEnumerable<OrderDTO>>> ViewPastOrders()
@@ -276,5 +291,7 @@ namespace API.Controllers
         // Simple example: generates OrderId in format 'OD' + current date + random number
         return "OD" + "_" + new Random().Next(1111, 9999).ToString();
     }
+
+    
  }
 }
