@@ -292,6 +292,93 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
         return "OD" + "_" + new Random().Next(1111, 9999).ToString();
     }
 
+
+             [HttpGet("GenerateInvoice/{orderId}")]
+            public async Task<IActionResult> GenerateInvoice(string orderId)
+            {
+                // Fetch the order along with the items
+                var order = await _context.Orders
+                    .Include(o => o.OrderItems)
+                    .Where(o => o.OrderId == orderId)
+                    .FirstOrDefaultAsync();
+
+                if (order == null)
+                {
+                    return NotFound("Order not found.");
+                }
+
+                // Generate the HTML body for the invoice
+                var htmlBody = GenerateHtmlInvoice(order);
+
+                // Return the HTML as the response
+                return Content(htmlBody, "text/html");
+            }
+
+            private string GenerateHtmlInvoice(Orders order)
+            {
+                // Start with the basic HTML structure
+                var htmlContent = $@"
+                <html>
+                <head>
+                    <style>
+                        body {{ font-family: Arial, sans-serif; }}
+                        table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+                        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+                        th {{ background-color: #f4f4f4; }}
+                        .invoice-header {{ margin-bottom: 20px; }}
+                        .total-amount {{ font-weight: bold; }}
+                    </style>
+                </head>
+                <body>
+                    <div class='invoice-header'>
+                        <h1>Invoice for Order {order.OrderId}</h1>
+                        <p><strong>Order Date:</strong> {order.OrderDate}</p>
+                        <p><strong>Order Name:</strong> {order.OrderName}</p>
+                        <p><strong>Order Amount:</strong> ${order.OrderAmount}</p>
+                        <p><strong>Order Status:</strong> {(order.OrderStatus == 1 ? "Pending" : "Completed")}</p>
+                        <p><strong>User ID:</strong> {order.UserId}</p>
+                        <p><strong>Cancel Comment:</strong> {(string.IsNullOrEmpty(order.CancelComment) ? "N/A" : order.CancelComment)}</p>
+                    </div>
+                    
+                    <h2>Order Items:</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Item Count</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+
+                // Add each order item to the table
+                foreach (var item in order.OrderItems)
+                {
+                    htmlContent += $@"
+                        <tr>
+                            <td>{item.ItemId}</td>
+                            <td>{item.ItemName}</td>
+                            <td>{item.ItemCount}</td>
+                            <td>${item.TotalPrice}</td>
+                        </tr>";
+                }
+
+                // Add total price at the bottom
+                htmlContent += $@"
+                        </tbody>
+                    </table>
+
+                    <div class='total-amount'>
+                        <p><strong>Total Order Amount:</strong> ${order.OrderAmount}</p>
+                    </div>
+
+                </body>
+                </html>";
+
+                return htmlContent;
+            }
+
     
  }
 }
