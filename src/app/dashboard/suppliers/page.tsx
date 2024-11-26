@@ -67,6 +67,10 @@ export default function Page(): React.JSX.Element {
   );
 
   useEffect(() => {
+    if (!searched) {
+      return;
+    }
+
     const filteredRows = suppliers.filter((row) => {
       const searchValue = searched.toLowerCase();
       return (

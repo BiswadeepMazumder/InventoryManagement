@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,6 +48,7 @@ const applyPagination = (
 };
 
 export default function Page(): React.JSX.Element {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -68,6 +70,7 @@ export default function Page(): React.JSX.Element {
   const exportPopover = usePopover<HTMLDivElement>();
   const { items, loading, refresh } = useFetchItems("user-id");
 
+  const isParams = searchParams.has("search");
   const isEmpty = items.length === 0;
   const isSearch = searched.length > 0;
   const isFilteredStatus = filterStatus !== StatusFilterType.None;
@@ -75,13 +78,44 @@ export default function Page(): React.JSX.Element {
     filterCategoryCode !== CategoryCodeFilterType.None;
 
   const itemsToDisplay =
-    isSearch || isFilteredStatus || isFilteredCategoryCode
+    isParams || isSearch || isFilteredStatus || isFilteredCategoryCode
       ? filterItems
       : items;
   const paginatedItems = applyPagination(itemsToDisplay, page, rowsPerPage);
 
+  // Filter items based on search keyword from params
+  useEffect(() => {
+    if (!isParams) return;
+
+    const keyword = searchParams.get("search");
+
+    const filteredRows = items.filter((row) => {
+      const results = [];
+
+      if (keyword) {
+        const _row = row.itemName.includes(keyword);
+        results.push(_row);
+      }
+
+      return results.every((result) => result);
+    });
+
+    // console.log("Filtered Rows Search: ", filteredRows);
+
+    setFilterItems(filteredRows);
+    setPage(0);
+  }, [items, searchParams, isParams]);
+
   // Filter items based on search text or status or category code
   useEffect(() => {
+    if (
+      !searched &&
+      filterStatus === StatusFilterType.None &&
+      filterCategoryCode === CategoryCodeFilterType.None
+    ) {
+      return;
+    }
+
     const filteredRows = items.filter((row) => {
       const results = [];
 
@@ -104,11 +138,10 @@ export default function Page(): React.JSX.Element {
         results.push(_row);
       }
 
-      // console.log("Results", results);
       return results.every((result) => result);
     });
 
-    // console.log("Filtered rows", filteredRows);
+    // console.log("Filtered Rows Filter: ", filteredRows);
 
     setFilterItems(filteredRows);
     setPage(0);
