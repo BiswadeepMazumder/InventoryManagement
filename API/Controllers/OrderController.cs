@@ -315,69 +315,91 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
             }
 
             private string GenerateHtmlInvoice(Orders order)
-            {
-                // Start with the basic HTML structure
-                var htmlContent = $@"
-                <html>
-                <head>
-                    <style>
-                        body {{ font-family: Arial, sans-serif; }}
-                        table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
-                        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
-                        th {{ background-color: #f4f4f4; }}
-                        .invoice-header {{ margin-bottom: 20px; }}
-                        .total-amount {{ font-weight: bold; }}
-                    </style>
-                </head>
-                <body>
-                    <div class='invoice-header'>
-                        <h1>Invoice for Order {order.OrderId}</h1>
-                        <p><strong>Order Date:</strong> {order.OrderDate}</p>
-                        <p><strong>Order Name:</strong> {order.OrderName}</p>
-                        <p><strong>Order Amount:</strong> ${order.OrderAmount}</p>
-                        <p><strong>Order Status:</strong> {(order.OrderStatus == 1 ? "Pending" : "Completed")}</p>
-                        <p><strong>User ID:</strong> {order.UserId}</p>
-                        <p><strong>Cancel Comment:</strong> {(string.IsNullOrEmpty(order.CancelComment) ? "N/A" : order.CancelComment)}</p>
-                    </div>
-                    
-                    <h2>Order Items:</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Item Name</th>
-                                <th>Item Count</th>
-                                <th>Total Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>";
+{
+    // Start with the basic HTML structure
+    var htmlContent = $@"
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 20px; }}
+            th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+            th {{ background-color: #f4f4f4; }}
+            .header {{ background-color: #f4f4f4; padding: 10px; text-align: center; }}
+            .section {{ margin-top: 20px; }}
+            .bold {{ font-weight: bold; }}
+            .totals {{ text-align: right; margin-top: 20px; }}
+            .notes {{ margin-top: 30px; font-style: italic; }}
+        </style>
+    </head>
+    <body>
+        <div class='header'>
+            <h1>SR Business Group</h1>
+            <p>Invoice for Order {order.OrderId}</p>
+        </div>
 
-                // Add each order item to the table
-                foreach (var item in order.OrderItems)
-                {
-                    htmlContent += $@"
-                        <tr>
-                            <td>{item.ItemId}</td>
-                            <td>{item.ItemName}</td>
-                            <td>{item.ItemCount}</td>
-                            <td>${item.TotalPrice}</td>
-                        </tr>";
-                }
+        <div class='section'>
+            <div style='width: 48%; display: inline-block; vertical-align: top;'>
+                <h3>To</h3>
+                <p>SR Business Group</p>
+                <p>6206 Woodland Avenue, </p>
+                <p>Cleveland, OH</p>
+                <p>United States</p>
+                <p>44114</p>
+                <p>(216) 467-5394</p>
+            </div>
+            <div style='width: 48%; display: inline-block; vertical-align: top;'>
+                <h3>Order Details</h3>
+                <p>Customer Name: {order.UserId}</p>
+                <p>Order Status: {(order.OrderStatus == 1 ? "Pending" : "Completed")}</p>
+                <p>Order Date: {order.OrderDate}</p>
+                <p>Cancel Comment: {(string.IsNullOrEmpty(order.CancelComment) ? "N/A" : order.CancelComment)}</p>
+            </div>
+        </div>
 
-                // Add total price at the bottom
-                htmlContent += $@"
-                        </tbody>
-                    </table>
+        <div class='section'>
+            <h3>Order Items</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>Item Count</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>";
 
-                    <div class='total-amount'>
-                        <p><strong>Total Order Amount:</strong> ${order.OrderAmount}</p>
-                    </div>
+    // Add each order item to the table
+    foreach (var item in order.OrderItems)
+    {
+        htmlContent += $@"
+                    <tr>
+                        <td>{item.ItemId}</td>
+                        <td>{item.ItemName}</td>
+                        <td>{item.ItemCount}</td>
+                        <td>${item.TotalPrice}</td>
+                    </tr>";
+    }
 
-                </body>
-                </html>";
+    htmlContent += $@"
+                </tbody>
+            </table>
+        </div>
 
-                return htmlContent;
-            }
+        <div class='totals'>
+            <p><span class='bold'>Total Order Amount:</span> ${order.OrderAmount}</p>
+        </div>
+
+        <div class='notes'>
+            <p></p>
+        </div>
+    </body>
+    </html>";
+
+    return htmlContent;
+}
+
 
     
  }
