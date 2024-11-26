@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z as zod } from "zod";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
@@ -10,11 +14,8 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { Controller, useForm } from "react-hook-form";
-import { z as zod } from "zod";
 
 import { authClient } from "@/utils/client";
-import { useRouter } from "next/navigation";
 
 const schema = zod.object({
   email: zod.string().min(1, { message: "Email is required" }).email(),
