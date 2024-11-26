@@ -14,6 +14,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z as zod } from "zod";
 
 import { authClient } from "@/utils/client";
+import { useRouter } from "next/navigation";
 
 const schema = zod.object({
   email: zod.string().min(1, { message: "Email is required" }).email(),
@@ -24,6 +25,7 @@ type Values = zod.infer<typeof schema>;
 const defaultValues = { email: "" } satisfies Values;
 
 export function ResetPasswordForm(): React.JSX.Element {
+  const router = useRouter();
   const [isPending, setIsPending] = React.useState<boolean>(false);
 
   const {
@@ -47,7 +49,7 @@ export function ResetPasswordForm(): React.JSX.Element {
 
       setIsPending(false);
 
-      // Redirect to confirm password reset
+      router.push("/auth/sign-in");
     },
     [setError],
   );
