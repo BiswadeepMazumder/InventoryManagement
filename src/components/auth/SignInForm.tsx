@@ -69,7 +69,8 @@ export function SignInForm(): React.JSX.Element {
 
       // UserProvider, for this case, will not refresh the router
       // After refresh, GuestGuard will handle the redirect
-      router.refresh();
+      router.refresh(); // Sometimes, it's better to use location.reload();
+      location.reload(); // Reload the page when the user is signed in
     },
     [checkSession, router, setError],
   );
