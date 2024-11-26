@@ -129,7 +129,7 @@ export default function ViewOrderModal({
                   {formatNumberWithCommas(order.orderAmount)}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Status:</strong>
+                  <strong>Status:</strong>{" "}
                   <Chip color={color} label={label} size="small" />
                 </Typography>
               </Stack>
