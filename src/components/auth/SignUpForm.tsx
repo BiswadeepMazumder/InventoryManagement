@@ -3,7 +3,10 @@
 import React from "react";
 import RouterLink from "next/link";
 import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z as zod } from "zod";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
@@ -15,8 +18,6 @@ import Link from "@mui/material/Link";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { Controller, useForm } from "react-hook-form";
-import { z as zod } from "zod";
 
 import { paths } from "@/paths";
 import { authClient } from "@/utils/client";
@@ -75,7 +76,8 @@ export function SignUpForm(): React.JSX.Element {
 
       // UserProvider, for this case, will not refresh the router
       // After refresh, GuestGuard will handle the redirect
-      router.refresh();
+      router.refresh(); // Sometimes, it's better to use location.reload();
+      location.reload(); // Reload the page when the user is signed in
     },
     [checkSession, router, setError],
   );

@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z as zod } from "zod";
+
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
@@ -10,8 +14,6 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { Controller, useForm } from "react-hook-form";
-import { z as zod } from "zod";
 
 import { authClient } from "@/utils/client";
 
@@ -24,6 +26,7 @@ type Values = zod.infer<typeof schema>;
 const defaultValues = { email: "" } satisfies Values;
 
 export function ResetPasswordForm(): React.JSX.Element {
+  const router = useRouter();
   const [isPending, setIsPending] = React.useState<boolean>(false);
 
   const {
@@ -47,7 +50,7 @@ export function ResetPasswordForm(): React.JSX.Element {
 
       setIsPending(false);
 
-      // Redirect to confirm password reset
+      router.push("/auth/sign-in");
     },
     [setError],
   );

@@ -204,13 +204,13 @@ export default function Page(): React.JSX.Element {
           >
             Export
           </Button>
-          <Button
-            startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
-            variant="contained"
-            onClick={handleOpenCreateModal}
-          >
-            Add
-          </Button>
+          {/*<Button*/}
+          {/*  startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}*/}
+          {/*  variant="contained"*/}
+          {/*  onClick={handleOpenCreateModal}*/}
+          {/*>*/}
+          {/*  Add*/}
+          {/*</Button>*/}
         </div>
       </Stack>
 

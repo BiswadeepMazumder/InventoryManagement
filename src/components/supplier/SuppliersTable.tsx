@@ -80,25 +80,25 @@ const SuppliersTable = ({
         <Table sx={{ minWidth: "800px" }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      selectAll();
-                    } else {
-                      deselectAll();
-                    }
-                  }}
-                />
-              </TableCell>
+              {/*<TableCell padding="checkbox">*/}
+              {/*  <Checkbox*/}
+              {/*    checked={selectedAll}*/}
+              {/*    indeterminate={selectedSome}*/}
+              {/*    onChange={(event) => {*/}
+              {/*      if (event.target.checked) {*/}
+              {/*        selectAll();*/}
+              {/*      } else {*/}
+              {/*        deselectAll();*/}
+              {/*      }*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*</TableCell>*/}
               <TableCell>Supplier Name</TableCell>
               <TableCell>Supplier Address</TableCell>
               <TableCell>Supplier City</TableCell>
               <TableCell>Supplier Zip Code</TableCell>
               <TableCell>Supplier Phone Number</TableCell>
-              <TableCell></TableCell>
+              {/*<TableCell></TableCell>*/}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -107,18 +107,18 @@ const SuppliersTable = ({
 
               return (
                 <TableRow hover key={row.supplierId} selected={isSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        if (event.target.checked) {
-                          selectOne(row.supplierId);
-                        } else {
-                          deselectOne(row.supplierId);
-                        }
-                      }}
-                    />
-                  </TableCell>
+                  {/*<TableCell padding="checkbox">*/}
+                  {/*  <Checkbox*/}
+                  {/*    checked={isSelected}*/}
+                  {/*    onChange={(event) => {*/}
+                  {/*      if (event.target.checked) {*/}
+                  {/*        selectOne(row.supplierId);*/}
+                  {/*      } else {*/}
+                  {/*        deselectOne(row.supplierId);*/}
+                  {/*      }*/}
+                  {/*    }}*/}
+                  {/*  />*/}
+                  {/*</TableCell>*/}
                   <TableCell>
                     <Stack
                       sx={{ alignItems: "center" }}
@@ -135,13 +135,13 @@ const SuppliersTable = ({
                   <TableCell>{row.supplierCity}</TableCell>
                   <TableCell>{row.supplierZipCode}</TableCell>
                   <TableCell>{row.supplierPhoneNumber}</TableCell>
-                  <TableCell padding="none">
-                    <Tooltip title="Edit supplier">
-                      <IconButton onClick={() => onUpdate(row)}>
-                        <EditNoteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
+                  {/*<TableCell padding="none">*/}
+                  {/*  <Tooltip title="Edit supplier">*/}
+                  {/*    <IconButton onClick={() => onUpdate(row)}>*/}
+                  {/*      <EditNoteIcon />*/}
+                  {/*    </IconButton>*/}
+                  {/*  </Tooltip>*/}
+                  {/*</TableCell>*/}
                 </TableRow>
               );
             })}
