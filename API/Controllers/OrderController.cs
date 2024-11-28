@@ -152,36 +152,6 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
 }
 
 
-            
-                    // PUT: api/Orders/5
-            [HttpPut("ModifyOrder{id}")]
-            public async Task<IActionResult> CancelOrder(string id, OrderDTO orderDTO)
-            {
-                if (id != orderDTO.OrderId)
-                {
-                    return BadRequest();
-                }
-
-                var order = await _context.Orders.FindAsync(id);
-                if (order == null)
-                {
-                    return NotFound();
-                }
-
-                order.OrderDate = orderDTO.OrderDate;
-                order.OrderName = orderDTO.OrderName;
-                order.UserId = orderDTO.UserId;
-                order.OrderAmount = orderDTO.OrderAmount;
-                order.OrderStatus = orderDTO.OrderStatus;
-                order.CancelComment = orderDTO.CancelComment;
-
-                _context.Entry(order).State = EntityState.Modified;
-
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-
             [HttpPut("CancelOrder/{id}")]
             public async Task<IActionResult> CancelOrder(string id, [FromBody] CancelOrderDTO cancelOrderDTO)
             {
@@ -286,11 +256,11 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
             }
 
             // Sample OrderId generation method (you can replace this with your actual logic)
-    private string GenerateOrderId()
-    {
-        // Simple example: generates OrderId in format 'OD' + current date + random number
-        return "OD" + "_" + new Random().Next(1111, 9999).ToString();
-    }
+             private string GenerateOrderId()
+                {
+                    // Simple example: generates OrderId in format 'OD' + current date + random number
+                    return "OD" + "_" + new Random().Next(1111, 9999).ToString();
+                }
 
 
              [HttpGet("GenerateInvoice/{orderId}")]
