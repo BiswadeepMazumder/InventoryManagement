@@ -49,6 +49,22 @@ app.UseSwagger();
 
 app.UseSwaggerUI();
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
+});
+
+// Redirect root URL ("/") to Swagger UI
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger/index.html");
+        return;
+    }
+    await next();
+});
    
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
