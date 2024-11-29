@@ -1,74 +1,80 @@
-# API Endpoints Overview
+# API Documentation
 
-This document outlines the available API endpoints for managing orders, viewing order details, handling the product inventory, and providing data for the dashboard in the Inventory Management System.
+## OrderController
 
----
-
-## 1. Order Management
-
-- **POST /api/orders**:  
-  Creates a new upcoming order.
-
-- **PUT /api/orders/{id}**:  
-  Modifies an existing order by `Order ID`.
-
-- **DELETE /api/orders/{id}**:  
-  Removes an order from the inventory by `Order ID`.
+### **GET /api/Order**
+**Purpose:** Retrieve a list of all orders.
 
 ---
 
-## 2. Order Details Viewing
-
-- **GET /api/orders**:  
-  Retrieves a list of all orders, both upcoming and previous.
-
-- **GET /api/orders/upcoming**:  
-  Retrieves a list of upcoming orders.
-
-- **GET /api/orders/{id}**:  
-  Retrieves details of a specific order by `Order ID`.
-
-- **GET /api/orders/previous**:  
-  Retrieves a list of previous orders.
+### **GET /api/Order/ViewOrderDetail/{id}**
+**Purpose:** Retrieve detailed information about a specific order by ID.
 
 ---
 
-## 3. Product List Management
-
-- **POST /api/products**:  
-  Adds a new product to the inventory.
-
-- **DELETE /api/products/{id}**:  
-  Removes a product from the inventory by `Product ID`.
-
-- **GET /api/products**:  
-  Retrieves a list of all products in the inventory.
-
-- **PUT /api/products/{id}**:  
-  Updates product information such as price, stock, etc., by `Product ID`.
+### **POST /api/Order/CreateOrder**
+**Purpose:** Create a new order with associated order items.
 
 ---
 
-## 4. Dashboard and Home Screen
-
-- **GET /api/dashboard/orders**:  
-  Retrieves an overview of previous and upcoming orders for the dashboard.
-
-- **GET /api/dashboard/top-products**:  
-  Retrieves data for the top-selling products for the chart.
-
-- **GET /api/dashboard/low-products**:  
-  Retrieves data for the lowest-selling products for the chart.
+### **PUT /api/Order/CancelOrder/{id}**
+**Purpose:** Cancel an existing order by updating its status and adding a cancel comment.
 
 ---
 
-## Total API Endpoints Breakdown
-
-- **Order Management**: 3 endpoints
-- **Order Details Viewing**: 4 endpoints
-- **Product List Management**: 4 endpoints
-- **Dashboard and Home Screen**: 3 endpoints
+### **GET /api/Order/UpcomingOrders**
+**Purpose:** Retrieve a list of upcoming orders (status indicating future fulfillment).
 
 ---
 
-## Total: 14 API Endpoints
+### **GET /api/Order/CurrentOrders**
+**Purpose:** Retrieve a list of current orders (status indicating they are in process).
+
+---
+
+### **GET /api/Order/PastOrders**
+**Purpose:** Retrieve a list of past orders (status indicating completion).
+
+---
+
+### **GET /api/Order/GenerateInvoice/{orderId}**
+**Purpose:** Generate an invoice in HTML format for a specific order.
+
+---
+
+## ItemController
+
+### **GET /api/Item**
+**Purpose:** Retrieve a list of all items in the inventory.
+
+---
+
+### **GET /api/Item/lowstock**
+**Purpose:** Retrieve a list of items that are low in stock.
+
+---
+
+### **GET /api/Item/{id}**
+**Purpose:** Retrieve details of a specific item by ID.
+
+---
+
+### **POST /api/Item**
+**Purpose:** Add a new item to the inventory.
+
+---
+
+### **PUT /api/Item/{id}**
+**Purpose:** Update details of an existing item.
+
+---
+
+### **DELETE /api/Item/{id}**
+**Purpose:** Delete an item from the inventory.
+
+---
+
+## SupplierController
+
+### **GET /api/Supplier/suppliers**
+**Purpose:** Retrieve a list of all suppliers.
