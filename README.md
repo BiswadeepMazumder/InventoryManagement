@@ -249,7 +249,7 @@ This document explains how the various tables in the database are connected, det
 ```
 
 
-## How to START the Backend WebAPI of the application.
+# How to START the Backend WebAPI of the application.
 
 ### Download the github repository
 
