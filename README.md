@@ -249,12 +249,28 @@ This document explains how the various tables in the database are connected, det
 ```
 
 
-Download the overall Proect.
+##How to START the Backend WebAPI of the application.
 
-Now copy the contents of the Frontend branch to a folder called frontend under the backend folder.
+###Download the github repository
 
-Also download the reqquired .NET SDKs and NODE for your system.
+###Copy the contents of the Backend branch to a folder called backend.
 
-Now navigate to the API/API folder under the backend folder. Then BUILD and RUN the backend. Your backend is now live on localhost:5000
+###Now navigate to the API folder under the backend folder. 
 
-Now navigate to the frontend folder under the backend folder. Then INSTALL the node dependiencies and START the react.js Frontend. Your frontend is now live on localhost:3000
+cd backend/API
+
+###Download the required .NET SDKs and NODE for your system. 
+(https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+
+###Restore the project dependencies:
+
+  DOTNET RESTORE
+
+###Then BUILD and RUN the backend.
+
+  DOTNET BUILD
+  DOTNET RUN
+
+###Your backend is now live on localhost:5000.
+
+###API endpoints can be accessed at : localhost:5000/swagger/index.html
