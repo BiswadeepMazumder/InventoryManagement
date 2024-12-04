@@ -1,22 +1,25 @@
-## Project Overview
+# How to START the Backend WebAPI of the application.
 
-This inventory management software is designed to help small to mid-sized businesses streamline the process of managing orders and product inventory. 
-The system allows the Business Owner, Manager, or Worker to efficiently handle essential inventory tasks while providing clear, intuitive interfaces 
-for order creation, modification, and product management.
+### Download the github repository
 
+### Copy the contents of the Backend branch to a folder called backend.
 
-## Project Architechture
+### Now navigate to the API folder under the backend folder. 
 
-Reeact.js + .net core entity framework + azure sql server. 
-This will be hosted on azure.
+    cd backend/API
 
+### Download the required .NET SDKs and NODE for your system. 
+    (https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
-Download the overall Proect.
+### Restore the project dependencies:
 
-Now copy the contents of the Frontend branch to a folder called frontend under the backend folder.
+    DOTNET RESTORE
 
-Also download the reqquired .NET SDKs and NODE for your system.
+### Then BUILD and RUN the backend.
 
-Now navigate to the API/API folder under the backend folder. Then BUILD and RUN the backend. Your backend is now live on localhost:5236.
+    DOTNET BUILD
+    DOTNET RUN
 
-the hosted app is available in http://eec626-inventorymanagement.runasp.net/swagger/index.html. 
+###  Your backend is now live on localhost:5000.
+
+###  API endpoints can be accessed at : localhost:5000/swagger/index.html
