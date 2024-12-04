@@ -249,28 +249,28 @@ This document explains how the various tables in the database are connected, det
 ```
 
 
-##How to START the Backend WebAPI of the application.
+## How to START the Backend WebAPI of the application.
 
-###Download the github repository
+### Download the github repository
 
-###Copy the contents of the Backend branch to a folder called backend.
+### Copy the contents of the Backend branch to a folder called backend.
 
-###Now navigate to the API folder under the backend folder. 
+### Now navigate to the API folder under the backend folder. 
 
-cd backend/API
+    cd backend/API
 
-###Download the required .NET SDKs and NODE for your system. 
-(https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+### Download the required .NET SDKs and NODE for your system. 
+    (https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
-###Restore the project dependencies:
+### Restore the project dependencies:
 
-  DOTNET RESTORE
+    DOTNET RESTORE
 
-###Then BUILD and RUN the backend.
+### Then BUILD and RUN the backend.
 
-  DOTNET BUILD
-  DOTNET RUN
+    DOTNET BUILD
+    DOTNET RUN
 
-###Your backend is now live on localhost:5000.
+###  Your backend is now live on localhost:5000.
 
-###API endpoints can be accessed at : localhost:5000/swagger/index.html
+###  API endpoints can be accessed at : localhost:5000/swagger/index.html
