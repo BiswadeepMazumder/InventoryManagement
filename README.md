@@ -2,7 +2,7 @@
 
 ### Download the github repository
 
-### Copy the contents of the Backend branch to a folder called backend.
+ Copy the contents of the Backend branch to a folder called backend.
 
 ### Now navigate to the API folder under the backend folder. 
 
