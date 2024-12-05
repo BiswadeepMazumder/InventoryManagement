@@ -33,7 +33,7 @@ const DeleteOrderModal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={(event) => handleClose(event, "button")}>Close</Button>
         <Button onClick={onSubmit} autoFocus>
           Delete
         </Button>

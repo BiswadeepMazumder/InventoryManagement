@@ -1,3 +1,4 @@
+import React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -32,7 +33,7 @@ const DeleteOrderModal = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={(event) => handleClose(event, "button")}>Close</Button>
         <Button onClick={onSubmit} autoFocus>
           Delete
         </Button>

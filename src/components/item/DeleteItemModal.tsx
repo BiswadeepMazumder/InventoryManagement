@@ -30,7 +30,7 @@ const DeleteItemModal = ({ open, onClose, onSubmit }: DeleteItemModalProps) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={(event) => handleClose(event, "button")}>Close</Button>
         <Button onClick={onSubmit} autoFocus>
           Delete
         </Button>

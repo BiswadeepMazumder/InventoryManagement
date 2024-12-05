@@ -197,7 +197,9 @@ export default function UpdateItemModal({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={(event) => handleClose(event, "button")}>
+            Close
+          </Button>
           <Button type="submit" autoFocus>
             Update Item
           </Button>

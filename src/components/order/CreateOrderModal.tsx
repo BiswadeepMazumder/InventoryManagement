@@ -164,7 +164,9 @@ export default function CreateOrderModal({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={(event) => handleClose(event, "button")}>
+            Close
+          </Button>
           <Button type="submit" autoFocus>
             Create order
           </Button>

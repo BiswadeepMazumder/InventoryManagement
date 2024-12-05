@@ -176,7 +176,9 @@ export default function UpdateSupplierModal({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={(event) => handleClose(event, "button")}>
+            Close
+          </Button>
           <Button type="submit" autoFocus>
             Update supplier
           </Button>

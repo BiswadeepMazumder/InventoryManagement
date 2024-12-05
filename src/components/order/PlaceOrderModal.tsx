@@ -368,7 +368,9 @@ export default function PlaceOrderModal({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={(event) => handleClose(event, "button")}>
+            Close
+          </Button>
           <Button type="submit">Place Order</Button>
         </DialogActions>
       </Dialog>

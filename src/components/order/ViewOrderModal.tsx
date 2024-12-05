@@ -187,7 +187,9 @@ export default function ViewOrderModal({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={(event) => handleClose(event, "button")}>
+            Close
+          </Button>
           {/*<Button type="submit" autoFocus>*/}
           {/*  Update Order*/}
           {/*</Button>*/}
