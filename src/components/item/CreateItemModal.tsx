@@ -33,12 +33,18 @@ export default function CreateItemModal({
     control,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
   const handleCreateItem = (values: Values) => {
     console.log("Create item", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 

@@ -33,6 +33,7 @@ export default function UpdateSupplierModal({
     handleSubmit,
     setError,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
@@ -47,6 +48,11 @@ export default function UpdateSupplierModal({
   const handleUpdateSupplier = (values: Values) => {
     console.log("Update supplier", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 

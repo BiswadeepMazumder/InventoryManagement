@@ -36,6 +36,7 @@ export default function UpdateItemModal({
     control,
     handleSubmit,
     setError,
+    reset,
     setValue,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
@@ -52,6 +53,11 @@ export default function UpdateItemModal({
   const handleUpdateItem = (values: Values) => {
     console.log("Update item", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 

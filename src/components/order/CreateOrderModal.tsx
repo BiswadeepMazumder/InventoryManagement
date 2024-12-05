@@ -34,6 +34,7 @@ export default function CreateOrderModal({
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
   const { user } = useUser();
@@ -48,6 +49,11 @@ export default function CreateOrderModal({
   const handleCreateOrder = (values: Values) => {
     console.log("Create order", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 

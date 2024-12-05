@@ -73,6 +73,7 @@ export default function PlaceOrderModal({
     getValues,
     watch,
     clearErrors,
+    reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
   const [orderItemPage, setOrderItemPage] = useState(0);
@@ -154,6 +155,11 @@ export default function PlaceOrderModal({
   const handlePlaceOrder = (values: Values) => {
     console.log("Place Order", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 

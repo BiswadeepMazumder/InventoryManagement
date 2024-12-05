@@ -29,12 +29,18 @@ export default function CreateSupplierModal({
     control,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
   const handleCreateSupplier = (values: Values) => {
     console.log("Create supplier", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 

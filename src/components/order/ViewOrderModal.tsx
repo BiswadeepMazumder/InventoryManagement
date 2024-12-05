@@ -50,6 +50,7 @@ export default function ViewOrderModal({
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
   const [orderItemPage, setOrderItemPage] = useState(0);
@@ -76,6 +77,11 @@ export default function ViewOrderModal({
   const handleCancelOrder = (values: Values) => {
     console.log("Cancel Order", values);
     onSubmit(values);
+
+    // clear form after submit
+    reset();
+
+    // close modal
     onClose();
   };
 
