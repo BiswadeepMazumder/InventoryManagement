@@ -89,6 +89,11 @@ export default function ViewOrderModal({
     if (reason === "backdropClick" || reason === "escapeKeyDown") {
       return;
     }
+
+    // clear form after close modal
+    reset();
+
+    // close modal
     onClose();
   };
 

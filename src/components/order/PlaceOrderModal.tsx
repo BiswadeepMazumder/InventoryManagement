@@ -163,6 +163,18 @@ export default function PlaceOrderModal({
     onClose();
   };
 
+  const handleClose = (_event: object, reason: string) => {
+    if (reason === "backdropClick" || reason === "escapeKeyDown") {
+      return;
+    }
+
+    // clear form after close modal
+    reset();
+
+    // close modal
+    onClose();
+  };
+
   const handleAddItem = (item: Item, quantity: number) => {
     console.log("Add item", item, quantity);
     // Add item to order items when item id is the same thing
@@ -202,13 +214,6 @@ export default function PlaceOrderModal({
     clearErrors("orderAmount");
 
     toast.success(`${quantity} ${item.itemName} added to order`);
-  };
-
-  const handleClose = (_event: object, reason: string) => {
-    if (reason === "backdropClick" || reason === "escapeKeyDown") {
-      return;
-    }
-    onClose();
   };
 
   const handleOrderItemPageChange = (

@@ -61,6 +61,11 @@ export default function CreateOrderModal({
     if (reason === "backdropClick" || reason === "escapeKeyDown") {
       return;
     }
+
+    // clear form after close modal
+    reset();
+
+    // close modal
     onClose();
   };
 
