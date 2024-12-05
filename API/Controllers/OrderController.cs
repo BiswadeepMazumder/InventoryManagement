@@ -141,9 +141,17 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
 
         await _context.SaveChangesAsync();
 
+        // Return OrderId and success message
+        var response = new
+        {
+            OrderId = order.OrderId,
+            Message = "Order successfully placed"
+        };
       
 
-        return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, createOrderDTO);
+        //return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, createOrderDTO);
+        return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, response);
+
     }
     catch (Exception ex)
     {
