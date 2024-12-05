@@ -96,10 +96,10 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemDTO>> PostItem([FromBody] ItemDTO itemDTO)
         {
-            if (!ModelState.IsValid)
-            {
+             if (!ModelState.IsValid)
+             {
                 return BadRequest(ModelState);
-            }
+             }
 
             var item = new Items
             {
@@ -111,8 +111,13 @@ namespace API.Controllers
                 CategoryCode = itemDTO.CategoryCode
             };
 
-            _context.Items.Add(item);
-            await _context.SaveChangesAsync();
+                 _context.Items.Add(item);
+            try{
+                 await _context.SaveChangesAsync();
+            }
+            catch(Exception e){
+                Console.WriteLine(e.InnerException);
+            }
 
             return CreatedAtAction(nameof(GetItem), new { id = item.ItemId }, itemDTO);
         }
