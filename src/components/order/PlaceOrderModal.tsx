@@ -282,9 +282,9 @@ export default function PlaceOrderModal({
             </Stack>
             <Stack sx={{ flexDirection: "row", gap: 2 }}>
               <Stack spacing={2} sx={{ flex: 1 }}>
-                <Typography variant="body1">
-                  <strong>Order Id:</strong> {orderId}
-                </Typography>
+                {/*<Typography variant="body1">*/}
+                {/*  <strong>Order Id:</strong> {orderId}*/}
+                {/*</Typography>*/}
                 <Typography variant="body1">
                   <strong>Date:</strong> {formatDate(orderDate)}
                 </Typography>
@@ -303,9 +303,9 @@ export default function PlaceOrderModal({
                   )}
                 </Stack>
 
-                <Typography variant="body1">
-                  <strong>User:</strong> {userId}
-                </Typography>
+                {/*<Typography variant="body1">*/}
+                {/*  <strong>User:</strong> {userId}*/}
+                {/*</Typography>*/}
               </Stack>
             </Stack>
 
