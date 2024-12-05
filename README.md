@@ -9,7 +9,7 @@ for order creation, modification, and product management.
 # Project Architecture
 
 The project is built using:
-- **Frontend**: React.js
+- **Frontend**: Next.js
 - **Backend**: .NET Core with Entity Framework
 - **Database**: Azure SQL Database
 
@@ -19,13 +19,13 @@ This will be hosted on Azure, and managed through Azure DevOps CI/CD pipelines.
 
 # System Architecture and Component Mapping
 
-This section describes the architecture and component mappings for the Inventory Management System, which includes the Frontend (React app), Backend (.NET Core API), Azure SQL Database, and Azure DevOps CI/CD pipeline.
+This section describes the architecture and component mappings for the Inventory Management System, which includes the Frontend (Next.js app), Backend (.NET Core API), Azure SQL Database, and Azure DevOps CI/CD pipeline.
 
 ## Components Mapping Visualization
 
 ### 1. **Frontend (React) → Backend (API)**
 - The React app uses **Axios** to send HTTP requests to the backend API.
-- Each request is accompanied by an **OAuth** token for secure authentication.
+- Each request is accompanied by an **FireBase** token for secure authentication.
 - Example request: `GET /api/orders`
 
 ### 2. **Backend (.NET Core API) → Azure SQL Database**
@@ -66,8 +66,8 @@ This section describes the architecture and component mappings for the Inventory
 ## Visual Representation of System Architecture
 ```plaintext
 ┌──────────────┐    HTTP Requests    ┌──────────────┐    Business Logic     ┌──────────────┐    CRUD Operations    ┌────────────────────┐
-│ React App    │  ────────────────►  │  API Layer   │  ────────────────►    │  Service     │  ────────────────►     │ Azure SQL Database │
-│ (Frontend)   │    (Axios + OAuth)  │ (.NET Core)  │   Controllers &       │  Layer       │   Entity Framework    │ Orders, Users, etc.│
+│ React App    │  ────────────────►  │  API Layer   │  ────────────────►    │  Service     │  ────────────────►    │ Azure SQL Database │
+│ (Frontend)   │    (Axios)          | (.NET Core)  │   Controllers &       │  Layer       │   Entity Framework    │ Orders, Users, etc.│
 └──────────────┘                     └──────────────┘   Repositories        └──────────────┘                       └────────────────────┘
 
                      ▲
