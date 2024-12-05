@@ -34,7 +34,7 @@ namespace API.Controllers
                     {
                         var orders = await _context.Orders
                             .Include(o => o.OrderItems)
-                            .OrderBy(order => order.OrderDate) // Sort orders by date in descending order
+                            .OrderByDescending(order => order.OrderDate) // Sort orders by date in descending order
                             .Select(order => new OrderDTO
                             {
                                 OrderId = order.OrderId,
