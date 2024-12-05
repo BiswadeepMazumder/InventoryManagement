@@ -38,12 +38,14 @@ export default function UpdateSupplierModal({
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
   useEffect(() => {
-    setValue("supplierName", supplier.supplierName);
-    setValue("supplierAddress", supplier.supplierAddress);
-    setValue("supplierCity", supplier.supplierCity);
-    setValue("supplierZipCode", supplier.supplierZipCode);
-    setValue("supplierPhoneNumber", supplier.supplierPhoneNumber);
-  }, [supplier, setValue]);
+    if (open) {
+      setValue("supplierName", supplier.supplierName);
+      setValue("supplierAddress", supplier.supplierAddress);
+      setValue("supplierCity", supplier.supplierCity);
+      setValue("supplierZipCode", supplier.supplierZipCode);
+      setValue("supplierPhoneNumber", supplier.supplierPhoneNumber);
+    }
+  }, [supplier, open, setValue]);
 
   const handleUpdateSupplier = (values: Values) => {
     console.log("Update supplier", values);

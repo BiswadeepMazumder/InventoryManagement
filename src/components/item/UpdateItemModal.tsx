@@ -42,13 +42,15 @@ export default function UpdateItemModal({
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
   useEffect(() => {
-    setValue("itemId", item.itemId);
-    setValue("itemName", item.itemName);
-    setValue("itemUnitPrice", item.itemUnitPrice);
-    setValue("currentStock", item.currentStock);
-    setValue("status", item.status);
-    setValue("categoryCode", item.categoryCode);
-  }, [item, setValue]);
+    if (open) {
+      setValue("itemId", item.itemId);
+      setValue("itemName", item.itemName);
+      setValue("itemUnitPrice", item.itemUnitPrice);
+      setValue("currentStock", item.currentStock);
+      setValue("status", item.status);
+      setValue("categoryCode", item.categoryCode);
+    }
+  }, [item, open, setValue]);
 
   const handleUpdateItem = (values: Values) => {
     console.log("Update item", values);

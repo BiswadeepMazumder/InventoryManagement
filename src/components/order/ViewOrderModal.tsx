@@ -64,15 +64,17 @@ export default function ViewOrderModal({
   );
 
   useEffect(() => {
-    setValue("orderId", order.orderId);
-    setValue("orderDate", order.orderDate);
-    setValue("orderName", order.orderName);
-    setValue("userId", order.userId);
-    setValue("orderAmount", order.orderAmount);
-    setValue("orderStatus", order.orderStatus);
-    setValue("cancelComment", order.cancelComment);
-    setValue("orderItems", order.orderItems);
-  }, [order, setValue]);
+    if (open) {
+      setValue("orderId", order.orderId);
+      setValue("orderDate", order.orderDate);
+      setValue("orderName", order.orderName);
+      setValue("userId", order.userId);
+      setValue("orderAmount", order.orderAmount);
+      setValue("orderStatus", order.orderStatus);
+      setValue("cancelComment", order.cancelComment);
+      setValue("orderItems", order.orderItems);
+    }
+  }, [order, open, setValue]);
 
   const handleCancelOrder = (values: Values) => {
     console.log("Cancel Order", values);

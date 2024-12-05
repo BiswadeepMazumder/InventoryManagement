@@ -41,10 +41,10 @@ export default function CreateOrderModal({
 
   useEffect(() => {
     // Set the userId to order form
-    if (user && user.uid) {
+    if (open && user && user.uid) {
       setValue("userId", user.uid.toString());
     }
-  }, [user, setValue]);
+  }, [user, open, setValue]);
 
   const handleCreateOrder = (values: Values) => {
     console.log("Create order", values);

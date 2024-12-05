@@ -118,8 +118,10 @@ export default function PlaceOrderModal({
   );
 
   useEffect(() => {
-    setValue("userId", "user-id");
-  }, [setValue]);
+    if (open) {
+      setValue("userId", "user-id");
+    }
+  }, [open, setValue]);
 
   // Filter items based on search text or status or category code
   useEffect(() => {
