@@ -123,7 +123,7 @@ export default function ViewOrderModal({
   return (
     <Dialog open={open} onClose={handleClose} scroll="paper" fullWidth>
       <DialogTitle>
-        Order Detail: <strong>{order.orderId}</strong>
+        Order: <strong>{order.orderId}</strong>
       </DialogTitle>
       <form onSubmit={handleSubmit(handleCancelOrder)}>
         <DialogContent dividers>
