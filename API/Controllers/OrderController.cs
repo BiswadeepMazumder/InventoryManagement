@@ -34,6 +34,7 @@ namespace API.Controllers
                     {
                         var orders = await _context.Orders
                             .Include(o => o.OrderItems)
+                            .OrderBy(order => order.OrderDate) // Sort orders by date in descending order
                             .Select(order => new OrderDTO
                             {
                                 OrderId = order.OrderId,
@@ -207,7 +208,8 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
             public async Task<ActionResult<IEnumerable<OrderDTO>>> ViewUpcomingOrders()
             {
                 var upcomingOrders = await _context.Orders
-                    .Where(o => o.OrderStatus == 3 || o.OrderStatus == 4)
+                    .Where(o => o.OrderStatus == 4)
+                    .OrderBy(order => order.OrderDate)
                     .Select(order => new OrderDTO
                     {
                         OrderId = order.OrderId,
@@ -228,6 +230,7 @@ public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderDTO 
             {
                 var currentOrders = await _context.Orders
                     .Where(o => o.OrderStatus == 1)
+                    .OrderBy(order => order.OrderDate)
                     .Select(order => new OrderDTO
                     {
                         OrderId = order.OrderId,
