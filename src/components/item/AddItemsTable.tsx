@@ -47,18 +47,14 @@ const AddItemsTable = ({
 }: AddItemsTableProps): React.JSX.Element => {
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
 
-  const handleQuantityChange = (
-    itemId: string,
-    value: string,
-    currentStock: number,
-  ) => {
+  const handleQuantityChange = (itemId: string, value: string) => {
     // limit the quantity to be a positive integer
     if (parseInt(value) < 0) {
       return;
     }
 
-    // limit the quantity to be less than or equal to the current stock
-    if (parseInt(value) > currentStock) {
+    // limit the quantity no more than 1000 units
+    if (parseInt(value) > 1000) {
       return;
     }
 
@@ -142,11 +138,7 @@ const AddItemsTable = ({
                       type="number"
                       value={quantities[row.itemId] || ""}
                       onChange={(e) =>
-                        handleQuantityChange(
-                          row.itemId,
-                          e.target.value,
-                          row.currentStock,
-                        )
+                        handleQuantityChange(row.itemId, e.target.value)
                       }
                     />
                   </TableCell>
@@ -154,7 +146,11 @@ const AddItemsTable = ({
                     <Typography variant="button">
                       $
                       {formatNumberWithCommas(
-                        row.itemUnitPrice * (quantities[row.itemId] || 0),
+                        parseFloat(
+                          (row.itemUnitPrice * quantities[row.itemId]).toFixed(
+                            2,
+                          ),
+                        ) || 0,
                       )}
                     </Typography>
                   </TableCell>
