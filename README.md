@@ -20,6 +20,6 @@
     DOTNET BUILD
     DOTNET RUN
 
-###  Your backend is now live on localhost:5000.
+###  Your backend is now live on localhost:5236.
 
-###  API endpoints can be accessed at : localhost:5000/swagger/index.html
+###  API endpoints can be accessed at : localhost:5236/swagger/index.html
