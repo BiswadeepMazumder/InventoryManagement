@@ -11,27 +11,27 @@ import {
 } from "@mui/material";
 import type { SxProps } from "@mui/material/styles";
 
-import { ArrowDown as ArrowDownIcon } from "@phosphor-icons/react/dist/ssr/ArrowDown";
 import { ArrowUp as ArrowUpIcon } from "@phosphor-icons/react/dist/ssr/ArrowUp";
-import { ClipboardText as ClipboardTextIcon } from "@phosphor-icons/react/dist/ssr/ClipboardText";
+import { ArrowDown as ArrowDownIcon } from "@phosphor-icons/react/dist/ssr/ArrowDown";
+import { CalendarCheck as CalendarCheckIcon } from "@phosphor-icons/react/dist/ssr/CalendarCheck";
 
-export interface BudgetProps {
+export interface UpcomingOrdersProps {
   diff?: number;
   trend?: "up" | "down";
   sx?: SxProps;
   value: string;
 }
 
-export function PastOrder({
+export function UpcomingOrders({
   diff,
   trend,
-  sx,
   value,
-}: BudgetProps): React.JSX.Element {
+  sx,
+}: UpcomingOrdersProps): React.JSX.Element {
   const router = useRouter();
 
   const handleViewOrders = () => {
-    router.push("dashboard/orders?filter=past");
+    router.push("dashboard/orders?filter=upcoming");
   };
 
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
@@ -44,7 +44,7 @@ export function PastOrder({
     <Card sx={sx}>
       <CardActionArea sx={sx} onClick={handleViewOrders}>
         <CardContent>
-          <Stack spacing={3}>
+          <Stack spacing={2}>
             <Stack
               direction="row"
               sx={{ alignItems: "flex-start", justifyContent: "space-between" }}
@@ -52,18 +52,18 @@ export function PastOrder({
             >
               <Stack spacing={1}>
                 <Typography color="text.primary" variant="h5">
-                  Past Order
+                  Upcoming Orders
                 </Typography>
                 <Typography variant="h4">{value}</Typography>
               </Stack>
               <Avatar
                 sx={{
-                  backgroundColor: "var(--mui-palette-info-main)",
+                  backgroundColor: "var(--mui-palette-secondary-main)",
                   height: "56px",
                   width: "56px",
                 }}
               >
-                <ClipboardTextIcon fontSize="var(--icon-fontSize-lg)" />
+                <CalendarCheckIcon fontSize="var(--icon-fontSize-lg)" />
               </Avatar>
             </Stack>
             {diff ? (

@@ -13,25 +13,25 @@ import type { SxProps } from "@mui/material/styles";
 
 import { ArrowDown as ArrowDownIcon } from "@phosphor-icons/react/dist/ssr/ArrowDown";
 import { ArrowUp as ArrowUpIcon } from "@phosphor-icons/react/dist/ssr/ArrowUp";
-import { Notebook as NotebookIcon } from "@phosphor-icons/react/dist/ssr/Notebook";
+import { ClipboardText as ClipboardTextIcon } from "@phosphor-icons/react/dist/ssr/ClipboardText";
 
-export interface CurrentOrderProps {
+export interface PastOrdersProps {
   diff?: number;
   trend?: "up" | "down";
   sx?: SxProps;
   value: string;
 }
 
-export function CurrentOrder({
+export function PastOrders({
   diff,
   trend,
   sx,
   value,
-}: CurrentOrderProps): React.JSX.Element {
+}: PastOrdersProps): React.JSX.Element {
   const router = useRouter();
 
   const handleViewOrders = () => {
-    router.push("dashboard/orders?filter=current");
+    router.push("dashboard/orders?filter=past");
   };
 
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
@@ -44,7 +44,7 @@ export function CurrentOrder({
     <Card sx={sx}>
       <CardActionArea sx={sx} onClick={handleViewOrders}>
         <CardContent>
-          <Stack spacing={2}>
+          <Stack spacing={3}>
             <Stack
               direction="row"
               sx={{ alignItems: "flex-start", justifyContent: "space-between" }}
@@ -52,18 +52,18 @@ export function CurrentOrder({
             >
               <Stack spacing={1}>
                 <Typography color="text.primary" variant="h5">
-                  Current Order
+                  Past Orders
                 </Typography>
                 <Typography variant="h4">{value}</Typography>
               </Stack>
               <Avatar
                 sx={{
-                  backgroundColor: "var(--mui-palette-success-main)",
+                  backgroundColor: "var(--mui-palette-info-main)",
                   height: "56px",
                   width: "56px",
                 }}
               >
-                <NotebookIcon fontSize="var(--icon-fontSize-lg)" />
+                <ClipboardTextIcon fontSize="var(--icon-fontSize-lg)" />
               </Avatar>
             </Stack>
             {diff ? (
