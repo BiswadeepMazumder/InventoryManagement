@@ -11,27 +11,27 @@ import {
 } from "@mui/material";
 import type { SxProps } from "@mui/material/styles";
 
-import { ArrowUp as ArrowUpIcon } from "@phosphor-icons/react/dist/ssr/ArrowUp";
 import { ArrowDown as ArrowDownIcon } from "@phosphor-icons/react/dist/ssr/ArrowDown";
-import { CalendarCheck as CalendarCheckIcon } from "@phosphor-icons/react/dist/ssr/CalendarCheck";
+import { ArrowUp as ArrowUpIcon } from "@phosphor-icons/react/dist/ssr/ArrowUp";
+import { Notebook as NotebookIcon } from "@phosphor-icons/react/dist/ssr/Notebook";
 
-export interface UpcomingOrderProps {
+export interface CurrentOrdersProps {
   diff?: number;
   trend?: "up" | "down";
   sx?: SxProps;
   value: string;
 }
 
-export function UpcomingOrder({
+export function CurrentOrders({
   diff,
   trend,
-  value,
   sx,
-}: UpcomingOrderProps): React.JSX.Element {
+  value,
+}: CurrentOrdersProps): React.JSX.Element {
   const router = useRouter();
 
   const handleViewOrders = () => {
-    router.push("dashboard/orders?filter=upcoming");
+    router.push("dashboard/orders?filter=current");
   };
 
   const TrendIcon = trend === "up" ? ArrowUpIcon : ArrowDownIcon;
@@ -52,18 +52,18 @@ export function UpcomingOrder({
             >
               <Stack spacing={1}>
                 <Typography color="text.primary" variant="h5">
-                  Upcoming Order
+                  Current Orders
                 </Typography>
                 <Typography variant="h4">{value}</Typography>
               </Stack>
               <Avatar
                 sx={{
-                  backgroundColor: "var(--mui-palette-secondary-main)",
+                  backgroundColor: "var(--mui-palette-success-main)",
                   height: "56px",
                   width: "56px",
                 }}
               >
-                <CalendarCheckIcon fontSize="var(--icon-fontSize-lg)" />
+                <NotebookIcon fontSize="var(--icon-fontSize-lg)" />
               </Avatar>
             </Stack>
             {diff ? (

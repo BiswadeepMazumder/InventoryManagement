@@ -19,7 +19,7 @@ export const schema = zod.object({
 export type Values = zod.infer<typeof schema>;
 
 export const defaultValues = {
-  supplierId: nanoid(),
+  supplierId: "",
   supplierName: "",
   supplierAddress: "",
   supplierCity: "",

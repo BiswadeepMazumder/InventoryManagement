@@ -10,33 +10,37 @@ import useFetchOrders from "@/hooks/useFetchOrders";
 import useFetchUpcomingOrders from "@/hooks/useFetchUpcomingOrders";
 import useFetchPastOrders from "@/hooks/useFetchPastOrders";
 import useFetchItems from "@/hooks/useFetchItems";
+import { useUser } from "@/hooks/useUser";
 
 import { ITEM_CATEGORY } from "@/constants/item";
 
-import { PastOrder } from "@/components/overview/PastOrder";
+import { PastOrders } from "@/components/overview/PastOrders";
 import { LowStock } from "@/components/overview/LowStock";
-import { CurrentOrder } from "@/components/overview/CurrentOrder";
-import { UpcomingOrder } from "@/components/overview/UpcomingOrder";
+import { CurrentOrders } from "@/components/overview/CurrentOrders";
+import { UpcomingOrders } from "@/components/overview/UpcomingOrders";
 import { RecentOrders } from "@/components/overview/RecentOrders";
 import { Statistics } from "@/components/overview/Statistics";
 import { ItemCategories } from "@/components/overview/ItemCategories";
 import { Suppliers } from "@/components/overview/Suppliers";
 
 export default function Page(): React.JSX.Element {
+  const { user } = useUser();
+  const userId = user?.uid ?? "";
+
   // Fetch order data
-  const { orders, loading: ordersLoading } = useFetchOrders("user-id");
+  const { orders, loading: ordersLoading } = useFetchOrders(userId);
   const { orders: upcomingOrders, loading: upcomingOrdersLoading } =
-    useFetchUpcomingOrders("user-id");
+    useFetchUpcomingOrders(userId);
   const { orders: pastOrders, loading: pastOrdersLoading } =
-    useFetchPastOrders("user-id");
+    useFetchPastOrders(userId);
   const { items: lowStockItems, loading: lowStockLoading } =
-    useFetchLowStockItem("user-id");
+    useFetchLowStockItem(userId);
 
   // Fetch supplier data
-  const { suppliers, loading: suppliersLoading } = useFetchSuppliers("user-id");
+  const { suppliers, loading: suppliersLoading } = useFetchSuppliers(userId);
 
   // Fetch item data
-  const { items, loading: itemsLoading } = useFetchItems("user-id");
+  const { items, loading: itemsLoading } = useFetchItems(userId);
 
   const lowStockItem = lowStockItems.length > 0 ? lowStockItems[0] : null;
 
@@ -158,7 +162,7 @@ export default function Page(): React.JSX.Element {
     <Grid container spacing={3}>
       {/* Current Order */}
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <CurrentOrder
+        <CurrentOrders
           // diff={16}
           // trend="up"
           sx={{ height: "100%" }}
@@ -168,7 +172,7 @@ export default function Page(): React.JSX.Element {
 
       {/* Upcoming Order */}
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <UpcomingOrder
+        <UpcomingOrders
           // diff={29}
           // trend="down"
           sx={{ height: "100%" }}
@@ -178,7 +182,7 @@ export default function Page(): React.JSX.Element {
 
       {/* Past Order */}
       <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
-        <PastOrder
+        <PastOrders
           // diff={12}
           // trend="up"
           sx={{ height: "100%" }}

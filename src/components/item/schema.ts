@@ -17,7 +17,7 @@ export const schema = zod.object({
 export type Values = zod.infer<typeof schema>;
 
 export const defaultValues = {
-  itemId: nanoid().toString().slice(0, 7), // Generate random id with 7 characters
+  itemId: "",
   itemName: "",
   itemUnitPrice: 0,
   currentStock: 0,

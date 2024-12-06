@@ -20,6 +20,7 @@ import { Supplier } from "@/types/supplier";
 
 import useFetchSuppliers from "@/hooks/useFetchSuppliers";
 import usePopover from "@/hooks/usePopover";
+import { useUser } from "@/hooks/useUser";
 
 import ExportSheet from "@/utils/export-sheet";
 
@@ -38,6 +39,9 @@ const applyPagination = (
 };
 
 export default function Page(): React.JSX.Element {
+  const { user } = useUser();
+  const userId = user?.uid ?? "";
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -54,7 +58,7 @@ export default function Page(): React.JSX.Element {
   const [searchSuppliers, setSearchSuppliers] = useState<Supplier[]>([]);
 
   const exportPopover = usePopover<HTMLDivElement>();
-  const { suppliers, loading } = useFetchSuppliers("user-id");
+  const { suppliers, loading } = useFetchSuppliers(userId);
 
   const suppliersToDisplay = searched ? searchSuppliers : suppliers;
   const paginatedSuppliers = applyPagination(
@@ -111,7 +115,7 @@ export default function Page(): React.JSX.Element {
   const handleCreateSupplier = async (supplier: Supplier) => {
     console.log("Creating supplier", supplier);
     try {
-      const response = await createSupplier("user-id", supplier);
+      const response = await createSupplier(userId, supplier);
       console.log("Supplier created", response);
       toast(response.toString());
     } catch (error) {
@@ -132,7 +136,7 @@ export default function Page(): React.JSX.Element {
   const handleUpdateSupplier = async (supplier: Supplier) => {
     console.log("Updating supplier", supplier);
     try {
-      const response = await updateSupplier("user-id", supplier);
+      const response = await updateSupplier(userId, supplier);
       console.log("Supplier updated", response);
       toast(response.toString());
     } catch (error) {
@@ -153,12 +157,9 @@ export default function Page(): React.JSX.Element {
   const handleDeleteSupplier = async () => {
     console.log("Deleting suppliers", selectedDeleteSuppliers);
     for (const supplier of selectedDeleteSuppliers) {
-      console.log("Deleting supplier", supplier);
       try {
-        const response = await deleteSupplier(
-          "user-id",
-          supplier.supplierId as string,
-        );
+        const supplierId = supplier.supplierId as string;
+        const response = await deleteSupplier(userId, supplierId);
         console.log("Supplier deleted", response);
         toast(response.toString());
       } catch (error) {

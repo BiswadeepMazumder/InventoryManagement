@@ -14,6 +14,7 @@ import ExportSheet from "@/utils/export-sheet";
 
 import useFetchOrders from "@/hooks/useFetchOrders";
 import usePopover from "@/hooks/usePopover";
+import { useUser } from "@/hooks/useUser";
 
 import OrdersTable from "@/components/order/OrdersTable";
 import TableFilters from "@/components/table/TableFilters";
@@ -41,6 +42,9 @@ const applyPagination = (
 };
 
 export default function Page(): React.JSX.Element {
+  const { user } = useUser();
+  const userId = user?.uid ?? "";
+
   const searchParams = useSearchParams();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -58,7 +62,7 @@ export default function Page(): React.JSX.Element {
   const [filterStatus, setFilterStatus] = useState(StatusFilterType.None);
 
   const exportPopover = usePopover<HTMLDivElement>();
-  const { orders, loading, refresh } = useFetchOrders("user-id");
+  const { orders, loading, refresh } = useFetchOrders(userId);
 
   const isParams = searchParams.has("filter");
   const isEmpty = orders.length === 0;
@@ -156,7 +160,7 @@ export default function Page(): React.JSX.Element {
   const handlePlaceOrder = async (order: Order) => {
     console.log("Placing order", order);
     try {
-      const response = await createOrder("user-id", order);
+      const response = await createOrder(userId, order);
       console.log("Order placed", response);
       refresh();
       toast("Order placed");
@@ -177,7 +181,7 @@ export default function Page(): React.JSX.Element {
   const handleViewOrder = async (order: Order) => {
     console.log("Canceling order", order);
     try {
-      const response = await cancelOrder("user-id", order);
+      const response = await cancelOrder(userId, order);
       console.log("Order canceled", response);
       refresh();
       toast("Order Canceled");
@@ -200,7 +204,7 @@ export default function Page(): React.JSX.Element {
     console.log("Deleting order", selectedDeleteOrders);
     for (const order of selectedDeleteOrders) {
       try {
-        const response = await deleteOrder("user-id", order.orderId);
+        const response = await deleteOrder(userId, order.orderId);
         console.log("Order deleted", response);
         refresh();
         toast("Order deleted");
@@ -227,7 +231,7 @@ export default function Page(): React.JSX.Element {
   const handlePrint = async (id: string) => {
     console.log("Print order invoice", id);
     try {
-      const response = await fetchOrderInvoiceById("user-id", id);
+      const response = await fetchOrderInvoiceById(userId, id);
       // console.log("Order invoice printed", response);
       const newTab = window.open();
       if (newTab) {

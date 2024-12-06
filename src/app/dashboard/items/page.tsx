@@ -21,6 +21,7 @@ import { Item } from "@/types/item";
 
 import useFetchItems from "@/hooks/useFetchItems";
 import usePopover from "@/hooks/usePopover";
+import { useUser } from "@/hooks/useUser";
 
 import ExportSheet from "@/utils/export-sheet";
 
@@ -45,6 +46,9 @@ const applyPagination = (
 };
 
 export default function Page(): React.JSX.Element {
+  const { user } = useUser();
+  const userId = user?.uid ?? "";
+
   const searchParams = useSearchParams();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -65,7 +69,7 @@ export default function Page(): React.JSX.Element {
   );
 
   const exportPopover = usePopover<HTMLDivElement>();
-  const { items, loading, refresh } = useFetchItems("user-id");
+  const { items, loading, refresh } = useFetchItems(userId);
 
   const isParams = searchParams.has("search");
   const isEmpty = items.length === 0;
@@ -149,7 +153,7 @@ export default function Page(): React.JSX.Element {
   };
 
   const handlePageChange = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -173,7 +177,7 @@ export default function Page(): React.JSX.Element {
   const handleCreateItem = async (item: Item) => {
     console.log("Create item", item);
     try {
-      const response = await createItem("user-id", item);
+      const response = await createItem(userId, item);
       console.log("Item created", response);
       refresh();
       toast("Item created");
@@ -195,7 +199,7 @@ export default function Page(): React.JSX.Element {
   const handleUpdateItem = async (item: Item) => {
     console.log("Update item", item);
     try {
-      const response = await updateItemById("user-id", item);
+      const response = await updateItemById(userId, item);
       console.log("Item Updated", response);
       refresh();
       toast("Item updated");
@@ -220,7 +224,7 @@ export default function Page(): React.JSX.Element {
     // loop through the items and delete them one by one
     for (const item of selectedDeleteItem) {
       try {
-        const response = await deleteItemById("user-id", item.itemId);
+        const response = await deleteItemById(userId, item.itemId);
         console.log("Item Deleted", response);
         refresh();
         toast("Item deleted");

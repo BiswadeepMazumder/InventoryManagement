@@ -2,7 +2,7 @@
 
 import React, { createContext, useCallback, useEffect, useState } from "react";
 
-import type { User } from "@/types/user";
+import { User } from "@/types/user";
 import { authClient } from "@/utils/client";
 import { logger } from "@/utils/default-logger";
 
@@ -67,6 +67,7 @@ export function UserProvider({
   }, []);
 
   useEffect(() => {
+    // Check session on mount to see if user is logged in or not
     checkSession().catch((err: unknown) => {
       logger.error(err);
       // noop

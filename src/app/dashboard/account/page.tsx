@@ -15,7 +15,7 @@ export default function Page(): React.JSX.Element {
   const displayName = (user?.displayName || "") as string;
   const [firstName, lastName] = displayName.split(NAME_DELIMITER);
 
-  const email = user?.email;
+  const email = user?.email || "";
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -27,10 +27,10 @@ export default function Page(): React.JSX.Element {
         <Typography variant="h4">Account</Typography>
       </div>
       <Grid container spacing={3}>
-        <Grid size={{ lg: 4, md: 6, xs: 12 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <AccountInfo firstName={firstName} lastName={lastName} />
         </Grid>
-        <Grid size={{ lg: 8, md: 6, xs: 12 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 8 }}>
           <AccountDetailsForm
             firstName={firstName}
             lastName={lastName}

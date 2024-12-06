@@ -23,9 +23,11 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import useFetchItems from "@/hooks/useFetchItems";
+import { useUser } from "@/hooks/useUser";
 
 import { OrderItems } from "@/types/order";
 import { Item } from "@/types/item";
+
 import { formatDate, formatNumberWithCommas } from "@/utils/format";
 
 import { schema, defaultValues, Values } from "@/components/order/schema";
@@ -76,13 +78,16 @@ export default function PlaceOrderModal({
     reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
+  const { user } = useUser();
+  const userId = user?.uid ?? "";
+
   const [orderItemPage, setOrderItemPage] = useState(0);
   const [orderItemRowsPerPage, setOrderItemRowsPerPage] = useState(5);
 
-  const orderId = watch("orderId");
+  // const orderId = watch("orderId");
   const orderDate = watch("orderDate");
   const orderAmount = watch("orderAmount");
-  const userId = watch("userId");
+  // const userId = watch("userId");
   const orderItems = watch("orderItems");
   const paginatedOrders = applyOrderItemsPagination(
     orderItems,
@@ -90,7 +95,7 @@ export default function PlaceOrderModal({
     orderItemRowsPerPage,
   );
 
-  const { items, loading: itemsLoading } = useFetchItems("user-id");
+  const { items, loading: itemsLoading } = useFetchItems(userId);
   const [itemPage, setItemPage] = useState(0);
   const [itemRowsPerPage, setItemRowsPerPage] = useState(5);
 
@@ -119,9 +124,9 @@ export default function PlaceOrderModal({
 
   useEffect(() => {
     if (open) {
-      setValue("userId", "user-id");
+      setValue("userId", userId);
     }
-  }, [open, setValue]);
+  }, [open, setValue, userId]);
 
   // Filter items based on search text or status or category code
   useEffect(() => {
