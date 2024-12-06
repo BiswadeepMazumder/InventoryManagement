@@ -20,8 +20,9 @@ import {
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 import { Item } from "@/types/item";
-import { ITEM_CATEGORY, ITEM_STATUS } from "@/constants/item";
 import { formatNumberWithCommas } from "@/utils/format";
+import { ITEM_CATEGORY, ITEM_STATUS } from "@/constants/item";
+import { LIMIT_ADD_QUANTITY_ORDER_ITEMS } from "@/config";
 
 interface AddItemsTableProps {
   count?: number;
@@ -53,8 +54,8 @@ const AddItemsTable = ({
       return;
     }
 
-    // limit the quantity no more than 1000 units
-    if (parseInt(value) > 1000) {
+    // limit the quantity no more than LIMIT_ADD_QUANTITY_ORDER_ITEMS units
+    if (parseInt(value) > LIMIT_ADD_QUANTITY_ORDER_ITEMS) {
       return;
     }
 

@@ -17,3 +17,5 @@ export const config: Config = {
     (process.env.NEXT_PUBLIC_LOG_LEVEL as keyof typeof LogLevel) ??
     LogLevel.ALL,
 };
+
+export const LIMIT_ADD_QUANTITY_ORDER_ITEMS = 1000;
