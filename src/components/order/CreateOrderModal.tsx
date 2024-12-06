@@ -163,12 +163,15 @@ export default function CreateOrderModal({
             />
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={(event) => handleClose(event, "button")}>
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button
+            variant="outlined"
+            onClick={(event) => handleClose(event, "button")}
+          >
             Close
           </Button>
-          <Button type="submit" autoFocus>
-            Create order
+          <Button variant="contained" type="submit" autoFocus>
+            Create Order
           </Button>
         </DialogActions>
       </form>

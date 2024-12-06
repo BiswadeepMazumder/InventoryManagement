@@ -157,3 +157,22 @@ export const cancelOrder = async (
   console.log("Cancel Order Response", response);
   return response.data;
 };
+
+export const fetchOrderInvoiceById = async (
+  userId: string,
+  orderId: string,
+): Promise<any> => {
+  const options = {
+    url: `${API_ENDPOINT}/GenerateInvoice/${orderId}`,
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    params: {
+      userId,
+    },
+  };
+  const response = await axios(options);
+  return response.data;
+};

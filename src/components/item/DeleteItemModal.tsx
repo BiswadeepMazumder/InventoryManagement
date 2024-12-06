@@ -29,10 +29,15 @@ const DeleteItemModal = ({ open, onClose, onSubmit }: DeleteItemModalProps) => {
           Are you sure you want to delete this item?
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={(event) => handleClose(event, "button")}>Close</Button>
-        <Button onClick={onSubmit} autoFocus>
-          Delete
+      <DialogActions sx={{ justifyContent: "space-between" }}>
+        <Button
+          variant="outlined"
+          onClick={(event) => handleClose(event, "button")}
+        >
+          Close
+        </Button>
+        <Button variant="contained" onClick={onSubmit} autoFocus>
+          Delete Item
         </Button>
       </DialogActions>
     </Dialog>

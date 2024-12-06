@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -37,6 +38,7 @@ interface ViewOrderModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: Values) => void;
+  onPrint: (id: string) => void;
 }
 
 export default function ViewOrderModal({
@@ -44,6 +46,7 @@ export default function ViewOrderModal({
   open,
   onClose,
   onSubmit,
+  onPrint,
 }: ViewOrderModalProps) {
   const {
     control,
@@ -97,6 +100,10 @@ export default function ViewOrderModal({
 
     // close modal
     onClose();
+  };
+
+  const handlePrint = () => {
+    onPrint(order.orderId);
   };
 
   const handleOrderItemPageChange = (
@@ -190,13 +197,21 @@ export default function ViewOrderModal({
             </Stack>
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={(event) => handleClose(event, "button")}>
-            Close
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Box>
+            <Button
+              variant="outlined"
+              onClick={(event) => handleClose(event, "button")}
+            >
+              Close
+            </Button>
+            {/*<Button variant="contained" type="submit" autoFocus>*/}
+            {/*  Update Order*/}
+            {/*</Button>*/}
+          </Box>
+          <Button variant="contained" onClick={handlePrint}>
+            Print Invoice
           </Button>
-          {/*<Button type="submit" autoFocus>*/}
-          {/*  Update Order*/}
-          {/*</Button>*/}
         </DialogActions>
       </form>
     </Dialog>

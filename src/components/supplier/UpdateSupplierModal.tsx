@@ -177,12 +177,15 @@ export default function UpdateSupplierModal({
             />
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={(event) => handleClose(event, "button")}>
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button
+            variant="outlined"
+            onClick={(event) => handleClose(event, "button")}
+          >
             Close
           </Button>
-          <Button type="submit" autoFocus>
-            Update supplier
+          <Button variant="contained" type="submit" autoFocus>
+            Update Supplier
           </Button>
         </DialogActions>
       </form>
