@@ -369,11 +369,16 @@ export default function PlaceOrderModal({
             </Card>
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={(event) => handleClose(event, "button")}>
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button
+            variant="outlined"
+            onClick={(event) => handleClose(event, "button")}
+          >
             Close
           </Button>
-          <Button type="submit">Place Order</Button>
+          <Button variant="contained" type="submit">
+            Place Order
+          </Button>
         </DialogActions>
       </Dialog>
     </form>

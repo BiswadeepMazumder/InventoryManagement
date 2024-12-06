@@ -32,10 +32,15 @@ const DeleteOrderModal = ({
           Are you sure you want to delete this order?
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={(event) => handleClose(event, "button")}>Close</Button>
-        <Button onClick={onSubmit} autoFocus>
-          Delete
+      <DialogActions sx={{ justifyContent: "space-between" }}>
+        <Button
+          variant="outlined"
+          onClick={(event) => handleClose(event, "button")}
+        >
+          Close
+        </Button>
+        <Button variant="contained" onClick={onSubmit} autoFocus>
+          Delete Order
         </Button>
       </DialogActions>
     </Dialog>

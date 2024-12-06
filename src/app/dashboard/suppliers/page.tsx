@@ -4,13 +4,10 @@ import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import { Button, Card, Stack, Typography } from "@mui/material";
 
 import { Download as DownloadIcon } from "@phosphor-icons/react/dist/ssr/Download";
-import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
+// import { Plus as PlusIcon } from "@phosphor-icons/react/dist/ssr/Plus";
 
 import SuppliersTable from "@/components/supplier/SuppliersTable";
 import TableFilters from "@/components/table/TableFilters";
@@ -90,7 +87,7 @@ export default function Page(): React.JSX.Element {
   };
 
   const handlePageChange = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -195,9 +192,10 @@ export default function Page(): React.JSX.Element {
         <Stack spacing={1} sx={{ flex: "1 1 auto" }}>
           <Typography variant="h4">Suppliers</Typography>
         </Stack>
-        <div>
+        <Stack direction="row" gap={2}>
           <Button
-            color="inherit"
+            variant="outlined"
+            // color="inherit"
             startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
             onClick={exportPopover.handleOpen}
             ref={exportPopover.anchorRef}
@@ -209,9 +207,9 @@ export default function Page(): React.JSX.Element {
           {/*  variant="contained"*/}
           {/*  onClick={handleOpenCreateModal}*/}
           {/*>*/}
-          {/*  Add*/}
+          {/*  Create New Supplier*/}
           {/*</Button>*/}
-        </div>
+        </Stack>
       </Stack>
 
       <Card sx={{ p: 2, display: "flex", gap: 2 }}>
