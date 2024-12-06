@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
+import { nanoid } from "nanoid";
 import dayjs from "dayjs";
 
 import {
@@ -124,6 +125,8 @@ export default function PlaceOrderModal({
 
   useEffect(() => {
     if (open) {
+      const id = nanoid().toString().slice(0, 7); // Generate random id with 7 characters
+      setValue("orderId", id);
       setValue("userId", userId);
     }
   }, [open, setValue, userId]);
