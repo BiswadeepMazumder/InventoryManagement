@@ -26,6 +26,7 @@ import {
   cancelOrder,
   createOrder,
   deleteOrder,
+  fetchOrderInvoiceById,
 } from "@/services/order.services";
 import StatusFilters, {
   FilterType as StatusFilterType,
@@ -215,12 +216,26 @@ export default function Page(): React.JSX.Element {
   const handleExport = (type: string) => {
     console.log("Exporting orders", type);
     try {
-      if (type) {
-        ExportSheet({ data: orders, fileType: type as "csv" | "xlsx" });
-        toast("Orders exported");
-      }
+      ExportSheet({ data: orders, fileType: type as "csv" | "xlsx" });
+      toast("Orders exported");
     } catch (error) {
       console.error("Error exporting orders", error);
+      if (error) toast(error.toString());
+    }
+  };
+
+  const handlePrint = async (id: string) => {
+    console.log("Print order invoice", id);
+    try {
+      const response = await fetchOrderInvoiceById("user-id", id);
+      // console.log("Order invoice printed", response);
+      const newTab = window.open();
+      if (newTab) {
+        newTab.document.write(response);
+        newTab.stop();
+      }
+    } catch (error) {
+      console.error("Error printing order invoice", error);
       if (error) toast(error.toString());
     }
   };
@@ -235,9 +250,10 @@ export default function Page(): React.JSX.Element {
         <Stack spacing={1} sx={{ flex: "1 1 auto" }}>
           <Typography variant="h4">Orders</Typography>
         </Stack>
-        <div>
+        <Stack direction="row" gap={2}>
           <Button
-            color="inherit"
+            variant="outlined"
+            // color="inherit"
             startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
             onClick={exportPopover.handleOpen}
             ref={exportPopover.anchorRef}
@@ -251,7 +267,7 @@ export default function Page(): React.JSX.Element {
           >
             Place New Order
           </Button>
-        </div>
+        </Stack>
       </Stack>
 
       <Card sx={{ p: 2, display: "flex", gap: 2 }}>
@@ -293,6 +309,7 @@ export default function Page(): React.JSX.Element {
           onClose={handleCloseViewModal}
           order={selectedViewOrder}
           onSubmit={handleViewOrder}
+          onPrint={handlePrint}
         />
       )}
 
