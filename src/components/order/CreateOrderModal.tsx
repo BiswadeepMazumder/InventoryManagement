@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { nanoid } from "nanoid";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -38,13 +39,15 @@ export default function CreateOrderModal({
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
   const { user } = useUser();
+  const userId = user?.uid ?? "";
 
   useEffect(() => {
-    // Set the userId to order form
-    if (open && user && user.uid) {
-      setValue("userId", user.uid.toString());
+    if (open) {
+      const id = nanoid().toString().slice(0, 7); // Generate random id with 7 characters
+      setValue("orderId", id);
+      setValue("userId", userId);
     }
-  }, [user, open, setValue]);
+  }, [open, setValue, userId]);
 
   const handleCreateOrder = (values: Values) => {
     console.log("Create order", values);

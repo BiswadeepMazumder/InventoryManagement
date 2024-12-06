@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { nanoid } from "nanoid";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -33,9 +34,17 @@ export default function CreateItemModal({
     control,
     handleSubmit,
     setError,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
+
+  useEffect(() => {
+    if (open) {
+      const id = nanoid().toString().slice(0, 7); // Generate random id with 7 characters
+      setValue("itemId", id);
+    }
+  }, [open, setValue]);
 
   const handleCreateItem = (values: Values) => {
     console.log("Create item", values);
