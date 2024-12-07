@@ -56,7 +56,7 @@ export default function OrderItemsTable({
                 {formatNumberWithCommas(row.itemCount)}
               </TableCell>
               <TableCell align="right">
-                {formatNumberWithCommas(row.totalPrice)}
+                {formatNumberWithCommas(parseFloat(row.totalPrice.toFixed(2)))}
               </TableCell>
             </TableRow>
           ))}
