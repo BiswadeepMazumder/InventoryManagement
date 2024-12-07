@@ -4,6 +4,14 @@ This inventory management software is designed to help small to mid-sized busine
 The system allows the Business Owner, Manager, or Worker to efficiently handle essential inventory tasks while providing clear, intuitive interfaces 
 for order creation, modification, and product management.
 
+**Website**: https://inventory-management-frontend-chi.vercel.app/
+
+**Demo Account**
+
+Email: test@gmail.com
+
+Password: 123456
+
 ---
 
 # Project Architecture
