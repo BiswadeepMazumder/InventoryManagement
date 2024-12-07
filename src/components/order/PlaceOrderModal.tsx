@@ -302,7 +302,7 @@ export default function PlaceOrderModal({
                 <Stack direction="row" gap={2}>
                   <Typography variant="body1">
                     <strong>Amount:</strong>{" "}
-                    {formatNumberWithCommas(orderAmount)}
+                    {formatNumberWithCommas(parseFloat(orderAmount.toFixed(2)))}
                   </Typography>
                   {errors.orderAmount && (
                     <Typography variant="body1" color="error">
