@@ -53,7 +53,8 @@ export default async function Page({
             Date: {formatDate(order.orderDate)}
           </Typography>
           <Typography variant="body1">
-            Amount: ${formatNumberWithCommas(order.orderAmount)}
+            Amount: $
+            {formatNumberWithCommas(parseFloat(order.orderAmount.toFixed(2)))}
           </Typography>
           <Typography variant="body1">
             Status: <Chip color={color} label={label} size="small" />
