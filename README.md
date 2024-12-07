@@ -7,10 +7,10 @@ for order creation, modification, and product management.
 **Website**: https://inventory-management-frontend-chi.vercel.app/
 
 **Demo Account**
-
+```
 Email: test@gmail.com
-
 Password: 123456
+```
 
 ---
 
