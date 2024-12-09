@@ -242,8 +242,8 @@ This document explains how the various tables in the database are connected, det
 
 ```plaintext
 ┌──────────────┐        ┌───────────────┐        ┌───────────────┐        ┌─────────────┐
-│  Category    │        │   Supplier    │        │    Users      │        │   Orders     │
-└─────┬────────┘        └─────┬─────────┘        └─────┬─────────┘        └─────┬───────┘
+│  Category    │        │   Supplier    │        │    Users      │        │   Orders    │
+└─────┬────────┘        └─────┬─────────┘        └─────┬─────────┘        └───-┬───-────┘
       │                       │                        │                       │
       ▼                       ▼                        │                       │
 ┌─────────────┐        ┌──────────────┐                │                       ▼
@@ -255,6 +255,7 @@ This document explains how the various tables in the database are connected, det
                                                               └────────────┘
 
 ```
+![image](https://github.com/user-attachments/assets/4749f4d2-9fbd-4036-9e0d-02449c8a4d92)
 
 # How to START the Frontend of the application.
 
